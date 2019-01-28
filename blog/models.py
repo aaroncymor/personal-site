@@ -29,6 +29,22 @@ class Post(PortfolioMixin):
 
     class Meta:
         db_table = 'post'
+    
+    def is_published(self):
+        
+        if self.published_date:
+            return True
+        return False
+    
+    def get_category(self):
+        return self.category.name
+    
+    def get_tags(self):
+        tags = Tag.objects.filter(post__id=self.id).value_list('name', flat=True)
+        return tags
+
+    def __str__(self):
+        return self.title
 
 
 class Tag(PortfolioMixin):
@@ -37,4 +53,4 @@ class Tag(PortfolioMixin):
 
     class Meta:
         db_table = 'tag'
-        unique_together = ('id', 'post')
+        unique_together = ('name', 'post')
