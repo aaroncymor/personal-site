@@ -1,0 +1,8 @@
+myportfolio:
+  secret_key: (pfboe=(9khdb1#tas!u32q=7ecc%x4$2we%-_#fjot6=j#96#
+  db:
+    database: acmn
+    user:
+    pass:
+    host: localhost
+    port: 5432
