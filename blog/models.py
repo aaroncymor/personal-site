@@ -18,6 +18,10 @@ class Category(PortfolioMixin):
 
     class Meta:
         db_table = 'category'
+        verbose_name_plural = 'categories'
+    
+    def __str__(self):
+        return self.name
 
 
 class Post(PortfolioMixin):
@@ -40,7 +44,7 @@ class Post(PortfolioMixin):
         return self.category.name
     
     def get_tags(self):
-        tags = Tag.objects.filter(post__id=self.id).value_list('name', flat=True)
+        tags = Tag.objects.filter(post__id=self.id).values_list('name', flat=True)
         return tags
 
     def __str__(self):
@@ -54,3 +58,6 @@ class Tag(PortfolioMixin):
     class Meta:
         db_table = 'tag'
         unique_together = ('name', 'post')
+    
+    def __str__(self):
+        return self.name
