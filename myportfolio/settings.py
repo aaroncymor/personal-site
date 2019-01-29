@@ -40,7 +40,7 @@ SECRET_KEY = DJANGO_SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '.pythonanyware.com']
+ALLOWED_HOSTS = ['localhost', 'aaroncymor.pythonanyware.com']
 
 
 # Application definition
