@@ -31,7 +31,8 @@ if config_env is not None:
     DJANGO_SECRET_KEY = app_conf['secret_key']
     DB_CONF = app_conf['db']
 else:
-    raise ImproperlyConfigured('MYCONFIG not set as an environment variable.')
+    DJANGO_SECRET_KEY = '(pfboe=(9khdb1#tas!u32q=7ecc%x4$2we%-_#fjot6=j#96#'
+    #raise ImproperlyConfigured('MYCONFIG not set as an environment variable.')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = DJANGO_SECRET_KEY
@@ -51,6 +52,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'tinymce',
+
     'blog',
 ]
 
