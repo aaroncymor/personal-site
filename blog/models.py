@@ -2,16 +2,12 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.db import models
+
 from tinymce import models as tinymce_models
 
+from myportfolio.core.models import PortfolioMixin
+
 # Create your models here.
-class PortfolioMixin(models.Model):
-    id = models.AutoField(primary_key=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        abstract = True
-
 
 class Category(PortfolioMixin):
     name = models.CharField(max_length=100)
