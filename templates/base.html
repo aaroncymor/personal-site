@@ -17,25 +17,24 @@
         {% block body %}   
         <div id="aaroncymor-website">
             <div class="row">
-                <div class="col s3">
+                <div class="col s3 m3">
                     <ul id="slide-out" class="sidenav sidenav-fixed">
                         <li><div class="user-view">
                         <div class="background">
-                            <img src="images/office.jpg">
+                            <img src="{% static 'images/office.jpg' %}">
                         </div>
-                        <a href="#user"><img class="circle" src="images/yuna.jpg"></a>
-                        <a href="#name"><span class="white-text name">John Doe</span></a>
-                        <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+                        <a href="#user"><img class="circle" src="{% static 'images/aaroncymor.jpg' %}"></a>
+                        <a href="#name"><span class="name">Aaron Cymor</span></a>
+                        <a href="#email"><span class="email">aaroncymor@gmail.com</span></a>
                         </div></li>
-                        <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
-                        <li><a href="#!">Second Link</a></li>
+                        <li><a href="#!"><i class="material-icons">face</i>About Me</a></li>
                         <li><div class="divider"></div></li>
-                        <li><a class="subheader">Subheader</a></li>
-                        <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+                        <li><a href="#!">Blog</a></li>
+                        <li><a class="waves-effect" href="#!">Projects</a></li>
                     </ul>
                     <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 </div>
-                <div class="col s9">
+                <div class="col s9 m9">
                     <div id="main">
                         {% block content %}{% endblock content %}
                     </div>
@@ -47,12 +46,12 @@
         {% block javascript %}
         <!--JavaScript at end of body for optimized loading-->
         <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
         <script type="text/javascript">
               $(document).ready(function(){
                 $('.sidenav').sidenav();
             });
         </script>
-        <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
         {% endblock javascript %}
     </body>
 </html>

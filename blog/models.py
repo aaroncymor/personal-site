@@ -30,6 +30,15 @@ class Post(PortfolioMixin):
     class Meta:
         db_table = 'post'
     
+    @property
+    def short_content(self):
+        # Slice content to 150 characters
+        return self.content[:150]
+    
+    @property
+    def tags(self):
+        return self.tag_set.all()[:4]
+    
     def is_published(self):
         
         if self.published_date:
