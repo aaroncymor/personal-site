@@ -16,5 +16,8 @@ class Project(PortfolioMixin):
     class Meta:
         db_table = 'project'
     
+    def short_description(self):
+        return self.description[:150]
+    
     def __str__(self):
         return self.name
