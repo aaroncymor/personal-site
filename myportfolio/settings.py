@@ -149,4 +149,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-
+# Tiny MCE Config
+TINYMCE_DEFAULT_CONFIG = {
+    'plugins': "image,table,spellchecker,paste,searchreplace",
+    'theme': "advanced",
+    'clean_on_startup': True,
+    'custom_undo_redo_levels': 10,
+}
+TINYMCE_SPELLCHECKER = True
+TINYMCE_COMPRESSOR = True
