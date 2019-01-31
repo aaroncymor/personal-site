@@ -1,5 +1,61 @@
 {% extends 'base.html' %}
 
 {% block content %}
- LOLO MOadjsfhjasfhjksfhjskdhfjshfjkshfjksdhfjsdhfjdhfj
+<div class="container">
+    <!--About Me-->
+    <div id="aaroncymor-aboutme" class="row">
+        <h3 id="aaroncymor-aboutme-h5">About Me</h3>
+        <div></div>
+    </div>
+    <!--Blog-->
+    <div id="aaroncymor-blog" class="row">
+        <h3 id="aaroncymor-blog-h5">Blog</h3>
+        <!--Feature Latest Three (3) Posts-->
+        <div id="">
+        {% if posts %}
+            {% for post in posts  %}
+                <div class="col s4">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">{{ post.title }}</span>
+                            <p>{{ post.short_content }}</p>
+                            {% if post.tags %}
+                                {% for tag in post.tags %}
+                                    {{ tag }}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            No posts at the moment
+        {% endif %}
+        </div>
+    </div>
+    <!--Projects-->
+    <div id="aaroncymor-projects" class="row">
+        <h3 id="aaroncymor-projects-h5">Projects</h3>
+        <!--Feature Latest Three (3) Projects-->
+        <div id="">
+        {% if projects %}
+            {% for project in projects %}
+                <div class="col s4">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">{{ project.name }}</span>
+                            <p>{{ project.short_description }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            No projects at the moment
+        {% endif %}
+        </div>
+    </div>
+    <!--Footer-->
+    <div id="aaroncymor-footer" class="row">
+    </div>
+</div>
 {% endblock content %} 
