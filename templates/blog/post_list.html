@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h3>Blog</h3>
+    <div class="divider"></div>
+    {% if post_list %}
+        {% for post in post_list %}
+            {{ post.title }}
+            {{ post.short_content }}
+        {% endfor %}
+    {% else %}
+        Walang POSTS
+    {% endif %}
+</div>
+{% endblock content %}
