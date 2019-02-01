@@ -22,6 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
     path('', core_views.HomeView.as_view(), name='home'),
-    path('blog', include('blog.urls')),
-    #path('projects', include('projects.urls')),
+    path('blog/', include('blog.urls')),
+    path('projects/', include('projects.urls')),
 ]
