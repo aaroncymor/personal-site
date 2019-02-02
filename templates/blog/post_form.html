@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block stylesheets %}
+<!--Import Google Icon Font-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
+
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+{{ form.media }}
+
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container">
+    <h3>Blog Post Form</h3>
+    <div class="divider"></div>
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {{ form.source.errors }}
+        {{ form.source }}
+        <p>
+            {{ form.category_id.label_tag }}
+            {{ form.category_id.errors }}
+            {{ form.category_id }}
+        </p>
+        <p>
+            {{ form.title.label_tag }}
+            {{ form.title.errors }}
+            {{ form.title }}
+        </p>
+        <p>
+            {{ form.content.label_tag }}
+            {{ form.content.errors }}
+            {{ form.content }}
+        </p>
+        <p>
+            <label>
+            {{ form.publish.errors }}
+            {{ form.publish }}
+                <span>Publish</span>
+            </label>
+        </p>
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+    </form>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('select').formSelect();
+  });
+</script>
+{% endblock javascript %}

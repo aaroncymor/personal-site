@@ -21,7 +21,6 @@ class Category(PortfolioMixin):
 
 
 class Post(PortfolioMixin):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = tinymce_models.HTMLField()
