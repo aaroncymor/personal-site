@@ -1,5 +1,6 @@
 import datetime
 
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.views import generic, View
 from django.urls import reverse
@@ -39,13 +40,19 @@ class PostFormView(generic.FormView):
                 published_date = None
 
             if 'id' in request.GET.keys():
-                if Post.objects.filter(id=request.GET['id']).exists():
-                    post = Post.objects.get(id=request.GET['id'])
+                try:
+                    post = get_object_or_404(Post, pk=request.GET['id'])
+                    
+                    if not post:
+                        raise Http404
+
                     post.category = Category.objects.get(id=post_data['category_id'])
                     post.title = post_data['title']
                     post.content = post_data['content']
                     post.published_date = published_date
                     post.save()
+                except ValueError:
+                    pass
             else:
                 data = {
                     'category_id': post_data['category_id'],
@@ -55,19 +62,26 @@ class PostFormView(generic.FormView):
                 }
                 post = Post.objects.create(**data)
 
-        return self.render_to_response({})
+        return self.render_to_response({'form': form})
 
     def get(self, request, *args, **kwargs):
         form = self.form_class
 
         if 'id' in request.GET.keys():
-            post = get_object_or_404(Post, pk=request.GET.get('id'))
-            form = self.form_class({
-                'category': post.category.id,
-                'title': post.title,
-                'content': post.content,
-                'publish': True if post.published_date else False
-            })
+            try:
+                post = get_object_or_404(Post, pk=request.GET['id'])
+                
+                if not post:
+                    raise Http404
+                
+                form = self.form_class({
+                    'category': post.category.id,
+                    'title': post.title,
+                    'content': post.content,
+                    'publish': True if post.published_date else False
+                })
+            except ValueError:
+                pass
 
         return self.render_to_response({'form': form})
 

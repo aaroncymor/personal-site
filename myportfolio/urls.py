@@ -16,9 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from filebrowser.sites import site
+
 from .core import views as core_views 
 
 urlpatterns = [
+    # django-filebrowser url requires to be before admin url
+    path('admin/filebrowser/', site.urls),
+    path('grappelli/', include('grappelli.urls')),
+
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
     path('', core_views.HomeView.as_view(), name='home'),

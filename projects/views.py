@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.views import generic, View
 
@@ -29,11 +30,19 @@ class ProjectFormView(generic.FormView):
             post_data = request.POST.dict()
 
             if 'id' in request.GET.keys():
-                if Project.objects.filter(id=request.GET['id']).exists():
+                try:
+                    project = get_object_or_404(Project, pk=request.GET.get('id'))
+                    
+                    if not project:
+                        raise Http404
+
                     project = Project.objects.get(id=request.GET['id'])
                     project.name = post_data['name']
                     project.description = post_data['description']
                     project.save()
+                except ValueError:
+                    # Error message, update not allowed
+                    pass
             else:
                 data = {
                     'name': post_data['name'],
@@ -41,15 +50,24 @@ class ProjectFormView(generic.FormView):
                 }
                 project = Project.objects.create(**data)
             
-        return self.render_to_response({})
+        return self.render_to_response({'form': form})
 
     def get(self, request, *args, **kwargs):
         form = self.form_class
         
         if 'id' in request.GET.keys():
-            project = get_object_or_404(Project, pk=request.GET.get('id'))
-            form = self.form_class({
-                'name': project.name,
-                'description': project.description
-            })
+            try:
+                project = get_object_or_404(Project, pk=request.GET.get('id'))
+                
+                if not project:
+                    raise Http404
+
+                form = self.form_class({
+                    'name': project.name,
+                    'description': project.description
+                })
+            except ValueError:
+                # alphabet or special characters not allowed
+                pass
+
         return self.render_to_response({'form': form})

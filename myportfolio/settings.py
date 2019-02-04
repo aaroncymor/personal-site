@@ -46,6 +46,11 @@ ALLOWED_HOSTS = ['localhost', 'aaroncymor.pythonanywhere.com']
 # Application definition
 
 INSTALLED_APPS = [
+    # django-filebrowser requires to be before django.contrib.admin
+    'grappelli',
+    'filebrowser',
+
+    # django modules
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -1,6 +1,9 @@
 beautifulsoup4==4.7.1
 Django==2.0.10
+django-filebrowser==3.11.1
+django-grappelli==2.12.2
 django-tinymce==2.8.0
+Pillow==5.4.1
 #pkg-resources==0.0.0
 pytz==2018.9
 PyYAML==3.13
