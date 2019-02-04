@@ -5,6 +5,7 @@ from django.db import models
 
 from tinymce import models as tinymce_models
 
+from myportfolio.core.utils import parse_html_content
 from myportfolio.core.models import PortfolioMixin
 
 # Create your models here.
@@ -17,7 +18,9 @@ class Project(PortfolioMixin):
         db_table = 'project'
     
     def short_description(self):
-        return self.description[:150]
+        # Slice description to 200 characters
+        parsed_description = parse_html_content(self.description)
+        return parsed_description[:200]
     
     def __str__(self):
         return self.name

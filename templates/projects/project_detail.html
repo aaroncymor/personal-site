@@ -5,6 +5,6 @@
     <h3>Project</h3>
     <div class="divider"></div>
     {{ project.name }}
-    {{ project.description }}
+    {{ project.description | safe }}
 </div>
 {% endblock content %}

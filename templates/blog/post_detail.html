@@ -7,7 +7,7 @@
         <div class="divider"></div>
         <div>
             {{ post.title }}
-            {{ post.content }}
+            {{ post.content | safe }}
         </div>
     </div>
 {% endblock content %}

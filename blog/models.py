@@ -5,6 +5,7 @@ from django.db import models
 
 from tinymce import models as tinymce_models
 
+from myportfolio.core.utils import parse_html_content
 from myportfolio.core.models import PortfolioMixin
 
 # Create your models here.
@@ -31,8 +32,9 @@ class Post(PortfolioMixin):
     
     @property
     def short_content(self):
-        # Slice content to 150 characters
-        return self.content[:150]
+        # Slice content to 200 characters
+        parsed_content = parse_html_content(self.content)
+        return parsed_content[:200]
     
     @property
     def tags(self):

@@ -1,5 +1,7 @@
+beautifulsoup4==4.7.1
 Django==2.0.10
 django-tinymce==2.8.0
 #pkg-resources==0.0.0
 pytz==2018.9
 PyYAML==3.13
+soupsieve==1.7.3
