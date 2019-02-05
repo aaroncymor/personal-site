@@ -5,6 +5,7 @@ from django.db import models
 
 from tinymce import models as tinymce_models
 
+from .managers import PublishedPostManager
 from myportfolio.core.utils import parse_html_content
 from myportfolio.core.models import PortfolioMixin
 
@@ -27,6 +28,9 @@ class Post(PortfolioMixin):
     content = tinymce_models.HTMLField()
     published_date = models.DateTimeField(blank=True, null=True)
 
+    objects = models.Manager()
+    published_objects = PublishedPostManager()
+
     class Meta:
         db_table = 'post'
     
@@ -38,32 +42,26 @@ class Post(PortfolioMixin):
     
     @property
     def tags(self):
-        return self.tag_set.all()[:4]
+        return list(self.tag_set.all().values('tag'))
     
+    @property
     def is_published(self):
         
         if self.published_date:
             return True
         return False
-    
-    def get_category(self):
-        return self.category.name
-    
-    def get_tags(self):
-        tags = Tag.objects.filter(post__id=self.id).values_list('name', flat=True)
-        return tags
 
     def __str__(self):
         return self.title
 
 
 class Tag(PortfolioMixin):
-    name = models.CharField(max_length=100)
+    tag = models.CharField(max_length=100)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'tag'
-        unique_together = ('name', 'post')
+        unique_together = ('tag', 'post')
     
     def __str__(self):
-        return self.name
+        return self.tag

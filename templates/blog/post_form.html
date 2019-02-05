@@ -40,6 +40,17 @@
             {{ form.content }}
         </p>
         <p>
+            <label>Tags:</label>
+            <div class="chips chips-initial"></div>
+            <div id="tag-container">
+                {% if tags %}
+                    {% for t in tags %}
+                        <input id="tag-{{ t.tag }}" type="hidden" name="tags" value="{{ t.tag }}" />
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </p>
+        <p>
             <label>
             {{ form.publish.errors }}
             {{ form.publish }}
@@ -59,6 +70,27 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $('select').formSelect();
+    $('.chips-initial').chips({
+        data: {{ tags | safe }},
+        limit: 4,
+        onChipAdd: function(e, data){
+            var chipVal = chipValue(data);
+            var tagId = 'tag-' + chipVal;
+            var inputElem = '<input type="hidden" id="' + tagId;
+            inputElem += '" value="' + chipVal + '" name="tags" />';
+            
+            console.log($.inArray(chipVal, $(this).attr('chipsData')));
+            
+            $("div#tag-container").append(inputElem);
+        },
+        onChipDelete: function(e, data) {
+            $('input#tag-' + chipValue(data)).remove();
+        }
+    });
+
+    function chipValue(data){
+        return data.childNodes[0].textContent;
+    }
   });
 </script>
 {% endblock javascript %}

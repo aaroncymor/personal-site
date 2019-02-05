@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
+from django.contrib.auth import views as auth_views
 
 from blog.models import Post
 from projects.models import Project
@@ -13,7 +14,7 @@ class HomeView(generic.TemplateView):
         context = self.get_context_data(**kwargs)
 
         # Queryset for blogs - latest three (3) posts
-        posts = Post.objects.all().order_by('-timestamp')[:3]
+        posts = Post.published_objects.all().order_by('-timestamp')[:3]
 
         # Queryset for projects - latest three (3) projects
         projects = Project.objects.all().order_by('-timestamp')[:3]
@@ -24,3 +25,6 @@ class HomeView(generic.TemplateView):
 
         return self.render_to_response(context)
 
+
+class DashboardView(generic.TemplateView):
+    template_name = 'myportfolio/dashboard.html'

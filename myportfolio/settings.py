@@ -154,9 +154,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
+# Accounts Settings
+LOGIN_REDIRECT_URL = 'dashboard/'
+
 # Tiny MCE Config
 TINYMCE_DEFAULT_CONFIG = {
-    'plugins': "image,table,spellchecker,paste,searchreplace",
+    'plugins': "code,image,table,spellchecker,paste,searchreplace",
     'theme': "advanced",
     'clean_on_startup': True,
     'custom_undo_redo_levels': 10,

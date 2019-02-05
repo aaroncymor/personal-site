@@ -1,11 +1,12 @@
 import datetime
 
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic, View
 from django.urls import reverse
 
-from .models import Post, Category
+
+from .models import Post, Category, Tag
 from .forms import PostForm
 
 # Create your views here.
@@ -28,9 +29,11 @@ class PostFormView(generic.FormView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+
         post = None
         if form.is_valid():
             post_data = request.POST.dict()
+            tags = request.POST.getlist('tags')
 
             try:
                 # TODO: Make DateFormat UTC
@@ -51,6 +54,19 @@ class PostFormView(generic.FormView):
                     post.content = post_data['content']
                     post.published_date = published_date
                     post.save()
+
+                    post_tags = post.tag_set.all().values_list('tag', flat=True)
+                    
+                    # delete if tag was removed from form POST
+                    for post_tag in post_tags:
+                        if post_tag not in tags:
+                            tag = Tag.objects.get(post=post, tag=post_tag)
+                            tag.delete()
+
+                    # insert tag if not existing in tags of post
+                    for tag in tags:
+                        if tag not in post_tags:
+                            Tag.objects.create(post=post, tag=tag)
                 except ValueError:
                     pass
             else:
@@ -62,26 +78,28 @@ class PostFormView(generic.FormView):
                 }
                 post = Post.objects.create(**data)
 
-        return self.render_to_response({'form': form})
+        return redirect("{0}?id={1}".format(reverse('post-form'), post.id))
 
     def get(self, request, *args, **kwargs):
         form = self.form_class
-
+        tags = []
         if 'id' in request.GET.keys():
             try:
                 post = get_object_or_404(Post, pk=request.GET['id'])
-                
+                tags = post.tags
+
                 if not post:
                     raise Http404
                 
                 form = self.form_class({
-                    'category': post.category.id,
+                    'category_id': post.category.id,
                     'title': post.title,
                     'content': post.content,
                     'publish': True if post.published_date else False
                 })
+
             except ValueError:
                 pass
 
-        return self.render_to_response({'form': form})
+        return self.render_to_response({'form': form, 'tags': tags})
 

@@ -18,16 +18,19 @@ from django.urls import path, include
 
 from filebrowser.sites import site
 
-from .core import views as core_views 
+from .core import views as core_views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # django-filebrowser url requires to be before admin url
     path('admin/filebrowser/', site.urls),
     path('grappelli/', include('grappelli.urls')),
+    path('tinymce/', include('tinymce.urls')),
 
     path('admin/', admin.site.urls),
-    path('tinymce/', include('tinymce.urls')),
     path('', core_views.HomeView.as_view(), name='home'),
+    path('login/', auth_views.LoginView.as_view(template_name='myportfolio/login.html'), name='login'),
+    path('dashboard/', core_views.DashboardView.as_view(), name='dashboard'),
     path('blog/', include('blog.urls')),
     path('projects/', include('projects.urls')),
 ]
