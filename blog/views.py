@@ -78,6 +78,13 @@ class PostFormView(generic.FormView):
                 }
                 post = Post.objects.create(**data)
 
+                post_tags = []
+                if tags:
+                    for tag in tags:
+                        post_tags.append(Tag(post=post, tag=tag))
+
+                Tag.objects.bulk_create(post_tags)
+
         return redirect("{0}?id={1}".format(reverse('post-form'), post.id))
 
     def get(self, request, *args, **kwargs):
