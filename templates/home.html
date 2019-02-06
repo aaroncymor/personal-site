@@ -5,22 +5,22 @@
 <div class="container">
     <!--About Me-->
     <div id="aaroncymor-aboutme" class="row">
-        <h3 id="aaroncymor-aboutme-h5">About Me</h3>
+        <h3 id="aaroncymor-aboutme-h3">About Me</h3>
         <div class="divider"></div>
         <div></div>
     </div>
     <!--Blog-->
     <div id="aaroncymor-blog" class="row">
-        <h3 id="aaroncymor-blog-h5">Blog</h3>
+        <h3 id="aaroncymor-blog-h3">Blog</h3>
         <div class="divider"></div>
         <!--Feature Latest Three (3) Posts-->
         <div id="">
         {% if posts %}
             <div class="row">
             {% for post in posts  %}
-                <div class="col s4">
+                <div class="col s6">
                     <a class="modal-trigger" href="#modal-blog-{{ forloop.counter }}">
-                        <div class="card medium">
+                        <div class="card">
                             <div class="card-content">
                                 <span class="card-title">{{ post.title }}</span>
                                 <p>{{ post.short_content }}</p>
@@ -61,7 +61,7 @@
         {% if projects %}
             <div class="row">
             {% for project in projects %}
-                <div class="col s4">
+                <div class="col s6">
                     <a class="modal-trigger" href="#modal-project-{{ forloop.counter }}">
                         <div class="card medium">
                             <div class="card-content">

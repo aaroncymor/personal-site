@@ -13,11 +13,11 @@ class HomeView(generic.TemplateView):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
-        # Queryset for blogs - latest three (3) posts
-        posts = Post.published_objects.all().order_by('-timestamp')[:3]
+        # Queryset for blogs - latest two (2) posts
+        posts = Post.published_objects.all().order_by('-timestamp')[:2]
 
-        # Queryset for projects - latest three (3) projects
-        projects = Project.objects.all().order_by('-timestamp')[:3]
+        # Queryset for projects - latest two (2) projects
+        projects = Project.objects.all().order_by('-timestamp')[:2]
 
         # Assign to context
         context['posts'] = posts
