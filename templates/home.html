@@ -20,11 +20,13 @@
             {% for post in posts  %}
                 <div class="col s6">
                     <a class="modal-trigger" href="#modal-blog-{{ forloop.counter }}">
-                        <div class="card">
+                        <div class="card small">
                             <div class="card-content">
                                 <span class="card-title">{{ post.title }}</span>
                                 <p>{{ post.short_content }}</p>
+
                                 {% if post.tag_set.all %}
+                                    <p>Tags</p>
                                     {% for tag in post.tag_set.all %}
                                         <div class="chip">{{ tag }}</div>
                                     {% endfor %}

@@ -18,14 +18,15 @@
 {% endblock stylesheets %}
 
 {% block content %}
-    <div class="container">
-        <h3>Blog</h3>
-        <div class="divider"></div>
-        <div>
-            {{ post.title }}
-            {{ post.content | safe }}
-        </div>
+<div class="container">
+    <h3>Blog</h3>
+    <div class="divider"></div>
+    <div>
+        {{ post.title }}
+        {{ post.content | safe }}
     </div>
+    <a href="{% url 'post-list' %}">Back</a>
+</div>
 {% endblock content %}
 
 {% block javascript %}

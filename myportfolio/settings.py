@@ -155,7 +155,7 @@ STATICFILES_DIRS = [
 ]
 
 # Accounts Settings
-LOGIN_REDIRECT_URL = 'dashboard/'
+LOGIN_REDIRECT_URL = '/dashboard/'
 
 # Tiny MCE Config
 TINYMCE_DEFAULT_CONFIG = {

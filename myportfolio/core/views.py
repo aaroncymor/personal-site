@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views import generic
-from django.contrib.auth import views as auth_views
+from django.contrib.auth import logout, views as auth_views
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from blog.models import Post
 from projects.models import Project
@@ -26,5 +27,26 @@ class HomeView(generic.TemplateView):
         return self.render_to_response(context)
 
 
-class DashboardView(generic.TemplateView):
+class DashboardView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'myportfolio/dashboard.html'
+
+
+class LoginView(auth_views.LoginView):
+    template_name = 'myportfolio/login.html'
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
+        form = self.get_form()
+        if form.is_valid():
+            request.session['authorized'] = True
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')

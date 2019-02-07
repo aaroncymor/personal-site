@@ -4,6 +4,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic, View
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 from .models import Post, Category, Tag
@@ -22,7 +23,9 @@ class PostDetailView(generic.DetailView):
     template_name = 'blog/post_detail.html'
 
 
-class PostFormView(generic.FormView):
+class PostFormView(LoginRequiredMixin, generic.FormView):
+    login_url = '/login'
+
     form_class = PostForm
     template_name = 'blog/post_form.html'
     success_url = '/blog/'
@@ -90,6 +93,7 @@ class PostFormView(generic.FormView):
     def get(self, request, *args, **kwargs):
         form = self.form_class
         tags = []
+        context = {}
         if 'id' in request.GET.keys():
             try:
                 post = get_object_or_404(Post, pk=request.GET['id'])
@@ -105,8 +109,13 @@ class PostFormView(generic.FormView):
                     'publish': True if post.published_date else False
                 })
 
+                context['post_id'] = post.id
+
             except ValueError:
                 pass
 
-        return self.render_to_response({'form': form, 'tags': tags})
+        context['form'] = form
+        context['tags'] = tags
+
+        return self.render_to_response(context)
 

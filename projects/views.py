@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.views import generic, View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project
 from .forms import ProjectForm
@@ -18,7 +19,7 @@ class ProjectDetailView(generic.DetailView):
     template_name = 'projects/project_detail.html'
 
 
-class ProjectFormView(generic.FormView):
+class ProjectFormView(LoginRequiredMixin, generic.FormView):
     form_class = ProjectForm
     template_name = 'projects/project_form.html'
     success_url = '/projects/'

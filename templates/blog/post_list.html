@@ -7,8 +7,14 @@
     <div class="divider"></div>
     {% if post_list %}
         {% for post in post_list %}
-            {{ post.title }}
-            {{ post.short_content }}
+        <div class="row">
+            <p class="aaroncymor-post-title">{{ post.title }}</p>
+            <p class="aaroncymor-post-content">{{ post.short_content }}</p>
+            {% if request.session.authorized %}
+            <a href="{% url 'post-form' %}?id={{ post.id }}">Edit</a>
+            {% endif %}
+            Read more <a href="{% url 'post-detail' post.id %}">here</a>.
+        </div>
         {% endfor %}
     {% else %}
         Walang POSTS

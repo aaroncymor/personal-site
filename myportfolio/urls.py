@@ -19,7 +19,6 @@ from django.urls import path, include
 from filebrowser.sites import site
 
 from .core import views as core_views
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # django-filebrowser url requires to be before admin url
@@ -29,7 +28,8 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('', core_views.HomeView.as_view(), name='home'),
-    path('login/', auth_views.LoginView.as_view(template_name='myportfolio/login.html'), name='login'),
+    path('login/', core_views.LoginView.as_view(), name='login'),
+    path('logout/', core_views.logout_view, name='logout'),
     path('dashboard/', core_views.DashboardView.as_view(), name='dashboard'),
     path('blog/', include('blog.urls')),
     path('projects/', include('projects.urls')),
