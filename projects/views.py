@@ -5,10 +5,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project
 from .forms import ProjectForm
+from myportfolio.core.views import ModifiedPaginateListView
 
 # Create your views here.
 
-class ProjectListView(generic.ListView):
+class ProjectListView(ModifiedPaginateListView):
     model = Project
     paginate_by = 10
     template_name = 'projects/project_list.html'

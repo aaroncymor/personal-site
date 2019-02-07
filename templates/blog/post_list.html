@@ -5,8 +5,8 @@
 <div class="container">
     <h3>Blog</h3>
     <div class="divider"></div>
-    {% if post_list %}
-        {% for post in post_list %}
+    {% if posts %}
+        {% for post in posts %}
         <div class="row">
             <p class="aaroncymor-post-title">{{ post.title }}</p>
             <p class="aaroncymor-post-content">{{ post.short_content }}</p>
@@ -16,6 +16,11 @@
             Read more <a href="{% url 'post-detail' post.id %}">here</a>.
         </div>
         {% endfor %}
+
+        {% if is_paginated %}
+        <ul class="pagination">
+        </ul>
+        {% endif %}
     {% else %}
         Walang POSTS
     {% endif %}

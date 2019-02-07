@@ -148,7 +148,7 @@ MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') # '/www/media/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-#STATIC_ROOT = '/www/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static') #'/www/static/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
@@ -166,3 +166,6 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
+
+# Self defined pagination
+GROUP_BY_PAGINATION = 2 # Can also be defined by config

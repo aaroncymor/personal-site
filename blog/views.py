@@ -6,16 +6,18 @@ from django.views import generic, View
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-
 from .models import Post, Category, Tag
 from .forms import PostForm
+from myportfolio.core.views import ModifiedPaginateListView
 
 # Create your views here.
 
-class PostListView(generic.ListView):
+class PostListView(ModifiedPaginateListView):
     model = Post
-    paginate_by = 10
+    paginate_by = 2
+    context_object_name = 'posts'
     template_name = 'blog/post_list.html'
+    queryset = Post.published_objects.all()
 
 
 class PostDetailView(generic.DetailView):
