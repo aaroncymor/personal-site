@@ -29,22 +29,17 @@ class ModifiedPaginateListView(generic.ListView):
                     raise Http404(_("Empty list and '%(class_name)s.allow_empty' is False.") % {
                         'class_name': self.__class__.__name__,
                         })
+        # TODO: By given page_num, determine the current group_number
+        
         context = self.get_context_data()
+        if context['is_paginated']:
+            page_obj = context['page_obj']
+            num_pages = page_obj.paginator.num_pages
 
-        if 'group_num' in request.GET.keys():
-            # get page_obj
-            if context['is_paginated']:
-                page_obj = context['page_obj']
-                num_of_pages = page_obj.paginator.num_pages
-                group_by = settings.GROUP_BY_PAGINATION
-                group_num = int(request.GET.get('group_num', None))
-                try:
-                    curr_page_range = group_pagination(num_of_pages, 
-                                    group_by, group_num)
-                    print(curr_page_range)
-                except ValueError:
-                    print("LOLOMO PASS")
-                    pass
+            # give default value of 1
+            group_num = int(request.GET.get('group_num', 1))
+
+            context.update(group_pagination(num_pages, group_num))
 
         return self.render_to_response(context)    
 

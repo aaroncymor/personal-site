@@ -167,5 +167,9 @@ TINYMCE_DEFAULT_CONFIG = {
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
 
-# Self defined pagination
-GROUP_BY_PAGINATION = 2 # Can also be defined by config
+# Grouping of pages. Basically how may page numbers you group by
+# Example below woulb mean group by 3, which will appear like this.
+# 1 2 3 >
+# < 4 5 6 >
+# < 7 8 9
+GROUPBY_PAGINATION = 3 # Can also be defined by config

@@ -14,7 +14,7 @@ from myportfolio.core.views import ModifiedPaginateListView
 
 class PostListView(ModifiedPaginateListView):
     model = Post
-    paginate_by = 2
+    paginate_by = 3 # 5 objects per page
     context_object_name = 'posts'
     template_name = 'blog/post_list.html'
     queryset = Post.published_objects.all()
