@@ -20,15 +20,15 @@
         {% if is_paginated %}
         <ul class="pagination">
             {% if group_has_prev %}
-                <li class=""><a href="{% url 'post-list' %}?group_num={{ group_prev }}"><i class="material-icons">chevron_left</i></a></li>
+                <li class=""><a href="{% url 'post-list' %}?group_num={{ group_prev }}&page={{ group_page_prev }}"><i class="material-icons">chevron_left</i></a></li>
             {% endif %}
 
             {% for gp in grouped_pagination %}
-            <li class=""><a href="{% url 'post-list' %}?page={{ gp }}">{{ gp }}</a></li>
+            <li class=""><a href="{% url 'post-list' %}?group_num={{ group_curr }}&page={{ gp }}">{{ gp }}</a></li>
             {% endfor %}
 
             {% if group_has_next %}
-                <li class=""><a href="{% url 'post-list' %}?group_num={{ group_next }}"><i class="material-icons">chevron_right</i></a></li>
+                <li class=""><a href="{% url 'post-list' %}?group_num={{ group_next }}&page={{ group_page_next }}"><i class="material-icons">chevron_right</i></a></li>
             {% endif %}
         </ul>
         {% endif %}

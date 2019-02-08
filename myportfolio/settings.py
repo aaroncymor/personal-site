@@ -172,4 +172,4 @@ TINYMCE_COMPRESSOR = True
 # 1 2 3 >
 # < 4 5 6 >
 # < 7 8 9
-GROUPBY_PAGINATION = 3 # Can also be defined by config
+GROUPBY_PAGINATION = 2 # Can also be defined by config

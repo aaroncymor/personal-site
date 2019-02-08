@@ -42,6 +42,7 @@ def group_pagination(num_pages, group_num):
     group_by = settings.GROUPBY_PAGINATION
 
     has_next, has_prev, next_num, prev_num = False, False, None, None
+    group_page_next, group_page_prev = None, None
 
     # default would be group by 1 at group number 0
     num_groups = ceil(num_pages / group_by) if group_by > 0 else num_pages
@@ -55,16 +56,6 @@ def group_pagination(num_pages, group_num):
     if group_num > num_groups or group_num < 0:
         group_num = 1
 
-    # check if has_next group
-    if group_num < num_groups and group_num > 0:
-        has_next = True
-        next_num = group_num + 1
-    
-    # check if has_prev group
-    if group_num > 1 and group_num <= num_groups:
-        has_prev = True
-        prev_num = group_num - 1
-
     # check if given group_num is within num_groups
     # and calculate new start and stop value
     if group_num <= num_groups and group_num > 0:
@@ -75,13 +66,30 @@ def group_pagination(num_pages, group_num):
 
         if res > num_pages:
             stop = num_pages + 1
+
+    page_list = list(range(start, stop))
+
+    # check if has_next group
+    if group_num < num_groups and group_num > 0:
+        has_next = True
+        next_num = group_num + 1
+        group_page_next = page_list[len(page_list) - 1] + 1
+    
+    # check if has_prev group
+    if group_num > 1 and group_num <= num_groups:
+        has_prev = True
+        prev_num = group_num - 1
+        group_page_prev = page_list[0] - 1
     
     grouped_pagination = {
-        'grouped_pagination': list(range(start, stop)),
+        'grouped_pagination': page_list,
         'group_has_next': has_next,
         'group_has_prev': has_prev,
         'group_next': next_num,
-        'group_prev': prev_num
+        'group_prev': prev_num,
+        'group_page_next': group_page_next,
+        'group_page_prev': group_page_prev,
+        'group_curr': group_num,
     }
-    print("GROUP PAGINATION DETAILS", grouped_pagination)
+
     return grouped_pagination
