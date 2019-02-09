@@ -8,17 +8,45 @@
     {% if posts %}
         {% for post in posts %}
         <div class="row">
+            <p class="">Published: {{ post.published_date | date:"M, d Y" }}</p>
             <p class="aaroncymor-post-title">{{ post.title }}</p>
             <p class="aaroncymor-post-content">{{ post.short_content }}</p>
-            {% if request.session.authorized %}
-            <a href="{% url 'post-form' %}?id={{ post.id }}">Edit</a>
+
+            {% if is_paginated %}
+                {% if request.session.authorized %}
+                <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ page_obj.number }}">Edit</a>
+                {% endif %}
+                Read more <a href="{% url 'post-detail' post.id %}?prev_page_session={{ page_obj.number }}">here</a>.
+            {% else %}
+                {% if request.session.authorized %}
+                <a href="{% url 'post-form' %}?id={{ post.id }}">Edit</a>
+                {% endif %}
+                Read more <a href="{% url 'post-detail' post.id %}">here</a>.
             {% endif %}
-            Read more <a href="{% url 'post-detail' post.id %}">here</a>.
         </div>
         {% endfor %}
 
         {% if is_paginated %}
         <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li><a href="{% url 'post-list' %}?page={{ page_obj.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+            {% else %}
+            <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+            {% endif %}
+
+            {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                <li class="active"><a href="#!">{{ i }}</a></li>
+                {% else %}
+                <li><a href="{% url 'post-list' %}?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li><a href="{% url 'post-list' %}?page={{ page_obj.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+            {% else %}
+            <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+            {% endif %}
         </ul>
         {% endif %}
     {% else %}

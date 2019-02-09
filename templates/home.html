@@ -48,7 +48,7 @@
             {% endfor %}
             </div>
             <!--Link to Post List-->
-            <div class="row"><a href="{% url 'post-list' %}">More of blogs here</a></div>
+            <div class="row"><a href="{% url 'post-list' %}?group_num=1">More of blogs here</a></div>
         {% else %}
             No posts at the moment
         {% endif %}
@@ -85,7 +85,7 @@
                 </div>
             {% endfor %}
             </div>
-            <div class="row"><a href="{% url 'project-list' %}">More of projects here</a></div>
+            <div class="row"><a href="{% url 'project-list' %}?group_num=1">More of projects here</a></div>
         {% else %}
             No projects at the moment
         {% endif %}

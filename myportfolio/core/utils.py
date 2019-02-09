@@ -1,9 +1,8 @@
 from math import ceil
 
-from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 from bs4 import BeautifulSoup
-
 
 def parse_html_content(post_content):
     """[summary]
@@ -14,7 +13,7 @@ def parse_html_content(post_content):
     soup = BeautifulSoup(post_content)
     return soup.get_text()
 
-def group_pagination(num_pages, group_by, group_number=1):
+def group_pagination(num_pages, group_num):
     """
     Let's say in our queryset, we have 11 number of pages,
     and we wanted to group them by 3 like so below:
@@ -27,11 +26,11 @@ def group_pagination(num_pages, group_by, group_number=1):
     total number of pages / group_by (page range to show) = ceil(answer) # group
     num_of_groups = ceil(num_of_pages / group_by)
     
-    we have 4 groups from 11 pages
+    We have 4 groups from 11 pages
 
     4 = ceil(11 / 3)
 
-    now all we need to do is determine the page range with the given group_number
+    Now all we need to do is determine the page range with the given group_number
     if  we were given group_number = 2, this would return list if [4, 5, 6]
 
     To get that, we multiply group_number * group_by, from there we can determine the
@@ -40,18 +39,57 @@ def group_pagination(num_pages, group_by, group_number=1):
     Returns:
         list -- list of pages based on the given group number
     """
-    num_groups = ceil(num_pages / group_by)
-    
-    # 6 = 2 * 3
-    if group_by <= num_groups:
-        res = group_number * group_by
+    group_by = settings.GROUPBY_PAGINATION
+
+    has_next, has_prev, next_num, prev_num = False, False, None, None
+    group_page_next, group_page_prev = None, None
+
+    # default would be group by 1 at group number 0
+    num_groups = ceil(num_pages / group_by) if group_by > 0 else num_pages
+    start, stop = 1, num_groups + 1
+
+    # if given group_num is more than the
+    # determined number of groups, set a default
+    # value for it which is 1. This will give
+    # default value of group number 1 to process
+    # group pagination.
+    if group_num > num_groups or group_num < 0:
+        group_num = 1
+
+    # check if given group_num is within num_groups
+    # and calculate new start and stop value
+    if group_num <= num_groups and group_num > 0:
+        res = group_num * group_by
         # list(range((6 + 1) - 3, (6 + 1))) or list(range(4, 7))
         start = (res + 1) - group_by
         stop = res + 1
 
         if res > num_pages:
             stop = num_pages + 1
-    else:
-        raise ValueError("Number of groups allowable exceeded.")
 
-    return list(range(start, stop))
+    page_list = list(range(start, stop))
+
+    # check if has_next group
+    if group_num < num_groups and group_num > 0:
+        has_next = True
+        next_num = group_num + 1
+        group_page_next = page_list[len(page_list) - 1] + 1
+    
+    # check if has_prev group
+    if group_num > 1 and group_num <= num_groups:
+        has_prev = True
+        prev_num = group_num - 1
+        group_page_prev = page_list[0] - 1
+    
+    grouped_pagination = {
+        'grouped_pagination': page_list,
+        'group_has_next': has_next,
+        'group_has_prev': has_prev,
+        'group_next': next_num,
+        'group_prev': prev_num,
+        'group_page_next': group_page_next,
+        'group_page_prev': group_page_prev,
+        'group_curr': group_num,
+    }
+
+    return grouped_pagination

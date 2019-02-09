@@ -61,9 +61,19 @@
             <input type="submit" value="Submit" />
         </p>
     </form>
-    {% if post_id %}
-        <a href="{% url 'post-detail' post_id %}">View</a>
+
+    {% if prev_page_session %}
+        <a href="{% url 'post-list' %}?page={{ prev_page_session }}">Back</a>
+        {% if post_id %}
+        <a href="{% url 'post-detail' post_id %}?form_post_id={{ post_id }}&prev_page_session={{ prev_page_session }}">View</a>
+        {% endif %}
+    {% else %}
+        <a href="{% url 'post-list' %}">Back</a>
+        {% if post_id %}
+        <a href="{% url 'post-detail' post_id %}?form_post_id={{ post_id }}">View</a>
+        {% endif %}
     {% endif %}
+
 </div>
 {% endblock content %}
 

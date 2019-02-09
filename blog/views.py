@@ -3,18 +3,18 @@ import datetime
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic, View
-from django.urls import reverse
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Post, Category, Tag
 from .forms import PostForm
-from myportfolio.core.views import ModifiedPaginateListView
+#from myportfolio.core.views import ModifiedPaginateListView
 
 # Create your views here.
 
-class PostListView(ModifiedPaginateListView):
+class PostListView(generic.ListView):
     model = Post
-    paginate_by = 2
+    paginate_by = 10
     context_object_name = 'posts'
     template_name = 'blog/post_list.html'
     queryset = Post.published_objects.all()
@@ -23,6 +23,16 @@ class PostListView(ModifiedPaginateListView):
 class PostDetailView(generic.DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
+
+    def get(self, request, *args, **kwargs):
+
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+
+        if 'prev_page_session' in request.GET.keys():
+            context['prev_page_session'] = request.GET['prev_page_session']
+
+        return self.render_to_response(context)
 
 
 class PostFormView(LoginRequiredMixin, generic.FormView):
@@ -96,7 +106,9 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
         form = self.form_class
         tags = []
         context = {}
-        if 'id' in request.GET.keys():
+        request_get_keys = request.GET.keys()
+
+        if 'id' in request_get_keys:
             try:
                 post = get_object_or_404(Post, pk=request.GET['id'])
                 tags = post.tags
@@ -115,6 +127,9 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
 
             except ValueError:
                 pass
+        
+        if 'prev_page_session' in request_get_keys:
+            context['prev_page_session'] = request.GET['prev_page_session']
 
         context['form'] = form
         context['tags'] = tags
