@@ -1,6 +1,7 @@
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic, View
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project
@@ -12,12 +13,23 @@ from myportfolio.core.views import ModifiedPaginateListView
 class ProjectListView(ModifiedPaginateListView):
     model = Project
     paginate_by = 10
+    context_object_name = 'projects'
     template_name = 'projects/project_list.html'
 
 
 class ProjectDetailView(generic.DetailView):
     model = Project
     template_name = 'projects/project_detail.html'
+
+    def get(self, request, *args, **kwargs):
+
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+
+        if 'prev_page_session' in request.GET.keys():
+            context['prev_page_session'] = request.GET['prev_page_session']
+        
+        return self.render_to_response(context)
 
 
 class ProjectFormView(LoginRequiredMixin, generic.FormView):
@@ -52,12 +64,14 @@ class ProjectFormView(LoginRequiredMixin, generic.FormView):
                 }
                 project = Project.objects.create(**data)
             
-        return self.render_to_response({'form': form})
+        return redirect('{0}?id={1}'.format(reverse('project-form'), project.id))
 
     def get(self, request, *args, **kwargs):
         form = self.form_class
+        context = {}
+        request_get_keys = request.GET.keys()
         
-        if 'id' in request.GET.keys():
+        if 'id' in request_get_keys:
             try:
                 project = get_object_or_404(Project, pk=request.GET.get('id'))
                 
@@ -68,8 +82,15 @@ class ProjectFormView(LoginRequiredMixin, generic.FormView):
                     'name': project.name,
                     'description': project.description
                 })
+
+                context['project_id'] = project.id
             except ValueError:
                 # alphabet or special characters not allowed
                 pass
+        
+        if 'prev_page_session' in request_get_keys:
+            context['prev_page_session'] = request.GET['prev_page_session']
 
-        return self.render_to_response({'form': form})
+        context['form'] = form
+
+        return self.render_to_response(context)

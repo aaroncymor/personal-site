@@ -37,6 +37,18 @@
             <input type="submit" value="Submit" />
         </p>
     </form>
+
+    {% if prev_page_session %}
+        <a href="{% url 'project-list' %}?page={{ prev_page_session }}">Back</a>
+        {% if project_id %}
+        <a href="{% url 'project-detail' project_id %}?prev_page_session={{ prev_page_session }}">View</a>
+        {% endif %}
+    {% else %}
+        <a href="{% url 'project-list' %}">Back</a>
+        {% if project_id %}
+        <a href="{% url 'project-detail' project_id %}">View</a>
+        {% endif %}
+    {% endif %}
 </div>
 {% endblock content %}
 

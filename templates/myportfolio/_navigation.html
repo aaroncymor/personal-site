@@ -40,8 +40,8 @@
       </li>   
       <li><a href="{% url 'logout' %}">Logout</li> 
     {% else %}
-    <li><a href="#!">Blog</a></li>
-    <li><a class="waves-effect" href="#!">Projects</a></li>
+    <li><a href="{% url 'post-list' %}">Blog</a></li>
+    <li><a class="waves-effect" href="{% url 'project-list' %}">Projects</a></li>
     {% endif %}
 </ul>
 <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
