@@ -4,11 +4,49 @@
 <div class="container">
     <h3>Project</h3>
     <div class="divider"></div>
-    {% if project_list %}
-        {% for project in project_list %}
-            {{ project.name }}
-            {{ project.short_description }}
+    {% if projects %}
+        {% for project in projects %}
+            <div class="row">
+                <p class="aaroncymor-project-name">{{ project.name }}</p>
+                <p class="aaron-project-description">{{ project.short_description }}</p>
+                
+                {% if is_paginated %}
+                    {% if request.session.authorized %}
+                    <a href="{% url 'project-form' %}?id={{ project.id }}&prev_page_session={{ page_obj.number }}">Edit</a>
+                    {% endif %}
+                    Read more <a href="{% url 'project-detail' project.id %}?prev_page_session={{ page_obj.number }}">here</a>.
+                {% else %}
+                    {% if request.session.authorized %}
+                    <a href="{% url 'project-form' %}?id={{ project.id }}">Edit</a>
+                    {% endif %}
+                    Read more <a href="{% url 'project-detail' project.id %}">here</a>.
+            {% endif %}            
+            </div>
         {% endfor %}
+
+        {% if is_paginated %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li><a href="{% url 'project-list' %}?page={{ page_obj.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+            {% else %}
+            <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+            {% endif %}
+
+            {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                <li class="active"><a href="#!">{{ i }}</a></li>
+                {% else %}
+                <li><a href="{% url 'project-list' %}?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li><a href="{% url 'project-list' %}?page={{ page_obj.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+            {% else %}
+            <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+            {% endif %}
+        </ul>
+        {% endif %}
     {% else %}
         Walang mga Proyekto
     {% endif %}
