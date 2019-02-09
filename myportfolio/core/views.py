@@ -12,7 +12,7 @@ from .utils import group_pagination
 # Create your views here.
 
 class ModifiedPaginateListView(generic.ListView):
-
+    # TODO: Check if this is needed.
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
         allow_empty = self.get_allow_empty()
@@ -30,7 +30,7 @@ class ModifiedPaginateListView(generic.ListView):
                         'class_name': self.__class__.__name__,
                         })
         # TODO: By given page_num, determine the current group_number
-        
+
         context = self.get_context_data()
         if context['is_paginated']:
             page_obj = context['page_obj']
