@@ -54,7 +54,7 @@ class HomeView(generic.TemplateView):
         posts = Post.published_objects.all().order_by('-timestamp')[:2]
 
         # Queryset for projects - latest two (2) projects
-        projects = Project.objects.all().order_by('-timestamp')[:2]
+        projects = Project.objects.all().order_by('-rank')[:2]
 
         # Assign to context
         context['posts'] = posts
