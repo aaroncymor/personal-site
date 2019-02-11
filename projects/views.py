@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project
 from .forms import ProjectForm
+
+from myportfolio.core.utils import enum
 from myportfolio.core.views import ModifiedPaginateListView
 
 # Create your views here.
@@ -15,6 +17,7 @@ class ProjectListView(ModifiedPaginateListView):
     paginate_by = 10
     context_object_name = 'projects'
     template_name = 'projects/project_list.html'
+    queryset = Project.objects.all().order_by('rank')
 
 
 class ProjectDetailView(generic.DetailView):
@@ -58,7 +61,6 @@ class ProjectFormView(LoginRequiredMixin, generic.FormView):
                     project = Project.objects.get(id=request.GET['id'])
                     project.name = post_data['name']
                     project.description = post_data['description']
-                    project.rank = post_data['rank']
                     project.save()
                 except ValueError:
                     # Error message, update not allowed
@@ -68,7 +70,7 @@ class ProjectFormView(LoginRequiredMixin, generic.FormView):
                     'name': post_data['name'],
                     'description': post_data['description'],
                     # default would always be count + 1
-                    'rank': Post.objects.all().count() + 1
+                    'rank': Project.objects.all().count() + 1
                 }
                 project = Project.objects.create(**data)
 
@@ -92,8 +94,7 @@ class ProjectFormView(LoginRequiredMixin, generic.FormView):
 
                 form = self.form_class({
                     'name': project.name,
-                    'description': project.description,
-                    'rank': project.rank
+                    'description': project.description
                 })
 
                 context['project_id'] = project.id
@@ -107,3 +108,23 @@ class ProjectFormView(LoginRequiredMixin, generic.FormView):
         context['form'] = form
 
         return self.render_to_response(context)
+
+
+def get_project_rankings(request):
+    context = {}
+    projects = Project.objects.all().order_by('rank')
+    
+    context['projects'] = projects
+
+    return render(request, 'projects/project_rank_form.html', context)
+
+def update_project_rankings(request):
+    if request.method == "POST":
+        if 'ranks' in request.POST.keys():
+            project_ids = request.POST.getlist('ranks')
+            for index, value in enum(sequence=project_ids, start=1):
+                project = Project.objects.get(id=value)
+                project.rank = index
+                project.save()
+
+    return redirect(reverse('project-rank-list'))

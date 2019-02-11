@@ -10,8 +10,3 @@ class ProjectForm(forms.Form):
         label="Description",
         widget=TinyMCE(attrs={'cols': 80, 'rows': 30})
     )
-    rank = forms.ChoiceField(
-            choices=Project.objects.get_rank_choices(),
-            widget=forms.Select(attrs={'class': 'input-field'}), 
-            required=False
-    )
