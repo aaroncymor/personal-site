@@ -2,14 +2,12 @@
 
 {% block content %}
 <div class="container">
-    <h3>Project</h3>
-    <div class="divider"></div>
+    <h3 class="center-align">Project</h3>
     {% if projects %}
         {% for project in projects %}
             <div class="row">
                 <p class="aaroncymor-project-name">{{ project.name }}</p>
                 <p class="aaron-project-description">{{ project.short_description }}</p>
-                
                 {% if is_paginated %}
                     {% if request.session.authorized %}
                     <a href="{% url 'project-form' %}?id={{ project.id }}&prev_page_session={{ page_obj.number }}">Edit</a>
@@ -20,7 +18,8 @@
                     <a href="{% url 'project-form' %}?id={{ project.id }}">Edit</a>
                     {% endif %}
                     Read more <a href="{% url 'project-detail' project.id %}">here</a>.
-            {% endif %}            
+            {% endif %}
+                <div class="divider"></div>
             </div>
         {% endfor %}
 

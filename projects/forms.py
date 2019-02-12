@@ -1,5 +1,7 @@
 from django import forms
 
+from .models import Project
+
 from tinymce.widgets import TinyMCE
 
 class ProjectForm(forms.Form):

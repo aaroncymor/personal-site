@@ -44,6 +44,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+        request_get_keys = request.GET.keys()
 
         post = None
         if form.is_valid():
@@ -57,7 +58,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
             except KeyError:
                 published_date = None
 
-            if 'id' in request.GET.keys():
+            if 'id' in request_get_keys:
                 try:
                     post = get_object_or_404(Post, pk=request.GET['id'])
                     
@@ -99,8 +100,13 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
                         post_tags.append(Tag(post=post, tag=tag))
 
                 Tag.objects.bulk_create(post_tags)
+            
+        redirect_url = "{0}?id={1}".format(reverse('post-form'), post.id)
+        if 'prev_page_session' in request_get_keys:
+            redirect_url += '&prev_page_session=' + request.GET['prev_page_session']
 
-        return redirect("{0}?id={1}".format(reverse('post-form'), post.id))
+
+        return redirect(redirect_url)
 
     def get(self, request, *args, **kwargs):
         form = self.form_class

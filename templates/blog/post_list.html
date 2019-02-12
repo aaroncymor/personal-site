@@ -3,15 +3,13 @@
 
 {% block content %}
 <div class="container">
-    <h3>Blog</h3>
-    <div class="divider"></div>
+    <h3 class="center-align">Blog</h3>
     {% if posts %}
         {% for post in posts %}
         <div class="row">
-            <p class="aaroncymor-post-published-date">Published: {{ post.published_date | date:"M, d Y" }}</p>
             <p class="aaroncymor-post-title">{{ post.title }}</p>
             <p class="aaroncymor-post-content">{{ post.short_content }}</p>
-
+            <p class="aaroncymor-post-published-date">Published: {{ post.published_date | date:"M d, Y h:i a" }}</p>
             {% if is_paginated %}
                 {% if request.session.authorized %}
                 <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ page_obj.number }}">Edit</a>
@@ -23,6 +21,7 @@
                 {% endif %}
                 Read more <a href="{% url 'post-detail' post.id %}">here</a>.
             {% endif %}
+            <div class="divider"></div>
         </div>
         {% endfor %}
 

@@ -14,7 +14,7 @@
 
 {% block content %}
 <div class="container">
-    <h3>Project Form</h3>
+    <h3 class="center-align">Project Form</h3>
     <div class="divider"></div>
     <form method="post">
         {% csrf_token %}
@@ -59,6 +59,7 @@
     $(document).ready(function(){
         $('.sidenav').sidenav();
         $('.collapsible').collapsible();
+        $('select').formSelect();
     });
 </script>
 {% endblock javascript %}

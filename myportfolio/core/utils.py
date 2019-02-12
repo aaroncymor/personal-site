@@ -13,6 +13,10 @@ def parse_html_content(post_content):
     soup = BeautifulSoup(post_content)
     return soup.get_text()
 
+def enum(sequence, start=0):
+    for index, value in enumerate(sequence):
+        yield index + start, value
+
 def group_pagination(num_pages, group_num):
     """
     Let's say in our queryset, we have 11 number of pages,
