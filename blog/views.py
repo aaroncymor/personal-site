@@ -71,7 +71,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
                     post.published_date = published_date
                     post.save()
 
-                    post_tags = post.tag_set.all().values_list('tag', flat=True)
+                    post_tags = post.tags.all().values_list('tag', flat=True)
                     
                     # delete if tag was removed from form POST
                     for post_tag in post_tags:
@@ -117,7 +117,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
         if 'id' in request_get_keys:
             try:
                 post = get_object_or_404(Post, pk=request.GET['id'])
-                tags = post.tags
+                tags = post.tags_obj
 
                 if not post:
                     raise Http404

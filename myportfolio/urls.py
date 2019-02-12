@@ -25,9 +25,11 @@ urlpatterns = [
     path('admin/filebrowser/', site.urls),
     path('grappelli/', include('grappelli.urls')),
     path('tinymce/', include('tinymce.urls')),
+    path('api-auth/', include('rest_framework.urls')),
 
     path('admin/', admin.site.urls),
     path('', core_views.HomeView.as_view(), name='home'),
+    path('api/v1/', include('myportfolio.myportfolioapi.apiv1', namespace='api')),
     path('login/', core_views.LoginView.as_view(), name='login'),
     path('logout/', core_views.logout_view, name='logout'),
     path('dashboard/', core_views.DashboardView.as_view(), name='dashboard'),

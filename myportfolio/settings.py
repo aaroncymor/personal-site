@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 
     # third party apps 
     'tinymce',
+    'rest_framework',
 
     # internal
     'myportfolio.core',

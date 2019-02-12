@@ -25,9 +25,9 @@
                                 <span class="card-title">{{ post.title }}</span>
                                 <p>{{ post.short_content }}</p>
 
-                                {% if post.tag_set.all %}
+                                {% if post.tags.all %}
                                     <p>Tags</p>
-                                    {% for tag in post.tag_set.all %}
+                                    {% for tag in post.tags.all %}
                                         <div class="chip">{{ tag }}</div>
                                     {% endfor %}
                                 {% endif %}
