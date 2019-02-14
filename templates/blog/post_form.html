@@ -41,7 +41,7 @@
         </p>
         <p>
             <label>Tags:</label>
-            <div class="chips chips-initial"></div>
+            <div class="chips chips-autocomplete"></div>
             <div id="tag-container">
                 {% if tags %}
                     {% for t in tags %}
@@ -73,7 +73,6 @@
         <a href="{% url 'post-detail' post_id %}">View</a>
         {% endif %}
     {% endif %}
-
 </div>
 {% endblock content %}
 
@@ -85,7 +84,7 @@
     $('.sidenav').sidenav();
     $('.collapsible').collapsible();
     $('select').formSelect();
-    $('.chips-initial').chips({
+    $('.chips-autocomplete').chips({
         data: {{ tags | safe }},
         limit: 4,
         onChipAdd: function(e, data){
@@ -100,6 +99,9 @@
         },
         onChipDelete: function(e, data) {
             $('input#tag-' + chipValue(data)).remove();
+        },
+        autocompleteOptions: {
+            data: {{ tags_autocomplete | safe }}
         }
     });
 

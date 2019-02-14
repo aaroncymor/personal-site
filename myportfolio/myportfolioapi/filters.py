@@ -9,6 +9,9 @@ from blog.models import (
 
 from projects.models import Project
 
+class CharInFilter(filters.BaseInFilter, filters.CharFilter):
+    pass
+
 class CategoryFilter(FilterSet):
     name = filters.CharFilter(field_name='name', lookup_expr='icontains')
     post_id = filters.NumberFilter(field_name='posts__id')
@@ -26,6 +29,8 @@ class PostFilter(FilterSet):
     title = filters.CharFilter(field_name='title', lookup_expr='icontains')
     tag_id = filters.NumberFilter(field_name='tags__id')
     tag = filters.CharFilter(field_name='tags__tag', lookup_expr='iexact')
+    
+    tags = CharInFilter(field_name='tags__tag', lookup_expr='in')
     
     class Meta:
         model = Post

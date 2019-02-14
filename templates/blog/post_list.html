@@ -5,6 +5,33 @@
 <div class="container">
     <h3 class="center-align">Blog</h3>
     {% if posts %}
+        <div class="row">
+            <form method="post" action="{% url 'post-search' %}">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+
+                {{ form.source.errors }}
+                {{ form.source }}
+                <p>
+                    {{ form.category.label_tag }}
+                    {{ form.category.errors }}
+                    {{ form.category }}
+                </p>
+                <p>
+                    {{ form.title.label_tag }}
+                    {{ form.title.errors }}
+                    {{ form.title }}
+                </p>                
+                <p>
+                    <label>Tags:</label>
+                    <div class="chips chips-autocomplete"></div>
+                    <div id="tag-container">
+                    </div>
+                </p>
+                <input type="submit" value="Search" />
+            </form>
+        </div>
+
         {% for post in posts %}
         <div class="row">
             <p class="aaroncymor-post-title">{{ post.title }}</p>
@@ -53,3 +80,38 @@
     {% endif %}
 </div>
 {% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.sidenav').sidenav();
+    $('.collapsible').collapsible();
+    $('select').formSelect();
+    $('.chips-autocomplete').chips({
+        limit: 10,
+        onChipAdd: function(e, data){
+            var chipVal = chipValue(data);
+            var tagId = 'tag-' + chipVal;
+            var inputElem = '<input type="hidden" id="' + tagId;
+            inputElem += '" value="' + chipVal + '" name="tags" />';
+            
+            console.log($.inArray(chipVal, $(this).attr('chipsData')));
+            
+            $("div#tag-container").append(inputElem);
+        },
+        onChipDelete: function(e, data) {
+            $('input#tag-' + chipValue(data)).remove();
+        },
+        autocompleteOptions: {
+            data: {{ tags_autocomplete | safe }}
+        }
+    });
+
+    function chipValue(data){
+        return data.childNodes[0].textContent;
+    }
+  });
+</script>
+{% endblock %}

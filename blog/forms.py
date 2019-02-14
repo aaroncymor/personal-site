@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django import forms
 
 from tinymce.widgets import TinyMCE
@@ -16,5 +18,18 @@ class PostForm(forms.Form):
             widget=TinyMCE(attrs={'cols': 80, 'rows': 30})
         )
     publish = forms.BooleanField(required=False, label="Publish")
+
+
+class PostSearchForm(forms.Form):
+    category = forms.ChoiceField(
+            required=False,
+            label="Category", 
+            widget=forms.Select(attrs={'class': 'input-field'}),
+            choices=list(chain([('', 'None')], Category.objects.all().values_list('name', 'name')))
+        )
+    title = forms.CharField(
+            required=False,
+            label="Title"
+        )
 
     

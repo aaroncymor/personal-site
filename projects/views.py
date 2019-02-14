@@ -118,6 +118,7 @@ def get_project_rankings(request):
 
     return render(request, 'projects/project_rank_form.html', context)
 
+
 def update_project_rankings(request):
     if request.method == "POST":
         if 'ranks' in request.POST.keys():
