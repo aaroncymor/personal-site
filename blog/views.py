@@ -49,6 +49,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
         post = None
         if form.is_valid():
             post_data = request.POST.dict()
+            # tags from form
             tags = request.POST.getlist('tags')
 
             try:
@@ -71,17 +72,19 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
                     post.published_date = published_date
                     post.save()
 
+                    # tags recorded in database
                     post_tags = post.tags.all().values_list('tag', flat=True)
                     
-                    # delete if tag was removed from form POST
+                    # delete tag in database if tag was removed from form
                     for post_tag in post_tags:
                         if post_tag not in tags:
-                            tag = Tag.objects.get(post=post, tag=post_tag)
-                            tag.delete()
+                            Tag.objects.get(post=post, tag=post_tag).delete()
 
                     # insert tag if not existing in tags of post
                     for tag in tags:
                         if tag not in post_tags:
+                            # check if tag exists in database using filter
+                            
                             Tag.objects.create(post=post, tag=tag)
                 except ValueError:
                     pass

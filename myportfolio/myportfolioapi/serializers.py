@@ -64,5 +64,5 @@ class TagSerializer(serializers.HyperlinkedModelSerializer):
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Tag
+        model = Project
         fields = ('id', 'name', 'description', 'rank')

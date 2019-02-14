@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 
 from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import mixins, status, viewsets, serializers
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
@@ -22,6 +23,13 @@ from .serializers import (
     ProjectSerializer
 )
 
+from .filters import (
+    CategoryFilter,
+    PostFilter,
+    TagFilter,
+    ProjectFilter
+)
+
 # Create your views here.
 
 class UserViewSet(mixins.ListModelMixin,
@@ -36,6 +44,8 @@ class CategoryViewSet(mixins.ListModelMixin,
                          viewsets.GenericViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = CategoryFilter
 
 
 class PostViewSet(mixins.ListModelMixin,
@@ -43,6 +53,8 @@ class PostViewSet(mixins.ListModelMixin,
                   viewsets.GenericViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    filter_backends = (DjangoFilterBackend,)    
+    filter_class = PostFilter
 
 
 class TagViewSet(mixins.ListModelMixin,
@@ -50,3 +62,14 @@ class TagViewSet(mixins.ListModelMixin,
                  viewsets.GenericViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    filter_backends = (DjangoFilterBackend,)    
+    filter_class = TagFilter
+
+
+class ProjectViewSet(mixins.ListModelMixin, 
+                     mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    filter_backends = (DjangoFilterBackend,)    
+    filter_class = ProjectFilter
