@@ -169,6 +169,9 @@ TINYMCE_DEFAULT_CONFIG = {
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
 
+## TODO: Reference myportfolio.core.utils.group_pagination
+## Check if we need to make partitions for pagination.
+
 # Grouping of pages. Basically how may page numbers you group by
 # Example below woulb mean group by 3, which will appear like this.
 # 1 2 3 >

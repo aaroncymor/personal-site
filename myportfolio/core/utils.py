@@ -1,6 +1,10 @@
 from math import ceil
 
 from django.conf import settings
+from django.views import generic
+from django.core.exceptions import ImproperlyConfigured
+from django.db.models.query import QuerySet
+
 
 from bs4 import BeautifulSoup
 
@@ -13,9 +17,85 @@ def parse_html_content(post_content):
     soup = BeautifulSoup(post_content)
     return soup.get_text()
 
+
 def enum(sequence, start=0):
     for index, value in enumerate(sequence):
         yield index + start, value
+
+
+class ModifiedListView(generic.ListView):
+    filter_class = None
+    filter_fields = []
+    filter_field_suffix = '_search'
+    filter_refresh_key = 'refresh'
+
+    def get_filter_class(self):
+        return self.filter_class
+    
+    def get_filter_fields(self):
+        return self.filter_fields
+
+    def get_filter_field_suffix(self):
+        return self.filter_field_suffix
+
+    def get_filter_refresh_key(self):
+        return self.filter_refresh_key
+
+    def get_queryset(self):
+        """
+        Return the list of items for this view.
+        The return value must be an iterable and may be an instance of
+        `QuerySet` in which case `QuerySet` specific behavior will be enabled.
+        
+        -Aaron overriding get_queryset for pagination with filters
+        https://github.com/django/django/blob/2.1/django/views/generic/list.py#L194
+        """
+        if self.queryset is not None:
+            queryset = self.queryset
+            if isinstance(queryset, QuerySet):
+                queryset = queryset.all()
+        elif self.model is not None:
+            queryset = self.model._default_manager.all()
+        else:
+            raise ImproperlyConfigured(
+                "%(cls)s is missing a QuerySet. Define "
+                "%(cls)s.model, %(cls)s.queryset, or override "
+                "%(cls)s.get_queryset()." % {
+                    'cls': self.__class__.__name__
+                }
+            )
+
+        # Adding filter to queryset
+        filter_class = self.get_filter_class()
+        search_filter = {}
+
+        if self.request.session and self.filter_class:
+            session_keys = self.request.session.keys()
+            for base_filter in self.filter_class.base_filters.keys():
+                search_filter_field = base_filter + self.get_filter_field_suffix()
+                if search_filter_field in session_keys:
+                    refresh_key = self.get_filter_refresh_key()
+                    if refresh_key in self.request.GET.keys() \
+                        and self.request.GET[refresh_key] in ['true', 'True']:
+                        # remove session and don't use as filter for queryset
+                        del self.request.session[search_filter_field]
+                    else:
+                        # add to search filter and use for filtering queryset                     
+                        search_filter[base_filter] = self.request.session[search_filter_field]
+            queryset = self.filter_class(search_filter, queryset=queryset).qs
+        # End of adding filter queryset
+
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, str):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+
+        return queryset    
+
+
+## TODO: Reference myportfolio.core.utils.group_pagination
+## Check if we need to make partitions for pagination.
 
 def group_pagination(num_pages, group_num):
     """
@@ -97,3 +177,35 @@ def group_pagination(num_pages, group_num):
     }
 
     return grouped_pagination
+
+class ModifiedPaginateListView(generic.ListView):
+    # TODO: Check if this is needed.
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        allow_empty = self.get_allow_empty()
+        
+        if not allow_empty:
+            # When pagination is enabled and object_list is a queryset,
+            # it's better to do a cheap query than to load the unpaginated
+            # queryset in memory.
+            if self.get_paginate_by(self.object_list) is not None and hasattr(self.object_list, 'exists'):
+                is_empty = not self.object_list.exists()
+            else:
+                is_empty = not self.object_list
+                if is_empty:
+                    raise Http404(_("Empty list and '%(class_name)s.allow_empty' is False.") % {
+                        'class_name': self.__class__.__name__,
+                        })
+        # TODO: By given page_num, determine the current group_number
+
+        context = self.get_context_data()
+        if context['is_paginated']:
+            page_obj = context['page_obj']
+            num_pages = page_obj.paginator.num_pages
+
+            # give default value of 1
+            group_num = int(request.GET.get('group_num', 1))
+
+            context.update(group_pagination(num_pages, group_num))
+
+        return self.render_to_response(context)   

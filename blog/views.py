@@ -8,20 +8,24 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Post, Category, Tag
 from .forms import PostForm, PostSearchForm
+
 from myportfolio.myportfolioapi.filters import PostFilter
+from myportfolio.core.utils import ModifiedListView
 
 #from myportfolio.core.views import ModifiedPaginateListView
 
 # Create your views here.
 
-class PostListView(generic.ListView):
+class PostListView(ModifiedListView):
     model = Post
     paginate_by = 10
     context_object_name = 'posts'
     template_name = 'blog/post_list.html'
     queryset = Post.published_objects.all()
+    filter_class = PostFilter
 
     def get(self, request, *args, **kwargs):
+
         self.object_list = self.get_queryset()
         allow_empty = self.get_allow_empty()
 
@@ -39,6 +43,7 @@ class PostListView(generic.ListView):
                 raise Http404(_("Empty list and '%(class_name)s.allow_empty' is False.") % {
                     'class_name': self.__class__.__name__,
                 })
+
         context = self.get_context_data()
 
         # add form here
@@ -191,13 +196,25 @@ def submit_post_search(request):
     paginated, page, post_qs, is_paginated = None, None, None, False
     
     if request.method == "POST":
-        search_filter = {}
+        session_keys = request.session.keys()
 
+        # For each new post request or click of search form,
+        # remove session with name (reference: ModifiedListView)
+        # filter_class.base_filter + filter_field_suffix
+        if 'category_search' in session_keys:
+            del request.session['category_search']
+        
+        if 'title_search' in session_keys:
+            del request.session['title_search']
+        
+        if 'tags_search' in session_keys:
+            del request.session['tags_search']
+
+        search_filter = {}
         form = PostSearchForm(request.POST)
         category, title, tags = None, None, None
         if form.is_valid():
             post_data = request.POST.dict()
-            print("POST DATA", post_data)
 
             category = post_data.get('category', None)
             if category:
@@ -210,17 +227,24 @@ def submit_post_search(request):
         if 'tags' in request.POST.keys():
             tags = ','.join(request.POST.getlist('tags'))
         
+        if not category and not title and not tags:
+            return redirect(reverse('post-list'))
+
+        # add sessions for filter fields to cache paginated queryset
+        # session name must be in filter_class.base_filter with the item
+        # by filter_field_suffix (See ModifiedListView in utils). In this
+        # case, it is base_filter + '_search'
         if category:
             search_filter['category_name'] = category
+            request.session['category_name_search'] = category
         
         if title:
             search_filter['title'] = title
+            request.session['title_search'] = title
 
         if tags:
             search_filter['tags'] = tags
-        
-        if not category and not title and not tags:
-            return redirect(reverse('post-list'))
+            request.session['tags_search'] = tags
         
         post_qs = PostFilter(search_filter, 
                              queryset=Post.published_objects.all()).qs
@@ -230,7 +254,7 @@ def submit_post_search(request):
                                                                     queryset=post_qs,
                                                                     page_size=10)
         context['paginator'] = paginator
-        context['page'] = page
+        context['page_obj'] = page
         context['is_paginated'] = is_paginated
         context['object_list'] = post_qs
         context['posts'] = post_qs
