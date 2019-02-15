@@ -8,18 +8,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Post, Category, Tag
 from .forms import PostForm, PostSearchForm
+
 from myportfolio.myportfolioapi.filters import PostFilter
+from myportfolio.core.utils import ModifiedListView
 
 #from myportfolio.core.views import ModifiedPaginateListView
 
 # Create your views here.
 
-class PostListView(generic.ListView):
+class PostListView(ModifiedListView):
     model = Post
     paginate_by = 10
     context_object_name = 'posts'
     template_name = 'blog/post_list.html'
     queryset = Post.published_objects.all()
+    filter_class = PostFilter
+    filter_fields = ['category_name_search', 'title_search', 'tags_search']
 
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
@@ -191,13 +195,23 @@ def submit_post_search(request):
     paginated, page, post_qs, is_paginated = None, None, None, False
     
     if request.method == "POST":
-        search_filter = {}
+        session_keys = request.session.keys()
 
+        # clear if existing session
+        if 'category_search' in session_keys:
+            del request.session['category_search']
+        
+        if 'title_search' in session_keys:
+            del request.session['title_search']
+        
+        if 'tags_search' in session_keys:
+            del request.session['tags_search']
+
+        search_filter = {}
         form = PostSearchForm(request.POST)
         category, title, tags = None, None, None
         if form.is_valid():
             post_data = request.POST.dict()
-            print("POST DATA", post_data)
 
             category = post_data.get('category', None)
             if category:
@@ -210,17 +224,20 @@ def submit_post_search(request):
         if 'tags' in request.POST.keys():
             tags = ','.join(request.POST.getlist('tags'))
         
+        if not category and not title and not tags:
+            return redirect(reverse('post-list'))
+
         if category:
             search_filter['category_name'] = category
+            request.session['category_name_search'] = category
         
         if title:
             search_filter['title'] = title
+            request.session['title_search'] = title
 
         if tags:
             search_filter['tags'] = tags
-        
-        if not category and not title and not tags:
-            return redirect(reverse('post-list'))
+            request.session['tags_search'] = tags
         
         post_qs = PostFilter(search_filter, 
                              queryset=Post.published_objects.all()).qs
