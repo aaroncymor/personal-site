@@ -110,6 +110,21 @@ class ProjectFormView(LoginRequiredMixin, generic.FormView):
         return self.render_to_response(context)
 
 
+def delete_project(request, pk):
+    if Project.objects.filter(pk=pk).exists():
+        project = Project.objects.get(pk=pk)
+        temp_rank = project.rank
+        project.delete()
+
+        # update rankings
+        projects = Project.objects.filter(rank__gt=temp_rank).order_by('rank')
+        for i, proj in enumerate(projects):
+            proj.rank = temp_rank + i
+            proj.save()
+        return redirect(reverse('project-list'))
+    return Http404s
+
+
 def get_project_rankings(request):
     context = {}
     projects = Project.objects.all().order_by('rank')

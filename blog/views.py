@@ -242,6 +242,13 @@ def submit_post_search(request):
     return render(request, 'blog/post_list.html', context)
 
 
+def delete_post(request, pk):
+    if Post.objects.filter(pk=pk).exists():
+        post = Post.objects.get(pk=pk)
+        post.delete()
+        return redirect(reverse('post-list'))
+    return Http404
+
 
 def get_post_random_tags_search(request):
     # TODO: This view will showcase randomize tags and when you click,
@@ -249,8 +256,8 @@ def get_post_random_tags_search(request):
     context = {}
     return render(request, 'blog/post_search.html', context)
 
-# None view functions
 
+# None view functions
 def paginate_queryset(request, queryset, page_size, orphans=0, allow_empty=True, page_kwarg='page'):
     """
     Code coming from the following attributes and methods under ListView CBV.

@@ -40,6 +40,7 @@
             {% if is_paginated %}
                 {% if request.session.authorized %}
                 <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ page_obj.number }}">Edit</a>
+                <a href="{% url 'post-delete' post.id %}">Delete</a>
                 {% endif %}
                 Read more <a href="{% url 'post-detail' post.id %}?prev_page_session={{ page_obj.number }}">here</a>.
             {% else %}
