@@ -7,12 +7,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Project
 from .forms import ProjectForm
 
-from myportfolio.core.utils import enum
-from myportfolio.core.views import ModifiedPaginateListView
+from myportfolio.core.utils import enum, ModifiedListView
 
 # Create your views here.
 
-class ProjectListView(ModifiedPaginateListView):
+class ProjectListView(ModifiedListView):
     model = Project
     paginate_by = 10
     context_object_name = 'projects'

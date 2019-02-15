@@ -23,9 +23,9 @@ class PostListView(ModifiedListView):
     template_name = 'blog/post_list.html'
     queryset = Post.published_objects.all()
     filter_class = PostFilter
-    filter_fields = ['category_name_search', 'title_search', 'tags_search']
 
     def get(self, request, *args, **kwargs):
+
         self.object_list = self.get_queryset()
         allow_empty = self.get_allow_empty()
 
@@ -43,6 +43,7 @@ class PostListView(ModifiedListView):
                 raise Http404(_("Empty list and '%(class_name)s.allow_empty' is False.") % {
                     'class_name': self.__class__.__name__,
                 })
+
         context = self.get_context_data()
 
         # add form here
@@ -197,7 +198,9 @@ def submit_post_search(request):
     if request.method == "POST":
         session_keys = request.session.keys()
 
-        # clear if existing session
+        # For each new post request or click of search form,
+        # remove session with name (reference: ModifiedListView)
+        # filter_class.base_filter + filter_field_suffix
         if 'category_search' in session_keys:
             del request.session['category_search']
         
@@ -227,6 +230,10 @@ def submit_post_search(request):
         if not category and not title and not tags:
             return redirect(reverse('post-list'))
 
+        # add sessions for filter fields to cache paginated queryset
+        # session name must be in filter_class.base_filter with the item
+        # by filter_field_suffix (See ModifiedListView in utils). In this
+        # case, it is base_filter + '_search'
         if category:
             search_filter['category_name'] = category
             request.session['category_name_search'] = category
@@ -247,7 +254,7 @@ def submit_post_search(request):
                                                                     queryset=post_qs,
                                                                     page_size=10)
         context['paginator'] = paginator
-        context['page'] = page
+        context['page_obj'] = page
         context['is_paginated'] = is_paginated
         context['object_list'] = post_qs
         context['posts'] = post_qs
