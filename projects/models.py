@@ -17,11 +17,18 @@ class Project(PortfolioMixin):
 
     class Meta:
         db_table = 'project'
-    
-    def short_description(self):
+
+    @property
+    def short_description_for_home(self):
         # Slice description to 200 characters
         parsed_description = parse_html_content(self.description)
-        return parsed_description[:200]
+        return parsed_description[:500]    
+
+    @property
+    def short_description_for_list(self):
+        # Slice description to 200 characters
+        parsed_description = parse_html_content(self.description)
+        return parsed_description[:500]
 
     def __str__(self):
         return self.name

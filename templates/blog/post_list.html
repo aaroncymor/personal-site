@@ -35,7 +35,7 @@
         {% for post in posts %}
         <div class="row">
             <p class="aaroncymor-post-title">{{ post.title }}</p>
-            <p class="aaroncymor-post-content">{{ post.short_content }}</p>
+            <p class="aaroncymor-post-content">{{ post.short_content_for_list }}</p>
             <p class="aaroncymor-post-published-date">Published: {{ post.published_date | date:"M d, Y h:i a" }}</p>
             {% if post.tags.all %}
                 <p class="aaroncymor-post-tags">
