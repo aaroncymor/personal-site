@@ -23,7 +23,7 @@ class Category(PortfolioMixin):
 
 
 class Post(PortfolioMixin):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=100)
     content = tinymce_models.HTMLField()
     published_date = models.DateTimeField(blank=True, null=True)
@@ -41,8 +41,8 @@ class Post(PortfolioMixin):
         return parsed_content[:200]
     
     @property
-    def tags(self):
-        return list(self.tag_set.all().values('tag'))
+    def tags_obj(self):
+        return list(self.tags.all().values('tag'))
     
     @property
     def is_published(self):
@@ -57,7 +57,7 @@ class Post(PortfolioMixin):
 
 class Tag(PortfolioMixin):
     tag = models.CharField(max_length=100)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='tags')
 
     class Meta:
         db_table = 'tag'

@@ -5,19 +5,58 @@
 <div class="container">
     <h3 class="center-align">Blog</h3>
     {% if posts %}
+        <div class="row">
+            <form method="post" action="{% url 'post-search' %}">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+
+                {{ form.source.errors }}
+                {{ form.source }}
+                <p>
+                    {{ form.category.label_tag }}
+                    {{ form.category.errors }}
+                    {{ form.category }}
+                </p>
+                <p>
+                    {{ form.title.label_tag }}
+                    {{ form.title.errors }}
+                    {{ form.title }}
+                </p>                
+                <p>
+                    <label>Tags:</label>
+                    <div class="chips chips-autocomplete"></div>
+                    <div id="tag-container">
+                    </div>
+                </p>
+                <input type="submit" value="Search" />
+            </form>
+        </div>
+
         {% for post in posts %}
         <div class="row">
             <p class="aaroncymor-post-title">{{ post.title }}</p>
             <p class="aaroncymor-post-content">{{ post.short_content }}</p>
             <p class="aaroncymor-post-published-date">Published: {{ post.published_date | date:"M d, Y h:i a" }}</p>
+            {% if post.tags.all %}
+                <p class="aaroncymor-post-tags">
+                    <label>Tags:</label>
+                    {% for tag in post.tags.all %}
+                        <div class="chip">
+                            {{ tag }}
+                        </div>
+                    {% endfor %}
+                </p>
+            {% endif %}
             {% if is_paginated %}
                 {% if request.session.authorized %}
                 <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ page_obj.number }}">Edit</a>
+                <a href="{% url 'post-delete' post.id %}">Delete</a>
                 {% endif %}
                 Read more <a href="{% url 'post-detail' post.id %}?prev_page_session={{ page_obj.number }}">here</a>.
             {% else %}
                 {% if request.session.authorized %}
                 <a href="{% url 'post-form' %}?id={{ post.id }}">Edit</a>
+                <a href="{% url 'post-delete' post.id %}">Delete</a>
                 {% endif %}
                 Read more <a href="{% url 'post-detail' post.id %}">here</a>.
             {% endif %}
@@ -53,3 +92,38 @@
     {% endif %}
 </div>
 {% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.sidenav').sidenav();
+    $('.collapsible').collapsible();
+    $('select').formSelect();
+    $('.chips-autocomplete').chips({
+        limit: 10,
+        onChipAdd: function(e, data){
+            var chipVal = chipValue(data);
+            var tagId = 'tag-' + chipVal;
+            var inputElem = '<input type="hidden" id="' + tagId;
+            inputElem += '" value="' + chipVal + '" name="tags" />';
+            
+            console.log($.inArray(chipVal, $(this).attr('chipsData')));
+            
+            $("div#tag-container").append(inputElem);
+        },
+        onChipDelete: function(e, data) {
+            $('input#tag-' + chipValue(data)).remove();
+        },
+        autocompleteOptions: {
+            data: {{ tags_autocomplete | safe }}
+        }
+    });
+
+    function chipValue(data){
+        return data.childNodes[0].textContent;
+    }
+  });
+</script>
+{% endblock %}
