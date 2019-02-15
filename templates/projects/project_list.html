@@ -7,7 +7,7 @@
         {% for project in projects %}
             <div class="row">
                 <p class="aaroncymor-project-name">{{ project.name }}</p>
-                <p class="aaron-project-description">{{ project.short_description }}</p>
+                <p class="aaron-project-description">{{ project.short_description_for_list }}</p>
                 {% if is_paginated %}
                     {% if request.session.authorized %}
                     <a href="{% url 'project-form' %}?id={{ project.id }}&prev_page_session={{ page_obj.number }}">Edit</a>

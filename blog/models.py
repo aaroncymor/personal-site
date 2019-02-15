@@ -35,10 +35,16 @@ class Post(PortfolioMixin):
         db_table = 'post'
     
     @property
-    def short_content(self):
+    def short_content_for_home(self):
         # Slice content to 200 characters
         parsed_content = parse_html_content(self.content)
         return parsed_content[:200]
+
+    @property
+    def short_content_for_list(self):
+        # Slice content to 500 characters
+        parsed_content = parse_html_content(self.content)
+        return parsed_content[:500]
     
     @property
     def tags_obj(self):
