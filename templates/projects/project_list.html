@@ -17,6 +17,7 @@
                 {% else %}
                     {% if request.session.authorized %}
                     <a href="{% url 'project-form' %}?id={{ project.id }}">Edit</a>
+                    <a href="{% url 'project-delete' project.id %}">Delete</a>                    
                     {% endif %}
                     Read more <a href="{% url 'project-detail' project.id %}">here</a>.
             {% endif %}
