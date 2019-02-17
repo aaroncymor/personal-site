@@ -280,7 +280,7 @@ def get_random_tags(request):
 
     context = {}
     if 'tag' in request.GET.keys():
-        posts = Post.objects.filter(tags__tag=request.GET['tag'])
+        posts = Post.published_objects.filter(tags__tag=request.GET['tag'])
         context['posts'] = posts
     
     # TODO: we can change how tags we want to appear
