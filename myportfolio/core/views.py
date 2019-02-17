@@ -16,10 +16,10 @@ class HomeView(generic.TemplateView):
         context = self.get_context_data(**kwargs)
 
         # Queryset for blogs - latest two (2) posts
-        posts = Post.published_objects.all().order_by('-timestamp')[:2]
+        posts = Post.published_objects.all().order_by('-timestamp')[:3]
 
         # Queryset for projects - latest two (2) projects
-        projects = Project.objects.all().order_by('rank')[:2]
+        projects = Project.objects.all().order_by('rank')[:3]
 
         # Assign to context
         context['posts'] = posts

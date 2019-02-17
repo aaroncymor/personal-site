@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+    {% if tags %}
+        {% for tag in tags %}
+            <a href="{% url 'post-random-tags' %}?tag={{ tag }}"><div class="chip">{{ tag }}</div></a>
+        {% endfor %}
+    {% endif %}
+    <div>
+    {% if posts %}
+        {% for post in posts %}
+            <div class="row">
+                {{ post.title }}
+                {{ post.content | safe }}
+                {{ post.published_date }}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
