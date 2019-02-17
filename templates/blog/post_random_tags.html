@@ -13,9 +13,10 @@
     {% if posts %}
         {% for post in posts %}
             <div class="row">
-                {{ post.title }}
-                {{ post.content | safe }}
-                {{ post.published_date }}
+                <p>{{ post.title }}</p>
+                {{ post.short_content_for_list }}
+                <p>Published date: {{ post.published_date }}</p>
+                <div class="divider"></div>
             </div>
         {% endfor %}
     {% endif %}
