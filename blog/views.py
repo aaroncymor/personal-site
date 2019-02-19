@@ -274,11 +274,29 @@ def delete_post(request, pk):
     return Http404
 
 
-def get_post_random_tags_search(request):
+def get_random_tags(request):
     # TODO: This view will showcase randomize tags and when you click,
     # it will show the corresponding post.
+
     context = {}
-    return render(request, 'blog/post_search.html', context)
+    if 'tag' in request.GET.keys():
+        posts = Post.published_objects.filter(tags__tag=request.GET['tag'])
+        context['posts'] = posts
+    
+    # TODO: we can change how tags we want to appear
+    # for now default value of 10.
+    from random import choice
+    tag_list = Tag.objects.values_list('tag', flat=True).distinct()
+    tags = []
+    while len(tags) < 10:
+        random_tag = choice(tag_list)
+        if random_tag not in tags:
+            tags.append(random_tag)
+        
+        if len(tag_list) < 10 and len(tags) == len(tag_list):
+            break
+    context['tags'] = tags
+    return render(request, 'blog/post_random_tags.html', context)
 
 
 # None view functions
