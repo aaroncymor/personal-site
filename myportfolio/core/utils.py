@@ -8,15 +8,54 @@ from django.db.models.query import QuerySet
 
 from bs4 import BeautifulSoup
 
-def parse_html_content(post_content):
-    """[summary]
-    
-    Arguments:
-        html_doc {[type]} -- [description]
+# BeautifulSoup related utils
+def load_html_doc(html_doc):
     """
-    soup = BeautifulSoup(post_content)
+    """
+    return BeautifulSoup(html_doc)
+
+
+def get_html_content(soup):
+    """
+    """
+    try:
+        text = soup.get_text()
+    except AttributeError:
+        return
     return soup.get_text()
 
+
+def get_tags(soup, selector):
+    """
+    """
+    try:
+        tags = soup.select(selector)
+    except AttributeError:
+        return
+    return tags
+
+
+def assign_attr_to_tag(tag, target_attr, attr_val):
+    """
+    """
+    try:
+        tag[target_attr] = attr_val
+    except (KeyError, AttributeError):
+        return
+
+
+def append_classes_to_tag(tag, addtl_class=[]):
+    """
+    """
+    try:
+        tag_classes = tag['class']
+        if addtl_class in tag_classes:
+            return
+        # addtl_class should be list of strings
+        tag['class'] += addtl_class
+    except KeyError:
+        return
+# end of BeautifulSoup related utils
 
 def enum(sequence, start=0):
     for index, value in enumerate(sequence):

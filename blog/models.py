@@ -6,7 +6,11 @@ from django.db import models
 from tinymce import models as tinymce_models
 
 from .managers import PublishedPostManager
-from myportfolio.core.utils import parse_html_content
+from myportfolio.core.utils import (
+    load_html_doc,
+    get_html_content,
+    get_tags
+)
 from myportfolio.core.models import PortfolioMixin
 
 # Create your models here.
@@ -37,14 +41,22 @@ class Post(PortfolioMixin):
     @property
     def short_content_for_home(self):
         # Slice content to 200 characters
-        parsed_content = parse_html_content(self.content)
-        return parsed_content[:200]
+        soup = load_html_doc(self.content)
+        deciphers = soup.select('span.decipher')
+        for decipher in deciphers:
+            decipher.decompose()
+        
+        return soup.get_text()[:200]
 
     @property
     def short_content_for_list(self):
         # Slice content to 500 characters
-        parsed_content = parse_html_content(self.content)
-        return parsed_content[:500]
+        soup = load_html_doc(self.content)
+        deciphers = soup.select('span.decipher')
+        for decipher in deciphers:
+            decipher.decompose()
+
+        return soup.get_text()[:200]
     
     @property
     def tags_obj(self):
@@ -71,3 +83,12 @@ class Tag(PortfolioMixin):
     
     def __str__(self):
         return self.tag
+
+
+class Decipher(PortfolioMixin):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='deciphers')
+    hidden_text = models.CharField(max_length=255)
+    name = models.CharField(max_length=100, null=True, default='')
+    challenge = models.TextField()
+    clue = models.TextField()
+    code = models.CharField(max_length=20, null=True, blank=True)
