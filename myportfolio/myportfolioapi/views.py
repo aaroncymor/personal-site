@@ -10,7 +10,8 @@ from rest_framework.response import Response
 from blog.models import (
     Category,
     Post,
-    Tag
+    Tag,
+    Decipher
 )
 
 from projects.models import Project
@@ -20,14 +21,16 @@ from .serializers import (
     CategorySerializer,
     PostSerializer,
     TagSerializer,
-    ProjectSerializer
+    ProjectSerializer,
+    DecipherSerializer,
 )
 
 from .filters import (
     CategoryFilter,
     PostFilter,
     TagFilter,
-    ProjectFilter
+    DecipherFilter,
+    ProjectFilter,
 )
 
 # Create your views here.
@@ -64,6 +67,15 @@ class TagViewSet(mixins.ListModelMixin,
     serializer_class = TagSerializer
     filter_backends = (DjangoFilterBackend,)    
     filter_class = TagFilter
+
+
+class DecipherViewSet(mixins.ListModelMixin,
+                 mixins.RetrieveModelMixin,
+                 viewsets.GenericViewSet):
+    queryset = Decipher.objects.all()
+    serializer_class = DecipherSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = DecipherFilter
 
 
 class ProjectViewSet(mixins.ListModelMixin, 

@@ -4,7 +4,8 @@ from django_filters.rest_framework import FilterSet
 from blog.models import (
     Category,
     Post,
-    Tag
+    Tag,
+    Decipher
 )
 
 from projects.models import Project
@@ -17,7 +18,7 @@ class CategoryFilter(FilterSet):
     post_id = filters.NumberFilter(field_name='posts__id')
     post_title = filters.CharFilter(field_name='posts__title', lookup_expr='iexact')
     tag_id = filters.NumberFilter(field_name='posts__tags__id')
-    tag = filters.CharFilter(field_name='posts__tags')
+    tag = filters.CharFilter(field_name='posts__tags', lookup_expr='iexact')
     
     class Meta:
         model = Category
@@ -40,13 +41,25 @@ class PostFilter(FilterSet):
 class TagFilter(FilterSet):
     tag = filters.CharFilter(field_name='tag', lookup_expr='icontains')
     post_id = filters.NumberFilter(field_name='post__id')
-    post_title = filters.NumberFilter(field_name='post__title', lookup_expr='iexact')
+    post_title = filters.CharFilter(field_name='post__title', lookup_expr='iexact')
     category_id = filters.NumberFilter(field_name='post__category__id')
-    category_name = filters.NumberFilter(field_name='post__category__name', lookup_expr='icontains')
+    category_name = filters.CharFilter(field_name='post__category__name', lookup_expr='icontains')
 
     class Meta:
         model = Tag
         fields = ['id', 'tag', 'post_id', 'post_title', 'category_id', 'category_name']
+
+
+class DecipherFilter(FilterSet):
+    post_id = filters.NumberFilter(field_name='post__id')
+    post_title = filters.NumberFilter(field_name='post__title', lookup_expr='iexact')
+    name = filters.CharFilter(field_name='name', lookup_expr='icontains')
+    category_id = filters.NumberFilter(field_name='post__category__id')
+    category_name = filters.CharFilter(field_name='post__category__name', lookup_expr='icontains')
+
+    class Meta:
+        model = Decipher
+        fields = ['id', 'post_id', 'post_title', 'name', 'category_id', 'category_name']
 
 
 class ProjectFilter(FilterSet):

@@ -8,6 +8,7 @@ from .views import (
     CategoryViewSet,
     PostViewSet,
     TagViewSet,
+    DecipherViewSet,
     ProjectViewSet
 )
 
@@ -16,6 +17,7 @@ router.register(r'users', UserViewSet, base_name='user')
 router.register(r'categories', CategoryViewSet, base_name='category')
 router.register(r'posts', PostViewSet, base_name='post')
 router.register(r'tags', TagViewSet, base_name='tag')
+router.register(r'deciphers', DecipherViewSet, base_name='decipher')
 router.register(r'projects', ProjectViewSet, base_name='project')
 
 app_name = 'api'
