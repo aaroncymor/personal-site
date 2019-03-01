@@ -39,29 +39,28 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 
     category = CategorySerializer()
 
-    tags = serializers.HyperlinkedRelatedField(
-        many=True,
-        view_name='api:tag-detail',
-        read_only=True
-    )
-    deciphers = serializers.HyperlinkedRelatedField(
-        many=True,
-        view_name='api:decipher-detail',
-        read_only=True
-    )
+    #tags = serializers.HyperlinkedRelatedField(
+    #    many=True,
+    #    view_name='api:tag-detail',
+    #    read_only=True
+    #)
+    
+    #deciphers = serializers.HyperlinkedRelatedField(
+    #    many=True,
+    #    view_name='api:decipher-detail',
+    #    read_only=True
+    #)
     class Meta:
         model = Post
-        fields = ('_link', 'id', 'category', 'title', 'content', 'published_date', 'timestamp', 'tags', 'deciphers')
+        fields = ('_link', 'id', 'category', 'title', 'content', 'published_date', 'timestamp')
 
 
 class TagSerializer(serializers.HyperlinkedModelSerializer):
     _link = serializers.HyperlinkedIdentityField(
         view_name='api:tag-detail'
     )
-    post = serializers.HyperlinkedIdentityField(
-        view_name='api:post-detail'
-    )
-    
+    post = PostSerializer()
+
     class Meta:
         model = Tag
         fields = ('_link', 'id', 'tag', 'post', 'timestamp')

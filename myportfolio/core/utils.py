@@ -55,6 +55,32 @@ def append_classes_to_tag(tag, addtl_class=[]):
         tag['class'] += addtl_class
     except KeyError:
         return
+
+def wrap_element(soup, wrapper, tag, tag_attr):
+    """
+    soup
+    wrapper
+    tag
+    tag_attr: tag_attribute
+    """
+    try:
+        attr = getattr(tag, tag_attr)
+    except (TypeError):
+        attr = tag
+    wrap = getattr(attr, 'wrap')
+    if callable(wrap):
+        wrap(soup.new_tag(wrapper))
+
+def replace_element(soup, replacement, tag, tag_attr):
+    try:
+        attr = getattr(tag, tag_attr)
+    except (TypeError):
+        attr = tag
+    replace_with = getattr(attr, 'replace_with')
+    if callable(replace_with):
+        replace_with(soup.new_tag(replacement))
+
+
 # end of BeautifulSoup related utils
 
 def enum(sequence, start=0):
