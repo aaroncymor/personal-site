@@ -59,6 +59,23 @@ class Post(PortfolioMixin):
         return soup.get_text()[:200]
     
     @property
+    def sanitized_content(self):
+        soup = load_html_doc(self.content)
+        deciphers = soup.select('span.decipher')
+        for decipher in deciphers:
+            decipher_id = decipher.get('id', '')
+            decipher_classes = decipher.get('class', [])
+            new_tag = soup.new_tag('a', href='#')
+            new_tag.string = "[...]"
+            if decipher_id:
+                new_tag['id'] = decipher_id
+            new_tag['class'] = decipher_classes + ['tooltipped']
+            new_tag['data-position'] = "top"
+            new_tag['data-tooltip'] = "Click me, and try to crack code to unlock secret message."
+            decipher.replace_with(new_tag)
+        return soup.prettify(formatter="html5")
+    
+    @property
     def tags_obj(self):
         return list(self.tags.all().values('tag'))
     

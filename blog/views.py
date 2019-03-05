@@ -13,7 +13,8 @@ from myportfolio.myportfolioapi.filters import PostFilter
 from myportfolio.core.utils import (
     ModifiedListView, load_html_doc,
     get_tags, assign_attr_to_tag,
-    append_classes_to_tag
+    append_classes_to_tag, wrap_element,
+    replace_element
 )
 
 #from myportfolio.core.views import ModifiedPaginateListView
@@ -394,11 +395,6 @@ def process_decipher_in_post(post, post_content):
                     attr_val='decipherme-' + str(instance.id)
                 )
 
-                append_classes_to_tag(
-                    tag=decipher,
-                    addtl_class=["hide"] # hide class for materialize
-                )
-
                 # also append newly saved decipher's id so
                 # it would not be deleted later
                 content_decipher_ids.append(instance.id)
@@ -413,4 +409,4 @@ def process_decipher_in_post(post, post_content):
             instance = Decipher.objects.get(id=post_decipher_id)
             instance.delete()
 
-    return soup.prettify(formatter="html")
+    return soup.prettify(formatter="html5")

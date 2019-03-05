@@ -23,7 +23,7 @@
     <div class="divider"></div>
     <div>
         {{ post.title }}
-        {{ post.content | safe }}
+        {{ post.sanitized_content | safe }}
     </div>
     {% if prev_page_session %}
         <a href="{% url 'post-list' %}?page={{ prev_page_session }}">Back</a>
@@ -42,8 +42,13 @@
 
 {% block javascript %}
 <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
 <script src="{% static 'js/highlight.pack.js' %}"></script>
 <script type="text/javascript">
-    $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+
+    $(document).ready(function(){
+        $('.tooltipped').tooltip();
+        $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+    });
 </script>
 {% endblock javascript %}
