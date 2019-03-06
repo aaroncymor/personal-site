@@ -65,11 +65,12 @@ class Post(PortfolioMixin):
         for decipher in deciphers:
             decipher_id = decipher.get('id', '')
             decipher_classes = decipher.get('class', [])
-            new_tag = soup.new_tag('a', href='#')
+            new_tag = soup.new_tag('a')
             new_tag.string = "[...]"
             if decipher_id:
                 new_tag['id'] = decipher_id
-            new_tag['class'] = decipher_classes + ['tooltipped']
+                new_tag['href'] = '#modal-' + decipher_id
+            new_tag['class'] = decipher_classes + ['tooltipped', 'modal-trigger']
             new_tag['data-position'] = "top"
             new_tag['data-tooltip'] = "Click me, and try to crack code to unlock secret message."
             decipher.replace_with(new_tag)

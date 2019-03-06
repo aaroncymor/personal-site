@@ -70,6 +70,9 @@ class PostDetailView(generic.DetailView):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
 
+        deciphers = Decipher.objects.filter(post=self.object)
+        context['deciphers'] = deciphers
+
         if 'prev_page_session' in request.GET.keys():
             context['prev_page_session'] = request.GET['prev_page_session']
 

@@ -21,22 +21,36 @@
 <div class="container">
     <h3 class="center-align">Blog</h3>
     <div class="divider"></div>
-    <div>
-        {{ post.title }}
-        {{ post.sanitized_content | safe }}
-    </div>
-    {% if prev_page_session %}
-        <a href="{% url 'post-list' %}?page={{ prev_page_session }}">Back</a>
-        {% if request.session.authorized %}
-        <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ prev_page_session }}">Edit</a>
+    {% if post %}
+        <div>
+            {{ post.title }}
+            {{ post.sanitized_content | safe }}
+        </div>
+        {% if prev_page_session %}
+            <a href="{% url 'post-list' %}?page={{ prev_page_session }}">Back</a>
+            {% if request.session.authorized %}
+            <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ prev_page_session }}">Edit</a>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'post-list' %}">Back</a>
+            {% if request.session.authorized %}
+            <a href="{% url 'post-form' %}?id={{ post.id }}">Edit</a>
+            {% endif %}
         {% endif %}
-    {% else %}
-        <a href="{% url 'post-list' %}">Back</a>
-        {% if request.session.authorized %}
-        <a href="{% url 'post-form' %}?id={{ post.id }}">Edit</a>
+
+        {% if deciphers %}
+            {% for decipher in deciphers %}
+            <div id="modal-decipherme-{{ decipher.id }}" class="modal">
+                <div class="modal-content">
+                    {{ decipher.hidden_text }}
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-close">Close</a>
+                </div>
+            </div> 
+            {% endfor %}
         {% endif %}
     {% endif %}
-
 </div>
 {% endblock content %}
 
@@ -47,6 +61,7 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
+        $('.modal').modal();
         $('.tooltipped').tooltip();
         $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
     });
