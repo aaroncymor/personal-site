@@ -107,6 +107,6 @@ class Decipher(PortfolioMixin):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='deciphers')
     hidden_text = models.CharField(max_length=255)
     name = models.CharField(max_length=100, null=True, default='')
-    challenge = models.TextField()
+    challenge = tinymce_models.HTMLField()
     clue = models.TextField()
     code = models.CharField(max_length=20, null=True, blank=True)
