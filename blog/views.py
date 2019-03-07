@@ -1,17 +1,17 @@
 import datetime
 
-from django.http import Http404
+from django.http import Http404, HttpResponseNotAllowed
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic, View
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Post, Category, Tag, Decipher
-from .forms import PostForm, PostSearchForm
+from .forms import PostForm, PostSearchForm, DecipherForm
 
 from myportfolio.myportfolioapi.filters import PostFilter
 from myportfolio.core.utils import (
-    ModifiedListView, load_html_doc,
+    ModifiedSearchListView, load_html_doc,
     get_tags, assign_attr_to_tag,
     append_classes_to_tag, wrap_element,
     replace_element
@@ -19,9 +19,136 @@ from myportfolio.core.utils import (
 
 #from myportfolio.core.views import ModifiedPaginateListView
 
-# Create your views here.
 
-class PostListView(ModifiedListView):
+# Function based views here.
+def submit_post_search(request):
+    """Assumes paginated already, hence we use paginate queryset function.
+    
+    Arguments:
+        request {[type]} -- [description]
+    
+    Returns:
+        [type] -- [description]
+    """
+    context = {'form': PostSearchForm()}
+    paginated, page, post_qs, is_paginated = None, None, None, False
+    
+    if request.method == "POST":
+        session_keys = request.session.keys()
+
+        # For each new post request or click of search form,
+        # remove session with name (reference: ModifiedListView)
+        # filter_class.base_filter + filter_field_suffix
+        if 'category_search' in session_keys:
+            del request.session['category_search']
+        
+        if 'title_search' in session_keys:
+            del request.session['title_search']
+        
+        if 'tags_search' in session_keys:
+            del request.session['tags_search']
+
+        search_filter = {}
+        form = PostSearchForm(request.POST)
+        category, title, tags = None, None, None
+        if form.is_valid():
+            post_data = request.POST.dict()
+
+            category = post_data.get('category', None)
+            if category:
+                search_filter['category'] = category
+
+            title = post_data.get('title', None)
+            if title:
+                search_filter['title'] = title
+
+        if 'tags' in request.POST.keys():
+            tags = ','.join(request.POST.getlist('tags'))
+        
+        if not category and not title and not tags:
+            return redirect(reverse('post-list'))
+
+        # add sessions for filter fields to cache paginated queryset
+        # session name must be in filter_class.base_filter with the item
+        # by filter_field_suffix (See ModifiedListView in utils). In this
+        # case, it is base_filter + '_search'
+        if category:
+            search_filter['category_name'] = category
+            request.session['category_name_search'] = category
+        
+        if title:
+            search_filter['title'] = title
+            request.session['title_search'] = title
+
+        if tags:
+            search_filter['tags'] = tags
+            request.session['tags_search'] = tags
+        
+        post_qs = PostFilter(search_filter, 
+                             queryset=Post.published_objects.all()).qs
+
+        # TODO: page_size should come from config or settings, not fix size of 10
+        paginator, page, queryset, is_paginated = paginate_queryset(request=request,
+                                                                    queryset=post_qs,
+                                                                    page_size=10)
+        context['paginator'] = paginator
+        context['page_obj'] = page
+        context['is_paginated'] = is_paginated
+        context['object_list'] = post_qs
+        context['posts'] = post_qs
+
+        # tags auto complete
+        tags_autocomplete = Tag.objects.distinct().values_list('tag', flat=True)
+        context['tags_autocomplete'] = convert_list_for_chipauto(tags_autocomplete)
+
+    return render(request, 'blog/post_list.html', context)
+
+def delete_post(request, pk):
+    if Post.objects.filter(pk=pk).exists():
+        post = Post.objects.get(pk=pk)
+        post.delete()
+        return redirect(reverse('post-list'))
+    return Http404
+
+def get_random_tags(request):
+    # TODO: This view will showcase randomize tags and when you click,
+    # it will show the corresponding post.
+
+    context = {}
+    if 'tag' in request.GET.keys():
+        posts = Post.published_objects.filter(tags__tag=request.GET['tag'])
+        context['posts'] = posts
+    
+    # TODO: we can change how tags we want to appear
+    # for now default value of 10.
+    from random import choice
+    tag_list = Tag.objects.values_list('tag', flat=True).distinct()
+    tags = []
+    while len(tags) < 10:
+        random_tag = choice(tag_list)
+        if random_tag not in tags:
+            tags.append(random_tag)
+        
+        if len(tag_list) < 10 and len(tags) == len(tag_list):
+            break
+    context['tags'] = tags
+    return render(request, 'blog/post_random_tags.html', context)
+
+def get_deciphers_by_post(request, pk):
+    context = {}
+    post = Post.objects.get(pk=pk)
+    if not post:
+        raise Http404
+
+    if request.method == 'GET':
+        deciphers = post.deciphers.all()
+        context.update({'post': post, 'deciphers': deciphers})
+
+    return render(request, 'blog/decipher_list.html', context)
+
+
+# Class based views here
+class PostListView(ModifiedSearchListView):
     model = Post
     paginate_by = 10
     context_object_name = 'posts'
@@ -200,120 +327,23 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
         return self.render_to_response(context)
 
 
-def submit_post_search(request):
-    """Assumes paginated already, hence we use paginate queryset function.
+class DecipherListView(generic.list.BaseListView):
+    model = Decipher
+
+    def get(self, request, post_id, *args, **kwargs):
+        pass
+
+
+class DecipherFormView(LoginRequiredMixin, generic.FormView):
     
-    Arguments:
-        request {[type]} -- [description]
+    form = DecipherForm
+
+    def post(self, request, post_id, *args, **kwargs):
+        pass
     
-    Returns:
-        [type] -- [description]
-    """
-    context = {'form': PostSearchForm()}
-    paginated, page, post_qs, is_paginated = None, None, None, False
-    
-    if request.method == "POST":
-        session_keys = request.session.keys()
-
-        # For each new post request or click of search form,
-        # remove session with name (reference: ModifiedListView)
-        # filter_class.base_filter + filter_field_suffix
-        if 'category_search' in session_keys:
-            del request.session['category_search']
-        
-        if 'title_search' in session_keys:
-            del request.session['title_search']
-        
-        if 'tags_search' in session_keys:
-            del request.session['tags_search']
-
-        search_filter = {}
-        form = PostSearchForm(request.POST)
-        category, title, tags = None, None, None
-        if form.is_valid():
-            post_data = request.POST.dict()
-
-            category = post_data.get('category', None)
-            if category:
-                search_filter['category'] = category
-
-            title = post_data.get('title', None)
-            if title:
-                search_filter['title'] = title
-
-        if 'tags' in request.POST.keys():
-            tags = ','.join(request.POST.getlist('tags'))
-        
-        if not category and not title and not tags:
-            return redirect(reverse('post-list'))
-
-        # add sessions for filter fields to cache paginated queryset
-        # session name must be in filter_class.base_filter with the item
-        # by filter_field_suffix (See ModifiedListView in utils). In this
-        # case, it is base_filter + '_search'
-        if category:
-            search_filter['category_name'] = category
-            request.session['category_name_search'] = category
-        
-        if title:
-            search_filter['title'] = title
-            request.session['title_search'] = title
-
-        if tags:
-            search_filter['tags'] = tags
-            request.session['tags_search'] = tags
-        
-        post_qs = PostFilter(search_filter, 
-                             queryset=Post.published_objects.all()).qs
-
-        # TODO: page_size should come from config or settings, not fix size of 10
-        paginator, page, queryset, is_paginated = paginate_queryset(request=request,
-                                                                    queryset=post_qs,
-                                                                    page_size=10)
-        context['paginator'] = paginator
-        context['page_obj'] = page
-        context['is_paginated'] = is_paginated
-        context['object_list'] = post_qs
-        context['posts'] = post_qs
-
-        # tags auto complete
-        tags_autocomplete = Tag.objects.distinct().values_list('tag', flat=True)
-        context['tags_autocomplete'] = convert_list_for_chipauto(tags_autocomplete)
-
-    return render(request, 'blog/post_list.html', context)
-
-
-def delete_post(request, pk):
-    if Post.objects.filter(pk=pk).exists():
-        post = Post.objects.get(pk=pk)
-        post.delete()
-        return redirect(reverse('post-list'))
-    return Http404
-
-
-def get_random_tags(request):
-    # TODO: This view will showcase randomize tags and when you click,
-    # it will show the corresponding post.
-
-    context = {}
-    if 'tag' in request.GET.keys():
-        posts = Post.published_objects.filter(tags__tag=request.GET['tag'])
-        context['posts'] = posts
-    
-    # TODO: we can change how tags we want to appear
-    # for now default value of 10.
-    from random import choice
-    tag_list = Tag.objects.values_list('tag', flat=True).distinct()
-    tags = []
-    while len(tags) < 10:
-        random_tag = choice(tag_list)
-        if random_tag not in tags:
-            tags.append(random_tag)
-        
-        if len(tag_list) < 10 and len(tags) == len(tag_list):
-            break
-    context['tags'] = tags
-    return render(request, 'blog/post_random_tags.html', context)
+    def get(self, request, post_id, *args, **kwargs):
+        form = self.form_class
+        pass
 
 
 # None view functions

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.views import generic
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models.query import QuerySet
-
+from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor, ReverseManyToOneDescriptor
 
 from bs4 import BeautifulSoup
 
@@ -88,7 +88,7 @@ def enum(sequence, start=0):
         yield index + start, value
 
 
-class ModifiedListView(generic.ListView):
+class ModifiedSearchListView(generic.ListView):
     filter_class = None
     filter_fields = []
     filter_field_suffix = '_search'
@@ -156,7 +156,7 @@ class ModifiedListView(generic.ListView):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
 
-        return queryset    
+        return queryset
 
 
 ## TODO: Reference myportfolio.core.utils.group_pagination

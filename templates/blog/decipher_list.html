@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  {% if deciphers %}
+    {% for decipher in deciphers %}
+      {{ decipher }}
+    {% endfor %}
+  {% endif %}
+</div>
+{% endblock content %}
