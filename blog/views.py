@@ -141,10 +141,23 @@ def get_deciphers_by_post(request, pk):
         raise Http404
 
     if request.method == 'GET':
-        deciphers = post.deciphers.all()
-        context.update({'post': post, 'deciphers': deciphers})
+        decipher_qs = post.deciphers.all()
+        paginator, page, queryset, is_paginated = paginate_queryset(request=request,
+                                                                    queryset=decipher_qs,
+                                                                    page_size=10)
+        context.update({
+                'post': post,
+                'paginator': paginator,
+                'page_obj': page,
+                'is_paginated': is_paginated,
+                'object_list': decipher_qs,
+                'deciphers': decipher_qs
+            })
 
-    return render(request, 'blog/decipher_list.html', context)
+        if 'prev_page_session' in request.GET.keys():
+            context['prev_page_session'] = request.GET['prev_page_session']
+
+    return render(request, 'blog/post_decipher_list.html', context)
 
 
 # Class based views here
@@ -327,23 +340,32 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
         return self.render_to_response(context)
 
 
-class DecipherListView(generic.list.BaseListView):
-    model = Decipher
-
-    def get(self, request, post_id, *args, **kwargs):
-        pass
-
-
-class DecipherFormView(LoginRequiredMixin, generic.FormView):
+class PostDecipherFormView(LoginRequiredMixin, generic.FormView):
     
-    form = DecipherForm
+    form_class = DecipherForm
+    template_name = 'blog/post_decipher_form.html'
 
-    def post(self, request, post_id, *args, **kwargs):
+    def post(self, request, post_id, decipher_id, *args, **kwargs):
         pass
     
-    def get(self, request, post_id, *args, **kwargs):
+    def get(self, request, post_id, decipher_id, *args, **kwargs):
         form = self.form_class
-        pass
+        decipher = Decipher.objects.get(id=decipher_id, post__id=post_id)        
+        if not decipher:
+            raise Http404
+
+        form = self.form_class({
+            'challenge': decipher.challenge,
+            'clue': decipher.clue,
+            'code': decipher.code
+        })
+
+        context = {'form': form}
+
+        if 'prev_page_session' in request.GET.keys():
+            context['prev_page_session'] = request.GET['prev_page_session']
+
+        return self.render_to_response(context)
 
 
 # None view functions
@@ -422,11 +444,16 @@ def process_decipher_in_post(post, post_content):
                 instance = Decipher.objects \
                                         .create(post=post, hidden_text=decipher.string)
 
+                decipher_name = 'decipherme-' + str(instance.id)
                 assign_attr_to_tag(
                     tag=decipher,
                     target_attr='id',
-                    attr_val='decipherme-' + str(instance.id)
+                    attr_val= decipher_name
                 )
+
+                # update decipher name once saved
+                instance.name = decipher_name
+                instance.save()
 
                 # also append newly saved decipher's id so
                 # it would not be deleted later

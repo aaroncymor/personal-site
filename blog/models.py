@@ -109,4 +109,4 @@ class Decipher(PortfolioMixin):
     name = models.CharField(max_length=100, null=True, default='')
     challenge = tinymce_models.HTMLField()
     clue = models.TextField()
-    code = models.CharField(max_length=20, null=True, blank=True)
+    code = models.CharField(max_length=20, null=True, blank=True, default='')

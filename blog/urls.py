@@ -4,7 +4,7 @@ from .views import (
     PostListView,
     PostDetailView,
     PostFormView,
-    DecipherFormView,
+    PostDecipherFormView,
     delete_post,
     submit_post_search,
     get_random_tags,
@@ -16,7 +16,8 @@ urlpatterns = [
     path('<int:pk>', PostDetailView.as_view(), name='post-detail'),
     path('<int:pk>/delete', delete_post, name='post-delete'),
     path('posts/<int:pk>/deciphers', get_deciphers_by_post, name='post-decipher-list'),
-    #path('form', PostFormView.as_view(), name='post-form'),
+    path('posts/<int:post_id>/deciphers/<int:decipher_id>/form', PostDecipherFormView.as_view(), name='post-decipher-form'),
+    path('form', PostFormView.as_view(), name='post-form'),
     path('search', submit_post_search, name='post-search'),
     path('random_tags', get_random_tags, name='post-random-tags' )
 ]

@@ -35,10 +35,11 @@ class PostSearchForm(forms.Form):
 
 class DecipherForm(forms.Form):
     challenge = forms.CharField(
-            label="Content",
+            label="Challenge",
             widget=TinyMCE(attrs={'cols': 80, 'rows': 30})
         )
     clue = forms.CharField(
             label="Clue",
-            widget=forms.Textarea(attrs={'class': 'input-field'})
+            widget=forms.Textarea(attrs={'class': 'materialize-textarea'})
         )
+    code = forms.CharField(label="Code")
