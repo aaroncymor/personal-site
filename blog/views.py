@@ -346,11 +346,26 @@ class PostDecipherFormView(LoginRequiredMixin, generic.FormView):
     template_name = 'blog/post_decipher_form.html'
 
     def post(self, request, post_id, decipher_id, *args, **kwargs):
-        pass
-    
+        form = self.form_class(request.POST)
+        decipher = Decipher.objects.get(id=decipher_id, post__id=post_id)
+        if not decipher:
+            raise Http404
+        data = request.POST.copy()
+
+        challenge = data.get('challenge', None)
+        clue = data.get('clue', None)
+        code = data.get('code', None)
+
+        decipher.challenge = challenge
+        decipher.code = code
+        decipher.clue = clue
+        decipher.save()
+
+        return redirect(reverse('post-decipher-form', kwargs={'post_id': post_id, 'decipher_id': decipher_id}))
+
     def get(self, request, post_id, decipher_id, *args, **kwargs):
         form = self.form_class
-        decipher = Decipher.objects.get(id=decipher_id, post__id=post_id)        
+        decipher = Decipher.objects.get(id=decipher_id, post__id=post_id)
         if not decipher:
             raise Http404
 

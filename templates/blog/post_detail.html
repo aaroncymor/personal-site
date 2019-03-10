@@ -42,6 +42,12 @@
             {% for decipher in deciphers %}
             <div id="modal-decipherme-{{ decipher.id }}" class="modal">
                 <div class="modal-content">
+                    <form id="form-decipherme-{{ decipher.id }}">
+                        <label>Code:</label>
+                        <input id="txt-decipherme-{{ decipher.id }}" type="text" name="code" />
+                    </form>
+
+                    <button id="btn-decipherme-{{ decipher.id }}">Submit</button>
                     {{ decipher.hidden_text }}
                 </div>
                 <div class="modal-footer">
@@ -64,6 +70,10 @@
         $('.modal').modal();
         $('.tooltipped').tooltip();
         $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+
+        $('button[id^=btn-decipherme-]').on('click', function(){
+            alert($(this).attr('id'));
+        })
     });
 </script>
 {% endblock javascript %}
