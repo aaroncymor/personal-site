@@ -72,7 +72,13 @@
         $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
 
         $('button[id^=btn-decipherme-]').on('click', function(){
-            alert($(this).attr('id'));
+            $.post("/api/v1/deciphers/44/check_code", {code: "1345"})
+            .fail(function(error){
+                alert(JSON.stringify(error));
+            })
+            .done(function(data){
+                console.log(JSON.stringify(data));
+            });
         })
     });
 </script>

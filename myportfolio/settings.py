@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'tinymce',
     'rest_framework',
     'django_filters',
+    'corsheaders',
 
     # internal
     'myportfolio.core',
@@ -72,6 +73,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    
+    # Django Cors
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -178,3 +182,5 @@ TINYMCE_COMPRESSOR = True
 # < 4 5 6 >
 # < 7 8 9
 #GROUPBY_PAGINATION = 2 # Can also be defined by config
+
+CORS_ORIGIN_ALLOW_ALL = True

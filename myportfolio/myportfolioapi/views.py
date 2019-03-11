@@ -90,10 +90,9 @@ class DecipherViewSet(mixins.ListModelMixin,
             if code != instance.code:
                 response['error'] = 'The code is not matching with decipher code.'
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        
-        serializer = self.get_serializer(instance)
-        response['data'] = serializer.data
-        return Response(response, status=status.HTTP_200_OK)
+        headers = {'content-type': 'application/json'}
+        response.update({'hidden_text':instance.hidden_text})
+        return Response(response, status=status.HTTP_200_OK, headers=headers)
 
 
 class ProjectViewSet(mixins.ListModelMixin, 
