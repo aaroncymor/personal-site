@@ -42,11 +42,18 @@
             {% for decipher in deciphers %}
             <div id="modal-{{ decipher.name }}" class="modal">
                 <div class="modal-content">
+                    <div id="aaroncymor-decipher-challenge">
+                      <label>Challenge:</label>
+                      {{ decipher.challenge | safe }}
+                    </div>
+                    <div id="aaroncymor-decipher-clue">
+                      <label>Clue:</label>
+                      <p>{{ decipher.clue }}</p>
+                    </div>
                     <label>Code:</label>
                     <input type="hidden" data-target="{{ decipher.name }}" value="{% url 'api:decipher-check-code' decipher.id %}" />
                     <input type="text" name="code" />
                     <a id="btn-{{ decipher.name }}" href="#">Submit</a>
-                    {{ decipher.hidden_text }}
                 </div>
                 <div class="modal-footer">
                     <a href="#!" class="modal-close">Close</a>
@@ -101,8 +108,13 @@
             })
             .done(function(data){
                 if(data.hasOwnProperty("hidden_text")){
-                    $('#' + target).replaceWith(data.hidden_text);
                     modal.close();
+                    inputTxtCode.val("");
+                    toReplace = $('#' + target);
+                    toReplace.fadeOut('slow', function(){
+                        hiddenText = '<span>' + data.hidden_text + '</span>'
+                        $(this).replaceWith(hiddenText).fadeIn('slow');
+                    });
                 };
             });
         })
