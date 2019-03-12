@@ -77,7 +77,7 @@ class DecipherViewSet(mixins.ListModelMixin,
     filter_backends = (DjangoFilterBackend,)
     filter_class = DecipherFilter
 
-    @action(detail=True, methods=['POST'])
+    @action(detail=True, methods=['POST'], url_name='check-code')
     def check_code(self, request, pk=None, *args, **kwargs):
         response = {}
         if 'code' not in request.POST:

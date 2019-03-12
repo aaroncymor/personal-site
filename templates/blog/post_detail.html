@@ -40,14 +40,12 @@
 
         {% if deciphers %}
             {% for decipher in deciphers %}
-            <div id="modal-decipherme-{{ decipher.id }}" class="modal">
+            <div id="modal-{{ decipher.name }}" class="modal">
                 <div class="modal-content">
-                    <form id="form-decipherme-{{ decipher.id }}">
-                        <label>Code:</label>
-                        <input id="txt-decipherme-{{ decipher.id }}" type="text" name="code" />
-                    </form>
-
-                    <button id="btn-decipherme-{{ decipher.id }}">Submit</button>
+                    <label>Code:</label>
+                    <input type="hidden" data-target="{{ decipher.name }}" value="{% url 'api:decipher-check-code' decipher.id %}" />
+                    <input type="text" name="code" />
+                    <a id="btn-{{ decipher.name }}" href="#">Submit</a>
                     {{ decipher.hidden_text }}
                 </div>
                 <div class="modal-footer">
@@ -71,13 +69,41 @@
         $('.tooltipped').tooltip();
         $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
 
-        $('button[id^=btn-decipherme-]').on('click', function(){
-            $.post("/api/v1/deciphers/44/check_code", {code: "1345"})
+        $('a[id^=btn-decipherme-]').on('click', function(){
+            
+            // get modal instance from this parent element
+            var modal = $(this).parent().parent()[0].M_Modal;
+            
+            // Previous element of button is text
+            var inputTxtCode = $(this).prev();
+            var codeVal = inputTxtCode.val();
+
+            // Previous element of text is input:hidden with endpoint value
+            var hiddenInput = $(this).prev().prev();
+            var target = hiddenInput.data("target");
+            var endpoint = hiddenInput.val();
+
+            // Pass user input of code to API
+            var data = { code: codeVal };
+            
+            // Ajax POST
+            $.post(endpoint, data)
             .fail(function(error){
-                alert(JSON.stringify(error));
+                if(error.hasOwnProperty("responseJSON")){
+                    responseJSON = error.responseJSON;
+                    if(responseJSON.hasOwnProperty("error")){
+                        // TODO: put logic that would show error message
+                        // console.log(responseJSON.error);
+                        M.toast({html: responseJSON.error, classes: 'rounded red lighten-1'});
+                        inputTxtCode.val("");
+                    }
+                };
             })
             .done(function(data){
-                console.log(JSON.stringify(data));
+                if(data.hasOwnProperty("hidden_text")){
+                    $('#' + target).replaceWith(data.hidden_text);
+                    modal.close();
+                };
             });
         })
     });
