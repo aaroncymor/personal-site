@@ -6,6 +6,7 @@ from rest_framework import mixins, status, viewsets, serializers
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.authentication import BasicAuthentication
 
 from blog.models import (
     Category,
@@ -32,6 +33,8 @@ from .filters import (
     DecipherFilter,
     ProjectFilter,
 )
+
+from .authentication import CsrfExemptSessionAuthentication
 
 # Create your views here.
 
@@ -77,8 +80,20 @@ class DecipherViewSet(mixins.ListModelMixin,
     filter_backends = (DjangoFilterBackend,)
     filter_class = DecipherFilter
 
-    @action(detail=True, methods=['POST'], url_name='check-code')
+    @action(detail=True, methods=['POST'], url_name='check-code',
+            authentication_classes=(CsrfExemptSessionAuthentication,
+            BasicAuthentication))
     def check_code(self, request, pk=None, *args, **kwargs):
+        """
+        TODO: Using below reference, we need to implement a custom
+        SesionAuthentication and override enforce csrf so that this
+        method gets passed csrf check. 
+        
+        ref:
+        https://www.cnblogs.com/AmilyWilly/p/6438448.html
+        https://github.com/encode/django-rest-framework/blob/master/rest_framework/authentication.py
+        """
+
         response = {}
         if 'code' not in request.POST:
             response['error'] = 'The code is required.'

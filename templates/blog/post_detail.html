@@ -96,12 +96,16 @@
             // Ajax POST
             $.post(endpoint, data)
             .fail(function(error){
+                console.log(error);
                 if(error.hasOwnProperty("responseJSON")){
                     responseJSON = error.responseJSON;
                     if(responseJSON.hasOwnProperty("error")){
                         // TODO: put logic that would show error message
                         // console.log(responseJSON.error);
                         M.toast({html: responseJSON.error, classes: 'rounded red lighten-1'});
+                        inputTxtCode.val("");
+                    } else if(responseJSON.hasOwnProperty("detail")) {
+                        M.toast({html: responseJSON.detail, classes: 'rounded red lighten-1'});
                         inputTxtCode.val("");
                     }
                 };

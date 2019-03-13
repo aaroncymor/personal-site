@@ -10,36 +10,48 @@
 
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        {% endblock stylesheets %}
         <style>
-            header, main, footer {
-            padding-left: 300px;
+          body {
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
             }
 
-            @media only screen and (max-width : 992px) {
-            header, main, footer {
-                padding-left: 0;
+            main {
+                flex: 1 0 auto;
             }
-            }
+      
         </style>
-        {% endblock stylesheets %}
     </head>
 
     <body>
-        {% block body %}   
-        <div id="aaroncymor-website">
-            <div class="row">
-                <div class="col s2 m2">
-                    {% include 'myportfolio/_navigation.html' %}
-                </div>
-                <div class="col s10 m10">
-                    <div id="main">
-                        {% block content %}{% endblock content %}
+        {% block body %}
+        <header>
+        </header>
+        <main>
+            <div id="aaroncymor-website">
+                <div class="row">
+                    <div class="col s3 m3">
+                        {% include 'myportfolio/_navigation.html' %}
+                    </div>
+                    <div class="col s9 m9">
+                        <div id="main">
+                            {% block content %}{% endblock content %}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
+        <footer>
+            <div class="row">
+                <div class="col s3 m3"></div>
+                <div class="col s9 m9 center-align">
+                    Test
+                </div>
+            </div>
+        </footer>
         {% endblock body %}
-
         {% block javascript %}
         <!--JavaScript at end of body for optimized loading-->
         <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>

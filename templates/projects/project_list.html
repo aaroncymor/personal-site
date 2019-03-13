@@ -10,17 +10,21 @@
                 <p class="aaron-project-description">{{ project.short_description_for_list }}</p>
                 {% if is_paginated %}
                     {% if request.session.authorized %}
+                    <a href="{% url 'project-detail' project.id %}?prev_page_session={{ page_obj.number }}">View</a>  
                     <a href="{% url 'project-form' %}?id={{ project.id }}&prev_page_session={{ page_obj.number }}">Edit</a>
                     <a href="{% url 'project-delete' project.id %}">Delete</a>
-                    {% endif %}
+                    {% else %}
                     Read more <a href="{% url 'project-detail' project.id %}?prev_page_session={{ page_obj.number }}">here</a>.
+                    {% endif %}
                 {% else %}
                     {% if request.session.authorized %}
+                    <a href="{% url 'project-detail' project.id %}">View</a>                   
                     <a href="{% url 'project-form' %}?id={{ project.id }}">Edit</a>
-                    <a href="{% url 'project-delete' project.id %}">Delete</a>                    
+                    <a href="{% url 'project-delete' project.id %}">Delete</a>
+                    {% else %}
+                    Read more <a href="{% url 'project-detail' project.id %}">here</a>.          
                     {% endif %}
-                    Read more <a href="{% url 'project-detail' project.id %}">here</a>.
-            {% endif %}
+                {% endif %}
                 <div class="divider"></div>
             </div>
         {% endfor %}
