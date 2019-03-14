@@ -1,15 +1,17 @@
 {% load static %}
 
 <ul id="slide-out" class="sidenav sidenav-fixed">
-    <li><div class="user-view">
-    <div class="background">
-        <img src="{% static 'images/office.jpg' %}">
-    </div>
-    <a href="#user"><img class="circle" src="{% static 'images/aaroncymor.jpg' %}"></a>
-    <a href="#name"><span class="name">Aaron Cymor</span></a>
-    <a href="#email"><span class="email">aaroncymor@gmail.com</span></a>
-    </div></li>
-    <li><a href="{% url 'home' %}"><i class="material-icons">face</i>About Me</a></li>
+    <li>
+      <div class="user-view">
+        <div class="background">
+          <img src="{% static 'images/office.jpg' %}">
+        </div>
+        <a href="#user"><img class="circle" src="{% static 'images/aaroncymor.jpg' %}"></a>
+        <a href="#name"><span class="name">Aaron Cymor</span></a>
+        <a href="#email"><span class="email">aaroncymor@gmail.com</span></a>
+      </div>
+      <a href="{% url 'home' %}"><i class="material-icons">face</i>About Me</a>
+    </li>
     <li><div class="divider"></div></li>
     {% if request.session.authorized %}
       <li class="no-padding">
