@@ -23,17 +23,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # Config
+db_config = {}
 config_env = os.getenv('MYCONFIG')
 if config_env is not None:
     with open(config_env) as f:
         config_data = yaml.load(f)
     app_conf = config_data['myportfolio']
     DJANGO_SECRET_KEY = app_conf['secret_key']
-    DB_CONF = app_conf['db']
-else:
-    DJANGO_SECRET_KEY = '(pfboe=(9khdb1#tas!u32q=7ecc%x4$2we%-_#fjot6=j#96#'
-    #raise ImproperlyConfigured('MYCONFIG not set as an environment variable.')
 
+    #app_name
+    APP_NAME = app_conf['app_name']
+
+    db_config = app_conf['db']
+else:
+    raise ImproperlyConfigured('MYCONFIG not set as an environment variable.')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = DJANGO_SECRET_KEY
 
@@ -107,12 +110,23 @@ WSGI_APPLICATION = 'myportfolio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+DATABASES = {}
+try:
+    if db_config:
+        DATABASES['default'] = {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': db_config['database'],
+            'USER': db_config['user'],
+            'PORT': db_config['port'],
+            'PASSWORD': db_config['pass'],
+            'HOST': db_config['host']
+        }
+except Exception:
+    DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-}
+    
 
 
 # Password validation

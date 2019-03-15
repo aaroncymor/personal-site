@@ -1,8 +1,9 @@
 myportfolio:
   secret_key: (pfboe=(9khdb1#tas!u32q=7ecc%x4$2we%-_#fjot6=j#96#
+  app_name: myportfolio
   db:
-    database: acmn
-    user:
-    pass:
+    database: myportfoliodb
+    user: rtidev
+    pass: password
     host: localhost
     port: 5432

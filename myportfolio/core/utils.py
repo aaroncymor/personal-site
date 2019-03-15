@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 def load_html_doc(html_doc):
     """
     """
-    return BeautifulSoup(html_doc)
+    return BeautifulSoup(html_doc, features="html.parser")
 
 
 def get_html_content(soup):
