@@ -114,15 +114,12 @@
                 if(data.hasOwnProperty("hidden_text")){
                     modal.close();
                     inputTxtCode.val("");
-                    console.log('.' + target + '-lock');
-                    $('.' + target + '-lock').toggle();
-                    /*
-                    toReplace = $('#' + target);
-                    toReplace.fadeOut('slow', function(){
+                    toReplace = $('.' + target + '-lock').toggle(200);
+
+                    $('#' + target + '-unlock').fadeOut('slow', function(){
                         hiddenText = '<span>' + data.hidden_text + '</span>'
                         $(this).replaceWith(hiddenText).fadeIn('slow');
                     });
-                    */
                 };
             });
         })

@@ -77,7 +77,7 @@ class Post(PortfolioMixin):
             
             # create icon tag lock_outline from materialize
             close_lock_icon = soup.new_tag('i')
-            close_lock_icon['class'] = ["material-icons",  decipher_id + "-lock"]
+            close_lock_icon['class'] = ["small", "material-icons",  decipher_id + "-lock"]
             close_lock_icon.string = "lock_outline"
             
             # append icon tag to anchor tag
@@ -85,8 +85,9 @@ class Post(PortfolioMixin):
 
             # create icon tag lock_open
             open_lock_icon = soup.new_tag('i')
-            open_lock_icon['class'] = ["material-icons",  decipher_id + "-lock"]
+            open_lock_icon['class'] = ["small", "material-icons",  decipher_id + "-lock"]
             open_lock_icon['style'] = "display:none"
+            open_lock_icon['id'] = decipher_id + '-unlock'
             open_lock_icon.string = "lock_open"
 
             decipher.insert_after(open_lock_icon)
