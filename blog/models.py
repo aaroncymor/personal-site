@@ -65,15 +65,32 @@ class Post(PortfolioMixin):
         for decipher in deciphers:
             decipher_id = decipher.get('id', '')
             decipher_classes = decipher.get('class', [])
-            new_tag = soup.new_tag('a')
-            new_tag.string = "[...]"
+
+            # create anchor tag
+            anchor_tag = soup.new_tag('a')
             if decipher_id:
-                new_tag['id'] = decipher_id
-                new_tag['href'] = '#modal-' + decipher_id
-            new_tag['class'] = decipher_classes + ['tooltipped', 'modal-trigger']
-            new_tag['data-position'] = "top"
-            new_tag['data-tooltip'] = "Click me, and try to crack code to unlock secret message."
-            decipher.replace_with(new_tag)
+                anchor_tag['id'] = decipher_id
+                anchor_tag['href'] = '#modal-' + decipher_id
+            anchor_tag['class'] = decipher_classes + ['tooltipped', 'modal-trigger']
+            anchor_tag['data-position'] = "top"
+            anchor_tag['data-tooltip'] = "Click me, and try to crack code to unlock secret message."
+            
+            # create icon tag lock_outline from materialize
+            close_lock_icon = soup.new_tag('i')
+            close_lock_icon['class'] = ["material-icons",  decipher_id + "-lock"]
+            close_lock_icon.string = "lock_outline"
+            
+            # append icon tag to anchor tag
+            anchor_tag.append(close_lock_icon)
+
+            # create icon tag lock_open
+            open_lock_icon = soup.new_tag('i')
+            open_lock_icon['class'] = ["material-icons",  decipher_id + "-lock"]
+            open_lock_icon['style'] = "display:none"
+            open_lock_icon.string = "lock_open"
+
+            decipher.insert_after(open_lock_icon)
+            decipher.replace_with(anchor_tag)
         return soup.prettify(formatter="html5")
     
     @property
