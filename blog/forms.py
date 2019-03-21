@@ -19,6 +19,14 @@ class PostForm(forms.Form):
         )
     publish = forms.BooleanField(required=False, label="Publish")
 
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.ChoiceField(
+            label="Category", 
+            widget=forms.Select(attrs={'class': 'input-field'}),
+            choices=Category.objects.all().values_list('id', 'name')
+        )
+
 
 class PostSearchForm(forms.Form):
     category = forms.ChoiceField(
@@ -30,6 +38,15 @@ class PostSearchForm(forms.Form):
     title = forms.CharField(
             required=False,
             label="Title"
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(PostSearchForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.ChoiceField(
+            required=False,
+            label="Category", 
+            widget=forms.Select(attrs={'class': 'input-field'}),
+            choices=list(chain([('', 'None')], Category.objects.all().values_list('name', 'name')))
         )
 
 

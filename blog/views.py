@@ -166,8 +166,38 @@ class PostListView(ModifiedSearchListView):
     paginate_by = 10
     context_object_name = 'posts'
     template_name = 'blog/post_list.html'
-    queryset = Post.published_objects.all()
     filter_class = PostFilter
+
+    def get_queryset(self):
+        """
+        Return the list of items for this view.
+        The return value must be an iterable and may be an instance of
+        `QuerySet` in which case `QuerySet` specific behavior will be enabled.
+        """
+        # We will not allow queryset value
+        self.queryset = None
+        
+        # We will require model 
+        if not self.model:
+            raise ImproperlyConfigured(
+                "%(cls)s is missing a QuerySet. Define "
+                "%(cls)s.model, or override "
+                "%(cls)s.get_queryset()." % {
+                    'cls': self.__class__.__name__
+                }
+            )
+
+        if not self.request.user:
+            queryset = self.model.published_objects.all()
+        elif self.request.user:
+            queryset = self.model._default_manager.all()
+            
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, str):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+        return queryset
 
     def get(self, request, *args, **kwargs):
 
