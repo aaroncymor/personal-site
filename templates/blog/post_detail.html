@@ -100,8 +100,6 @@
                 if(error.hasOwnProperty("responseJSON")){
                     responseJSON = error.responseJSON;
                     if(responseJSON.hasOwnProperty("error")){
-                        // TODO: put logic that would show error message
-                        // console.log(responseJSON.error);
                         M.toast({html: responseJSON.error, classes: 'rounded red lighten-1'});
                         inputTxtCode.val("");
                     } else if(responseJSON.hasOwnProperty("detail")) {
@@ -114,11 +112,17 @@
                 if(data.hasOwnProperty("hidden_text")){
                     modal.close();
                     inputTxtCode.val("");
-                    toReplace = $('.' + target + '-lock').toggle(200);
 
-                    $('#' + target + '-unlock').fadeOut('slow', function(){
-                        hiddenText = '<span>' + data.hidden_text + '</span>'
-                        $(this).replaceWith(hiddenText).fadeIn('slow');
+                    toReplace = $('#' + target);
+
+                    // Get the element that will replace anchor tag
+                    unLockElem = $('#' + target + '-unlock');
+                    toReplace.fadeOut('slow', function(){
+                        $(this).replaceWith(unLockElem).fadeIn('slow');
+                        unLockElem.show().fadeOut('slow', function(){
+                            hiddenText = '<span>' + data.hidden_text + '</span>'
+                            $(this).replaceWith(hiddenText).fadeIn('slow');
+                        });
                     });
                 };
             });
