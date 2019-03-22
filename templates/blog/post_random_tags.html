@@ -7,22 +7,24 @@
         <h3 class="center-align">Random Tag Search</h3>
     </div>
     <div class="divider"></div>
-    <div class="row">
     {% if tags %}
-        {% for tag in tags %}
-            <a href="{% url 'post-random-tags' %}?tag={{ tag }}"><div class="chip">{{ tag }}</div></a>
-        {% endfor %}
-    {% endif %}
-    <div>
-    {% if posts %}
-        {% for post in posts %}
-            <div class="row">
-                <p>{{ post.title }}</p>
-                {{ post.short_content_for_list }}
-                <p>Published date: {{ post.published_date }}</p>
+        <div class="row">
+            {% for tag in tags %}
+                <a href="{% url 'post-random-tags' %}?tag={{ tag }}"><div class="chip">{{ tag }}</div></a>
+            {% endfor %}
+        <div>
+        {% if posts %}
+            {% for post in posts %}
+                <div class="row">
+                    <p>{{ post.title }}</p>
+                    {{ post.short_content_for_list }}
+                    <p>Published date: {{ post.published_date }}</p>
+                </div>
                 <div class="divider"></div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% endif %}
+    {% else %}
+    There are no tags yet.
     {% endif %}
 </div>
 {% endblock %}

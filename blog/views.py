@@ -111,7 +111,10 @@ def get_random_tags(request):
 
     context = {}
     if 'tag' in request.GET.keys():
-        posts = Post.published_objects.filter(tags__tag=request.GET['tag'])
+        if request.user:
+            posts = Post.objects.filter(tags__tag=request.GET['tag'])
+        else:
+            posts = Post.published_objects.filter(tags__tag=request.GET['tag'])
         context['posts'] = posts
     
     # TODO: we can change how tags we want to appear
@@ -120,12 +123,16 @@ def get_random_tags(request):
     tag_list = Tag.objects.values_list('tag', flat=True).distinct()
     tags = []
     while len(tags) < 10:
-        random_tag = choice(tag_list)
-        if random_tag not in tags:
-            tags.append(random_tag)
-        
-        if len(tag_list) < 10 and len(tags) == len(tag_list):
+        try:
+            random_tag = choice(tag_list)
+            if random_tag not in tags:
+                tags.append(random_tag)
+
+            if len(tag_list) < 10 and len(tags) == len(tag_list):
+                break
+        except IndexError:
             break
+
     context['tags'] = tags
     return render(request, 'blog/post_random_tags.html', context)
 
