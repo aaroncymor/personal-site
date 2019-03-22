@@ -5,7 +5,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic, View
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import AnonymousUser
+from django.db import IntegrityError
 
 from .models import Post, Category, Tag, Decipher
 from .forms import PostForm, PostSearchForm, DecipherForm
@@ -477,37 +478,41 @@ def process_decipher_in_post(post, post_content):
     # create or update
     if deciphers:
         for decipher in deciphers:
-            try:
-                decipher_id = int(decipher['id'][11:])
+            # To avoid IntegrityError (null value)
+            if decipher.string:
+                try:
+                    decipher_id = int(decipher['id'][11:])
 
-                instance = Decipher.objects.get(id=decipher_id)
-                # update decipher
-                instance.hidden_text = decipher.string
-                instance.save()
+                    instance = Decipher.objects.get(id=decipher_id)
+                    # update decipher
+                    instance.hidden_text = decipher.string
+                    instance.save()
 
-                # if id was successfully parsed to int and is
-                # existing append to content_decipher_ids list
-                # so they would not be deleted later
-                content_decipher_ids.append(decipher_id)
-            except (KeyError, ValueError, Decipher.DoesNotExist):
-                # save decipher to db
-                instance = Decipher.objects \
-                                        .create(post=post, hidden_text=decipher.string)
+                    # if id was successfully parsed to int and is
+                    # existing append to content_decipher_ids list
+                    # so they would not be deleted later
+                    content_decipher_ids.append(decipher_id)
+                except (KeyError, ValueError, Decipher.DoesNotExist):
+                    # save decipher to db
+                    instance = Decipher.objects \
+                                            .create(post=post, hidden_text=decipher.string)
 
-                decipher_name = 'decipherme-' + str(instance.id)
-                assign_attr_to_tag(
-                    tag=decipher,
-                    target_attr='id',
-                    attr_val= decipher_name
-                )
+                    decipher_name = 'decipherme-' + str(instance.id)
+                    assign_attr_to_tag(
+                        tag=decipher,
+                        target_attr='id',
+                        attr_val= decipher_name
+                    )
 
-                # update decipher name once saved
-                instance.name = decipher_name
-                instance.save()
+                    # update decipher name once saved
+                    instance.name = decipher_name
+                    instance.save()
 
-                # also append newly saved decipher's id so
-                # it would not be deleted later
-                content_decipher_ids.append(instance.id)
+                    # also append newly saved decipher's id so
+                    # it would not be deleted later
+                    content_decipher_ids.append(instance.id)
+            else:
+                decipher.decompose()
 
     # get existing id of deciphers from given post
     post_decipher_ids = Decipher.objects.filter(post=post).values_list('id', flat=True)
