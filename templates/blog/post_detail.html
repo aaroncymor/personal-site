@@ -14,7 +14,12 @@
 
 <!--Let browser know website is optimized for mobile-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
+<style>
+    a.decipher {
+        color: black;
+        text-decoration: none;
+    }
+</style>
 {% endblock stylesheets %}
 
 {% block content %}
@@ -117,8 +122,8 @@
 
                     // Get the element that will replace anchor tag
                     unLockElem = $('#' + target + '-unlock');
-                    toReplace.fadeOut('slow', function(){
-                        $(this).replaceWith(unLockElem).fadeIn('slow');
+                    toReplace.delay(500).fadeOut(100, function(){
+                        $(this).replaceWith(unLockElem).fadeIn(50);
                         unLockElem.show().fadeOut('slow', function(){
                             hiddenText = '<span>' + data.hidden_text + '</span>'
                             $(this).replaceWith(hiddenText).fadeIn('slow');
