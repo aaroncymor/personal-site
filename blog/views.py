@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic, View
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import AnonymousUser, User
 
 from .models import Post, Category, Tag, Decipher
 from .forms import PostForm, PostSearchForm, DecipherForm
@@ -77,8 +78,11 @@ def submit_post_search(request):
         if tags:
             search_filter['tags'] = tags
             request.session['tags_search'] = tags
+        if isinstance(request.user, AnonymousUser):
+            queryset = Post.published_objects.all()
+        else:
+            queryset = Post.objects.all()
 
-        queryset = Post.published_objects.all() if not request.user else Post.objects.all()
         post_qs = PostFilter(search_filter, 
                              queryset=queryset).qs
 
@@ -111,10 +115,10 @@ def get_random_tags(request):
 
     context = {}
     if 'tag' in request.GET.keys():
-        if request.user:
-            posts = Post.objects.filter(tags__tag=request.GET['tag'])
-        else:
+        if isinstance(request.user, AnonymousUser):
             posts = Post.published_objects.filter(tags__tag=request.GET['tag'])
+        else:
+            posts = Post.objects.filter(tags__tag=request.GET['tag'])
         context['posts'] = posts
     
     # TODO: we can change how tags we want to appear
@@ -189,9 +193,9 @@ class PostListView(ModifiedSearchListView):
                 }
             )
 
-        if not self.request.user:
+        if isinstance(self.request.user, AnonymousUser):
             queryset = self.model.published_objects.all()
-        elif self.request.user:
+        else:
             queryset = self.model._default_manager.all()
             
         ordering = self.get_ordering()
@@ -205,7 +209,6 @@ class PostListView(ModifiedSearchListView):
 
         self.object_list = self.get_queryset()
         allow_empty = self.get_allow_empty()
-
         if not allow_empty:
             # When pagination is enabled and object_list is a queryset,
             # it's better to do a cheap query than to load the unpaginated
