@@ -21,7 +21,7 @@ class PostForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
-        self.fields['category'] = forms.ChoiceField(
+        self.fields['category_id'] = forms.ChoiceField(
             label="Category", 
             widget=forms.Select(attrs={'class': 'input-field'}),
             choices=Category.objects.all().values_list('id', 'name')

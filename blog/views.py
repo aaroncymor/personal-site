@@ -32,7 +32,6 @@ def submit_post_search(request):
     """
     context = {'form': PostSearchForm()}
     paginated, page, post_qs, is_paginated = None, None, None, False
-    
     if request.method == "POST":
         session_keys = request.session.keys()
 
@@ -55,18 +54,13 @@ def submit_post_search(request):
             post_data = request.POST.dict()
 
             category = post_data.get('category', None)
-            if category:
-                search_filter['category'] = category
-
             title = post_data.get('title', None)
-            if title:
-                search_filter['title'] = title
 
-        if 'tags' in request.POST.keys():
-            tags = ','.join(request.POST.getlist('tags'))
+            if 'tags' in request.POST.keys():
+                tags = ','.join(request.POST.getlist('tags'))
         
-        if not category and not title and not tags:
-            return redirect(reverse('post-list'))
+            if not category and not title and not tags:
+                return redirect(reverse('post-list'))
 
         # add sessions for filter fields to cache paginated queryset
         # session name must be in filter_class.base_filter with the item
@@ -83,9 +77,10 @@ def submit_post_search(request):
         if tags:
             search_filter['tags'] = tags
             request.session['tags_search'] = tags
-        
+
+        queryset = Post.published_objects.all() if not request.user else Post.objects.all()
         post_qs = PostFilter(search_filter, 
-                             queryset=Post.published_objects.all()).qs
+                             queryset=queryset).qs
 
         # TODO: page_size should come from config or settings, not fix size of 10
         paginator, page, queryset, is_paginated = paginate_queryset(request=request,
