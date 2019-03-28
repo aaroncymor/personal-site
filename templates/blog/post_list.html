@@ -1,6 +1,49 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block stylesheets %}
+<!--Import Google Icon Font-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--Import Font Awesome-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
+
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+    p.post-title {
+        font-size: 2em;
+    }
+    
+    p.post-content {
+        font-size: 1.2em;
+    }
+
+    p.post-published-date {
+        color: #004d40;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    p.read-more-here {
+        font-size: 1.1em;
+    }
+
+    div#random-tag-search {
+        margin-top: 2em;
+    }
+
+    div#random-tag-search p{
+        font-size: 1.1em;
+    }
+    
+    a.post-detail-here {
+    }
+</style>
+{% endblock stylesheets %}
+
 {% block content %}
 <div class="container">
     <h3 class="center-align">Blog</h3>
@@ -28,18 +71,27 @@
                     <div id="tag-container">
                     </div>
                 </p>
-                <input type="submit" value="Search" />
+                <button class="waves-effect waves-light btn" type="submit">
+                    Search
+                    <i class="material-icons right">search</i>
+                </button>
             </form>
-            Try <a href="{% url 'post-random-tags' %}">Random tag search</a>?
+            <div id="random-tag-search">
+                <p> Try <a href="{% url 'post-random-tags' %}">random tag search</a>?</p>
+            </div>
         </div>
 
         {% for post in posts %}
         <div class="row">
-            <p class="aaroncymor-post-title">{{ post.title }}</p>
-            <p class="aaroncymor-post-content">{{ post.short_content_for_list }}</p>
-            <p class="aaroncymor-post-published-date">Published: {{ post.published_date | date:"M d, Y h:i a" }}</p>
+            <p class="post-title center-align">{{ post.title }}</p>
+            <p class="post-content">{{ post.short_content_for_list }}</p>
+            {% if post.published_date %}
+                <p class="post-published-date">Posted: {{ post.published_date | date:"M d, Y h:i a" }}</p>
+            {% else %}
+                <p class="post-published-date">Unpublished</p>
+            {% endif %}
             {% if post.tags.all %}
-                <p class="aaroncymor-post-tags">
+                <p class="post-tags">
                     <label>Tags:</label>
                     {% for tag in post.tags.all %}
                         <div class="chip">
@@ -54,7 +106,7 @@
                 <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ page_obj.number }}">Edit</a>
                 <a href="{% url 'post-delete' post.id %}">Delete</a>
                 {% else %}
-                Read more <a href="{% url 'post-detail' post.id %}">here</a>.
+                <p class="read-more-here">Read more <a href="{% url 'post-detail' post.id %}">here</a>.</p>
                 {% endif %}
             {% else %}
                 {% if request.session.authorized %}
@@ -62,7 +114,7 @@
                 <a href="{% url 'post-form' %}?id={{ post.id }}">Edit</a>
                 <a href="{% url 'post-delete' post.id %}">Delete</a>
                 {% else %}
-                Read more <a href="{% url 'post-detail' post.id %}">here</a>.
+                <p class="read-more-here">Read more <a class="post-detail-here" href="{% url 'post-detail' post.id %}">here</a>.</p>
                 {% endif %}
             {% endif %}
             <div class="divider"></div>

@@ -4,7 +4,7 @@
     <li>
       <div class="user-view">
         <div class="background">
-          <img src="{% static 'images/office.jpg' %}">
+          <!--<img src="{% static 'images/office.jpg' %}">-->
         </div>
         <a href="#user"><img class="circle" src="{% static 'images/aaroncymor.jpg' %}"></a>
         <a href="#name"><span class="name">Aaron Cymor</span></a>
@@ -40,11 +40,19 @@
             </div>
           </li>
         </ul>
-      </li>   
-      <li><a href="{% url 'logout' %}">Logout</li> 
+     </li>   
+     <li><a href="{% url 'logout' %}">Logout</li> 
     {% else %}
     <li><a href="{% url 'post-list' %}?refresh=true">Blog</a></li>
     <li><a class="waves-effect" href="{% url 'project-list' %}">Projects</a></li>
     {% endif %}
+    <li>
+      <div class="social-links center-align">
+        <a href="#" class="fa fa-facebook"></a>
+        <a href="#" class="fa fa-twitter"></a>
+        <a href="#" class="fa fa-linkedin"></a>
+        <a href="#" class="fa fa-github"></a>
+      </div>
+    </li>
 </ul>
 <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>

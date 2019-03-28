@@ -15,7 +15,7 @@
 {% endblock stylesheets %}
 
 {% block body %}
-<div id="aaroncymor-website">
+<div id="myportfolio-website">
     {% if projects %}
     <ul id="sortable">
         {% for project in projects %}
@@ -25,9 +25,9 @@
             </li>
         {% endfor %}
     </ul>
-    <form id="aaroncymor-project-rankings-form" method="post" action="{% url 'project-rank-list-update' %}">
+    <form id="project-rankings-form" method="post" action="{% url 'project-rank-list-update' %}">
         {% csrf_token %}
-        <div id="aaroncymor-input-rankings"></div>
+        <div id="input-rankings"></div>
         <input type="submit" value="Submit" />
     </form>
     {% else %}
@@ -45,7 +45,7 @@
     $( "#sortable" ).sortable();
     $( "#sortable" ).disableSelection();
     
-    $("#aaroncymor-project-rankings-form").submit(function(event){
+    $("#project-rankings-form").submit(function(event){
         var projectIDs = $("#sortable").sortable("toArray");
         var inputRanks = "";
         $.each(projectIDs, function(index, value){
@@ -54,7 +54,7 @@
         });
 
         if(inputRanks.length > 0) {
-            $("#aaroncymor-input-rankings").html(inputRanks);
+            $("#input-rankings").html(inputRanks);
             $(this).submit();
         } else {
             event.preventDefault();

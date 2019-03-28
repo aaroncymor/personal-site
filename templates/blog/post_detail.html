@@ -19,6 +19,16 @@
         color: black;
         text-decoration: none;
     }
+    span.unlocked {
+        text-decoration: underline;
+        font-size: 1.2em;
+    }
+    p.post-title {
+        font-size: 2em;
+    }
+    div.post-content-container {
+        font-size: 1.1em;
+    }
 </style>
 {% endblock stylesheets %}
 
@@ -27,9 +37,11 @@
     <h3 class="center-align">Blog</h3>
     <div class="divider"></div>
     {% if post %}
-        <div>
-            {{ post.title }}
+        <div class="post-container">
+            <p class="post-title center-align">{{ post.title }}</p>
+            <div class="post-content-container">
             {{ post.sanitized_content | safe }}
+            </div>
         </div>
         {% if prev_page_session %}
             <a href="{% url 'post-list' %}?page={{ prev_page_session }}">Back</a>
@@ -61,7 +73,7 @@
                     <a id="btn-{{ decipher.name }}" href="javascript:void(0);">Submit</a>
                 </div>
                 <div class="modal-footer">
-                    <a href="#!" class="modal-close">Close</a>
+                    <!--<a href="#!" class="modal-close">Close</a>-->
                 </div>
             </div> 
             {% endfor %}
@@ -77,6 +89,8 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
+        $('.sidenav').sidenav();
+        $('.collapsible').collapsible();
         $('.modal').modal();
         $('.tooltipped').tooltip();
         $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
@@ -125,7 +139,7 @@
                     toReplace.delay(500).fadeOut(100, function(){
                         $(this).replaceWith(unLockElem).fadeIn(50);
                         unLockElem.show().fadeOut('slow', function(){
-                            hiddenText = '<span>' + data.hidden_text + '</span>'
+                            hiddenText = '<span class="unlocked">' + data.hidden_text + '</span>'
                             $(this).replaceWith(hiddenText).fadeIn('slow');
                         });
                     });

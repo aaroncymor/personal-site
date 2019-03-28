@@ -1,4 +1,31 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block stylesheets %}
+<!--Import Google Icon Font-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--Import Font Awesome-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
+
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+    p.project-name {
+        font-size: 2em;
+    }
+    
+    p.project-description {
+        font-size: 1.2em;
+    }
+
+    p.read-more-here {
+        font-size: 1.1em;
+    }
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
 <div class="container">
@@ -6,15 +33,15 @@
     {% if projects %}
         {% for project in projects %}
             <div class="row">
-                <p class="aaroncymor-project-name">{{ project.name }}</p>
-                <p class="aaron-project-description">{{ project.short_description_for_list }}</p>
+                <p class="project-name center-align">{{ project.name }}</p>
+                <p class="project-description">{{ project.short_description_for_list }}</p>
                 {% if is_paginated %}
                     {% if request.session.authorized %}
                     <a href="{% url 'project-detail' project.id %}?prev_page_session={{ page_obj.number }}">View</a>  
                     <a href="{% url 'project-form' %}?id={{ project.id }}&prev_page_session={{ page_obj.number }}">Edit</a>
                     <a href="{% url 'project-delete' project.id %}">Delete</a>
                     {% else %}
-                    Read more <a href="{% url 'project-detail' project.id %}?prev_page_session={{ page_obj.number }}">here</a>.
+                    <p class="read-more-here"> Read more <a href="{% url 'project-detail' project.id %}?prev_page_session={{ page_obj.number }}">here</a>.</p>
                     {% endif %}
                 {% else %}
                     {% if request.session.authorized %}
@@ -22,7 +49,7 @@
                     <a href="{% url 'project-form' %}?id={{ project.id }}">Edit</a>
                     <a href="{% url 'project-delete' project.id %}">Delete</a>
                     {% else %}
-                    Read more <a href="{% url 'project-detail' project.id %}">here</a>.          
+                    <p class="read-more-here"> Read more <a href="{% url 'project-detail' project.id %}">here</a>.</p>   
                     {% endif %}
                 {% endif %}
                 <div class="divider"></div>

@@ -5,6 +5,8 @@
         {% block stylesheets %}
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import Font Awesome-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
 
@@ -16,11 +18,25 @@
                 display: flex;
                 min-height: 100vh;
                 flex-direction: column;
-            }
+          }
 
-            main {
-                flex: 1 0 auto;
-            }
+          main {
+            flex: 1 0 auto;
+          }
+          
+          div.social-links {
+            position: relative;
+            display: block;
+          }
+          a {
+            color: #37474f;
+            font-weight: bold;
+          }
+          a.fa {
+              color: #37474f;
+              padding: 10px;
+              font-size: 30px;
+          }
       
         </style>
     </head>
@@ -30,7 +46,7 @@
         <header>
         </header>
         <main>
-            <div id="aaroncymor-website">
+            <div id="myportfolio-website">
                 <div class="row">
                     <div class="col m2">
                         {% include 'myportfolio/_navigation.html' %}
@@ -47,7 +63,7 @@
             <div class="row">
                 <div class="col s3 m3"></div>
                 <div class="col s9 m9 center-align">
-                    Test
+                    This site is powered by Python, Django, DRF, & Materialize.
                 </div>
             </div>
         </footer>
