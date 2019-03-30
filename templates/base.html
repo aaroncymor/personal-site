@@ -37,6 +37,16 @@
               padding: 10px;
               font-size: 30px;
           }
+
+          ul.quick-links li:first-child {
+              font-size: 1.1em;
+              font-weight: bold;
+          }
+
+          ul.contactme li:first-child {
+              font-size: 1.1em;
+              font-weight: bold;
+          }
       
         </style>
     </head>
@@ -49,7 +59,7 @@
             <div id="myportfolio-website">
                 <div class="row">
                     <div class="col m2">
-                        {% include 'myportfolio/_navigation.html' %}
+                        {% include 'myportfolio/_navigation.html' %}                        
                     </div>
                     <div class="col m8 offset-m1">
                         <div id="main">
@@ -62,8 +72,32 @@
         <footer>
             <div class="row">
                 <div class="col s3 m3"></div>
-                <div class="col s9 m9 center-align">
-                    This site is powered by Python, Django, DRF, & Materialize.
+                <div class="col s9 m9">
+                    <div class="row">
+                        <div class="col s12 m2">
+                            <ul class="quick-links">
+                                <li>Quick Links</li>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="{% url 'post-list' %}">Blog</a></li>
+                                <li><a href="{% url 'project-list' %}">Projects</a></li>
+                            </ul>
+                        </div>
+                        <div class="col s12 m2 offset-m2">
+                            <ul class="contactme">
+                                <li>Contact Me</li>
+                                <li>aaroncymor@gmail.com</li>
+                                <li>aaroncymor@live.com</li>
+                            </ul>
+                        </div>
+                        <div class="col s12 m3 offset-m2">
+                            <div class="social-links">
+                                <a href="https://bit.ly/2Uoqj76" class="fa fa-facebook"></a>
+                                <a href="https://bit.ly/2HXBEEC" class="fa fa-instagram"></a>
+                                <a href="https://bit.ly/2uoy2CP" class="fa fa-linkedin"></a>
+                                <a href="https://bit.ly/2V7xfCL" class="fa fa-github"></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </footer>

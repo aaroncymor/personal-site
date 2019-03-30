@@ -14,13 +14,13 @@
 
 <style>
     .card.medium {
-        height: 35vh;
+        height: 50vh;
         /*min-height: 60vh;*/
     }
     div.post-tags {
-        margin-top: 2vh;
+        margin-top: 3vh;
     }
-
+    
     a.modal-trigger div.card.medium div.card-content span.card-title {
         font-size: 2em;
     }
@@ -29,8 +29,38 @@
         font-weight: normal;
         font-size: 1.1em;
     }
+
     .post-tag-label {
         font-size: 0.8em;
+    }
+
+    div.post-short-content {
+        margin-top: 5vh;
+    }
+
+    .project-shortdesc {
+        margin-top: 5vh;
+    }
+    img.myphoto {
+        max-height: 60vh;
+        width: 50%;
+    }
+
+    p#thecreator {
+        font-size: 1.2em;
+    }
+
+    p#thecreator span{
+        font-weight: bold;
+    }
+
+    p#introductory {  
+        text-align: justify;
+        font-size: 1.2em;
+    }
+
+    p#introductory span.strike-me{ 
+        text-decoration: line-through;
     }
 </style>
 {% endblock stylesheets %}
@@ -38,14 +68,26 @@
 {% block content %}
 <div class="container">
     <!--About Me-->
-    <div id="aaroncymor-aboutme" class="row">
-        <h3 id="aaroncymor-aboutme-h3">About Me</h3>
+    <div id="aboutme-container" class="row">
+        <h3 id="aboutme-h3">About Me</h3>
         <div class="divider"></div>
-        <div></div>
+        <div id="aboutme-content" class="center-align">
+            <img class="myphoto" src="{% static 'images/aaroncymor.jpg' %}">
+            <p id="thecreator">Hi, I'm <span>Aaron</span>! You can call me <span>AA</span>.</p>
+            <p id="introductory">
+                I made this <span class="strike-me">so that I can boast to my family
+                and friends that I have my own website.</span> site to sharpen up my coding skills and
+                give me motivation in making this less of an eye sore, really. 
+                I also put up a blog page so I can talk about anything I wanted
+                to talk about. You would probably find this  useless at the 
+                moment. I haven't come up with anything useful to talk 
+                about anyway. Regardless, thank you for visiting!
+            </p>
+        </div>
     </div>
     <!--Blog-->
-    <div id="aaroncymor-blog" class="row">
-        <h3 id="aaroncymor-blog-h3">Blog</h3>
+    <div id="blog-container" class="row">
+        <h3 id="blog-h3">Blog</h3>
         <div class="divider"></div>
         <!--Feature Latest Three (3) Posts-->
         <div id="">
@@ -57,7 +99,9 @@
                             <div class="card medium">
                                 <div class="card-content">
                                     <span class="card-title center-align">{{ post.title }}</span>
-                                    <p>{{ post.short_content_for_home }}</p>
+                                    <div class="post-short-content">
+                                        <p>{{ post.short_content_for_home }}</p>
+                                    </div>
                                     <div class="post-tags">
                                     {% if post.tags.all %}
                                         <p class="post-tag-label">Tags</p>
@@ -83,15 +127,15 @@
                 </div>
             {% endfor %}
             <!--Link to Post List-->
-            <div class="row"><a href="{% url 'post-list' %}?group_num=1">More of blogs here</a></div>
+            <div class="row"><a href="{% url 'post-list' %}?group_num=1">More blog posts here</a></div>
         {% else %}
             No posts at the moment
         {% endif %}
         </div>
     </div>
     <!--Projects-->
-    <div id="aaroncymor-projects" class="row">
-        <h3 id="aaroncymor-projects-h5">Projects</h3>
+    <div id="projects-container" class="row">
+        <h3 id="projects-h5">Projects</h3>
         <div class="divider"></div>
         <!--Feature Latest Three (3) Projects-->
         <div id="">
@@ -103,14 +147,16 @@
                             <div class="card medium">
                                 <div class="card-content">
                                     <span class="card-title center-align">{{ project.name }}</span>
-                                    <p class="aaroncymor-project-shortdesc">{{ project.short_description_for_home }}</p>
+                                    <div class="project-shortdesc">
+                                        <p>{{ project.short_description_for_home }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </a>
                         <div id="modal-project-{{ forloop.counter }}" class="modal">
                             <div class="modal-content">
-                                <p class="aaroncymor-project-name">{{ project.name }}</p>
-                                <p class="aaroncymor-project-shortdesc">{{ project.short_description_for_home }}</p>
+                                <p>{{ project.name }}</p>
+                                <p>{{ project.short_description_for_home }}</p>
                                 <div class="modal-footer">
                                     Read full project <a href="{% url 'project-detail' project.id %}"> here</a> |
                                     <a href="#!" class="modal-close">Close</a>
@@ -120,14 +166,11 @@
                     </div>
                 </div>
             {% endfor %}
-            <div class="row"><a href="{% url 'project-list' %}?group_num=1">More of projects here</a></div>
+            <div class="row"><a href="{% url 'project-list' %}?group_num=1">More projects here</a></div>
         {% else %}
             No projects at the moment
         {% endif %}
         </div>
-    </div>
-    <!--Footer-->
-    <div id="aaroncymor-footer" class="row">
     </div>
 </div>
 {% endblock content %}
