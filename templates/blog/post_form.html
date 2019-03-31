@@ -43,9 +43,9 @@
             <label>Tags:</label>
             <div class="chips chips-autocomplete"></div>
             <div id="tag-container">
-                {% if tags %}
-                    {% for t in tags %}
-                        <input id="tag-{{ t.tag }}" type="hidden" name="tags" value="{{ t.tag }}" />
+                {% if tag_objects %}
+                    {% for tag in tag_objects %}
+                        <input id="tag-{{ tag.html_id }}" type="hidden" name="tags" value="{{ tag.tag }}" />
                     {% endfor %}
                 {% endif %}
             </div>
@@ -91,7 +91,8 @@
         limit: 4,
         onChipAdd: function(e, data){
             var chipVal = chipValue(data);
-            var tagId = 'tag-' + chipVal;
+            var tagId = 'tag-' + chipVal.split(" ").join("-");
+            console.log(tagId);
             var inputElem = '<input type="hidden" id="' + tagId;
             inputElem += '" value="' + chipVal + '" name="tags" />';
             
@@ -100,7 +101,9 @@
             $("div#tag-container").append(inputElem);
         },
         onChipDelete: function(e, data) {
-            $('input#tag-' + chipValue(data)).remove();
+            var chipVal = chipValue(data);
+            var tagId = 'tag-' + chipVal.split(" ").join("-");
+            $('input#' + tagId).remove();
         },
         autocompleteOptions: {
             data: {{ tags_autocomplete | safe }}

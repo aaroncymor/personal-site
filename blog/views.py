@@ -349,7 +349,8 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
         if 'id' in request_get_keys:
             try:
                 post = get_object_or_404(Post, pk=request.GET['id'])
-                tags = post.tags_obj
+                tag_objects = Tag.objects.filter(post=post)
+                tags = list(tag_objects.values('tag'))
 
                 if not post:
                     raise Http404
@@ -370,6 +371,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
             context['prev_page_session'] = request.GET['prev_page_session']
 
         context['form'] = form
+        context['tag_objects'] = tag_objects
         context['tags'] = tags
         context['tags_autocomplete'] = convert_list_for_chipauto(tags_autocomplete)
 

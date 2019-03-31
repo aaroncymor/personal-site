@@ -95,10 +95,6 @@ class Post(PortfolioMixin):
         return soup.prettify(formatter="html5")
     
     @property
-    def tags_obj(self):
-        return list(self.tags.all().values('tag'))
-    
-    @property
     def is_published(self):
         
         if self.published_date:
@@ -116,6 +112,10 @@ class Tag(PortfolioMixin):
     class Meta:
         db_table = 'tag'
         unique_together = ('tag', 'post')
+    
+    @property
+    def html_id(self):
+        return self.tag.replace(" ", "-")
     
     def __str__(self):
         return self.tag
