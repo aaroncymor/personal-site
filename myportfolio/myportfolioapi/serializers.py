@@ -39,6 +39,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 
     category = CategorySerializer()
     content = serializers.SerializerMethodField()
+    short_content = serializers.SerializerMethodField()
     #tags = serializers.HyperlinkedRelatedField(
     #    many=True,
     #    view_name='api:tag-detail',
@@ -52,13 +53,20 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     #)
     class Meta:
         model = Post
-        fields = ('_link', 'id', 'category', 'title', 'content', 'published_date', 'timestamp')
+        fields = ('_link', 'id', 'category', 'title', 'short_content', 'content', 'published_date', 'timestamp')
 
     def get_content(self, obj):
         if not obj.content:
             return None
         
         return obj.sanitized_content
+    
+    def get_short_content(self, obj):
+        if not obj.content:
+            return None
+        
+        return obj.short_content_for_list
+        
 
 
 class TagSerializer(serializers.HyperlinkedModelSerializer):
@@ -84,6 +92,13 @@ class DecipherSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    short_description = serializers.SerializerMethodField()
+
     class Meta:
         model = Project
-        fields = ('id', 'name', 'description', 'rank')
+        fields = ('id', 'name', 'short_description', 'description', 'rank')
+    
+    def get_short_description(self, obj):
+        if not obj.description:
+            return None
+        return obj.short_description_for_list

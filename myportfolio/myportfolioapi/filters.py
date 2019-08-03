@@ -27,15 +27,19 @@ class CategoryFilter(FilterSet):
 class PostFilter(FilterSet):
     category_id = filters.NumberFilter(field_name='category__id')
     category_name = filters.CharFilter(field_name='category__name', lookup_expr='icontains')
-    title = filters.CharFilter(field_name='title', lookup_expr='icontains')
+    title_iexact = filters.CharFilter(field_name='title', lookup_expr='iexact')
+    title_icontains = filters.CharFilter(field_name='title', lookup_expr='icontains')
+
     tag_id = filters.NumberFilter(field_name='tags__id')
-    tag = filters.CharFilter(field_name='tags__tag', lookup_expr='iexact')
+    tag_iexact = filters.CharFilter(field_name='tags__tag', lookup_expr='iexact')
+    tag_icontains = filters.CharFilter(field_name='tags__tag', lookup_expr='icontains')
     
     tags = CharInFilter(field_name='tags__tag', lookup_expr='in')
     
     class Meta:
         model = Post
-        fields = ['id', 'category_id', 'category_name', 'title', 'tag_id', 'tag']
+        fields = ['id', 'category_id', 'category_name', 'title_iexact', 'title_icontains',
+                'tag_id', 'tag_iexact', 'tag_icontains']
 
 
 class TagFilter(FilterSet):
