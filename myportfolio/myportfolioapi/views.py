@@ -5,7 +5,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, status, viewsets, serializers
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.authentication import BasicAuthentication
 
 from blog.models import (
@@ -34,6 +33,8 @@ from .filters import (
     ProjectFilter,
 )
 
+from .pagination import CustomPagination
+from .mixins import CustomListModelMixin
 from .authentication import CsrfExemptSessionAuthentication
 
 # Create your views here.
@@ -54,22 +55,24 @@ class CategoryViewSet(mixins.ListModelMixin,
     filter_class = CategoryFilter
 
 
-class PostViewSet(mixins.ListModelMixin,
+class PostViewSet(CustomListModelMixin,
                   mixins.RetrieveModelMixin,
                   viewsets.GenericViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     filter_backends = (DjangoFilterBackend,)    
     filter_class = PostFilter
+    pagination_class = CustomPagination
 
 
-class TagViewSet(mixins.ListModelMixin,
+class TagViewSet(CustomListModelMixin,
                  mixins.RetrieveModelMixin,
                  viewsets.GenericViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     filter_backends = (DjangoFilterBackend,)    
     filter_class = TagFilter
+    pagination_class = CustomPagination
 
 
 class DecipherViewSet(mixins.ListModelMixin,
@@ -110,10 +113,11 @@ class DecipherViewSet(mixins.ListModelMixin,
         return Response(response, status=status.HTTP_200_OK, headers=headers)
 
 
-class ProjectViewSet(mixins.ListModelMixin, 
+class ProjectViewSet(CustomListModelMixin, 
                      mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     filter_backends = (DjangoFilterBackend,)    
     filter_class = ProjectFilter
+    pagination_class = CustomPagination
