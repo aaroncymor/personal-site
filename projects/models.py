@@ -5,11 +5,11 @@ from django.db import models
 
 from tinymce import models as tinymce_models
 
-from myportfolio.core.utils import (
+from core.utils import (
     load_html_doc,
     get_html_content
 )
-from myportfolio.core.models import PortfolioMixin
+from core.models import PortfolioMixin
 
 # Create your models here.
 

@@ -6,12 +6,12 @@ from django.db import models
 from tinymce import models as tinymce_models
 
 from .managers import PublishedPostManager
-from myportfolio.core.utils import (
+from core.utils import (
     load_html_doc,
     get_html_content,
     get_tags
 )
-from myportfolio.core.models import PortfolioMixin
+from core.models import PortfolioMixin
 
 # Create your models here.
 
@@ -94,6 +94,38 @@ class Post(PortfolioMixin):
             decipher.replace_with(anchor_tag)
         return soup.prettify(formatter="html5")
     
+    @property
+    def angular_content(self):
+        soup = load_html_doc(self.content)
+        deciphers = soup.select('span.decipher')
+
+        for decipher in deciphers:
+            decipher_id = decipher.get('id', '')
+            decipher_classes = decipher.get('class', [])
+
+            # create anchor tag
+            anchor_tag = soup.new_tag('a')
+            if decipher_id:
+                #anchor_tag['href'] = '#' + decipher_id
+                anchor_tag['class'] = 'decipher-clickme'
+            
+            # create icon tag lock_outline from materialize
+            close_lock_icon = soup.new_tag('i')
+            close_lock_icon['class'] = ["small", "material-icons"]
+            close_lock_icon.string = "lock_outline"
+            
+            # append icon tag to anchor tag
+            anchor_tag.append(close_lock_icon)
+
+            # create icon tag lock_open
+            open_lock_icon = soup.new_tag('i')
+            open_lock_icon['class'] = ["small", "material-icons"]
+            open_lock_icon.string = "lock_open"
+
+            decipher.insert_after(open_lock_icon)
+            decipher.replace_with(anchor_tag)
+        return soup.prettify(formatter="html5")
+
     @property
     def is_published(self):
         

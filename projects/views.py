@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Project
 from .forms import ProjectForm
 
-from myportfolio.core.utils import enum, ModifiedSearchListView
+from core.utils import enum, ModifiedSearchListView
 
 # Create your views here.
 

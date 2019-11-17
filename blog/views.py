@@ -11,8 +11,8 @@ from django.db import IntegrityError
 from .models import Post, Category, Tag, Decipher
 from .forms import PostForm, PostSearchForm, DecipherForm
 
-from myportfolio.myportfolioapi.filters import PostFilter
-from myportfolio.core.utils import (
+from myportfolioapi.filters import PostFilter
+from core.utils import (
     ModifiedSearchListView, load_html_doc,
     get_tags, assign_attr_to_tag,
     append_classes_to_tag, wrap_element,
@@ -346,6 +346,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
 
         tags_autocomplete = Tag.objects.distinct().values_list('tag', flat=True)
 
+        tag_objects = []
         if 'id' in request_get_keys:
             try:
                 post = get_object_or_404(Post, pk=request.GET['id'])
