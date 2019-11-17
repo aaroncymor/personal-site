@@ -1,16 +1,26 @@
 from itertools import chain
 
 from django import forms
+from django.db.utils import ProgrammingError
 
 from tinymce.widgets import TinyMCE
 
 from .models import Category
 
+def generate_category_choices(category_fields):
+    try:
+        choices = list(chain([('', 'None')], 
+                Category.objects.all().values_list(*category_fields)))
+    except ProgrammingError:
+        choices = (('', 'None'))
+
+    return choices
+
 class PostForm(forms.Form):
     category_id = forms.ChoiceField(
             label="Category", 
             widget=forms.Select(attrs={'class': 'input-field'}),
-            choices=Category.objects.all().values_list('id', 'name')
+            choices=generate_category_choices(['id', 'name'])
         )
     title = forms.CharField(label="Title")
     content = forms.CharField(
@@ -24,7 +34,7 @@ class PostForm(forms.Form):
         self.fields['category_id'] = forms.ChoiceField(
             label="Category", 
             widget=forms.Select(attrs={'class': 'input-field'}),
-            choices=Category.objects.all().values_list('id', 'name')
+            choices=generate_category_choices(['id', 'name'])
         )
 
 
@@ -33,7 +43,7 @@ class PostSearchForm(forms.Form):
             required=False,
             label="Category", 
             widget=forms.Select(attrs={'class': 'input-field'}),
-            choices=list(chain([('', 'None')], Category.objects.all().values_list('name', 'name')))
+            choices=generate_category_choices(['name', 'name'])
         )
     title = forms.CharField(
             required=False,
@@ -46,7 +56,7 @@ class PostSearchForm(forms.Form):
             required=False,
             label="Category", 
             widget=forms.Select(attrs={'class': 'input-field'}),
-            choices=list(chain([('', 'None')], Category.objects.all().values_list('name', 'name')))
+            choices=generate_category_choices(['name', 'name'])
         )
 
 

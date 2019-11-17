@@ -28,13 +28,13 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
 
     path('admin/', admin.site.urls),
+
+    path('blog/', include('blog.urls')),
+    path('projects', include('projects.urls')),
+    
+    # core
     path('', include('core.urls')),
     path('api/v1/', include('myportfolioapi.apiv1', namespace='api')),
-    
-    # blog urls
-    path('blog/', include('blog.urls')),
-    # project urls
-    path('projects/', include('projects.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

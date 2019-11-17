@@ -68,9 +68,9 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # internal
-    'core',
     'blog',
     'projects',
+#    'core',
 ]
 
 MIDDLEWARE = [
