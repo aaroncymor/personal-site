@@ -70,7 +70,8 @@ INSTALLED_APPS = [
     # internal
     'blog',
     'projects',
-#    'core',
+    'core',
+    'aa_chatbot',
 ]
 
 MIDDLEWARE = [

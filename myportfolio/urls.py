@@ -34,6 +34,7 @@ urlpatterns = [
     
     # core
     path('', include('core.urls')),
+    path('api/v1/chatbot/', include('aa_chatbot.apiv1', namespace='chatbot-api')),
     path('api/v1/', include('myportfolioapi.apiv1', namespace='api')),
 ]
 
