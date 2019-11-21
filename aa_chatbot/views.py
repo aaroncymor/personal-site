@@ -66,33 +66,19 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
 
         elif request.method == 'GET':
             verify_token = "C75D9C4588648645EDBF24987D32713368806AB2"
-            required_qparams = ['hub.mode', 'hub.verify_token', 'hub.challenge']
-            param_keys = request.query_params.keys()
+            
+            mode = request.query_params.get('hub.mode', None)
+            token = request.query_params.get('hub.verify_token', None)
+            challenge = request.query_params.get('hub.challenge', 'success')
 
-            # compare count required query parameters
-            if len(param_keys) != len(required_qparams):
-                return Response({
-                    'error': "Parameters passed incomplete."
-                }, status=status.HTTP_400_BAD_REQUEST)
-
-            # check for query parameter keys
-            for query_param in request.query_params.keys():
-                if query_param not in required_qparams:
-                    return Response({
-                        'error': "Parameters passed incomplete."
-                    }, status=status.HTTP_400_BAD_REQUEST)
-
-            mode = request.query_params['hub.mode']
-            token = request.query_params['hub.verify_token']
-            challenge = request.query_params['hub.challenge']
-
-            if mode != 'subscribe' or token != verify_token:
-                return Response({'error': "Token does not match."},
-                                status=status.HTTP_400_BAD_REQUEST)
-
-            return Response({'challenge': challenge}, status.HTTP_200_OK)
-
+            if mode and token:
+                if verify_token != token:
+                    return Response({'error': "Token does not match."},
+                                    status=status.HTTP_400_BAD_REQUEST)
+                if mode == 'subscribe':
+                    return Response({'challenge': challenge}, status.HTTP_200_OK)
+     
         return Response({
-                    'error': "Unknown error occured."
-                }, status=status.HTTP_404_NOT_FOUND)
+                    'error': "Access to this service not allowed."
+                }, status=status.HTTP_403_FORBIDDEN)
 
