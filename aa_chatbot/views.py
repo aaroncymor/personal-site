@@ -65,7 +65,7 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
             return Response({'success': True}, status=status.HTTP_200_OK)
 
         elif request.method == 'GET':
-            verify_token = "aaron"
+            verify_token = "C75D9C4588648645EDBF24987D32713368806AB2"
             required_qparams = ['hub.mode', 'hub.verify_token', 'hub.challenge']
             param_keys = request.query_params.keys()
 
