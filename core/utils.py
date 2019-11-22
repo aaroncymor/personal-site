@@ -8,6 +8,25 @@ from django.db.models.fields.related_descriptors import ForwardManyToOneDescript
 
 from bs4 import BeautifulSoup
 
+API_CUSTOM_STATUS_CODES = {
+    2000: 'List successfully retrieved.',
+    2001: 'Data successfully retrieved.',
+    2002: 'Data successfully saved.',
+    2003: 'Data successfully updated.',
+    2004: 'Data successfully deleted.',
+
+    4000: 'Serializer related error. Check fields and parameters submitted.',
+    4001: 'Invalid post parameters.',
+    4002: 'Invalid parameters count.',
+    4003: 'Data does not exist. Model affected: ',
+    4004: 'Duplicate data error.',
+    4999: 'Client error occured. Please investigate.',
+    
+    5000: 'Server error occured. Please investigate.',
+
+    9999: 'Unknown error occured. Please investigate.',
+}
+
 # BeautifulSoup related utils
 def load_html_doc(html_doc):
     """
@@ -80,8 +99,8 @@ def replace_element(soup, replacement, tag, tag_attr):
     if callable(replace_with):
         replace_with(soup.new_tag(replacement))
 
-
 # end of BeautifulSoup related utils
+
 
 def enum(sequence, start=0):
     for index, value in enumerate(sequence):
@@ -273,4 +292,14 @@ class ModifiedPaginateListView(generic.ListView):
 
             context.update(group_pagination(num_pages, group_num))
 
-        return self.render_to_response(context)   
+        return self.render_to_response(context)
+
+
+class APITransactException(Exception):
+    def __init__(self, *args, **kwargs):
+        if 'code' in kwargs:
+            self.code = kwargs.pop('code')
+        
+        if 'message' in kwargs:
+            self.message = kwargs.pop('message')
+        super(APITransactException, self).__init__(*args, **kwargs)

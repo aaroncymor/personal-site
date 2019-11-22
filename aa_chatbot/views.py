@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.shortcuts import render
 
@@ -9,6 +10,7 @@ from rest_framework.response import Response
 
 from myportfolioapi.authentication import CsrfExemptSessionAuthentication
 
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 class FacebookChatbotViewSet(viewsets.ViewSet):
@@ -60,23 +62,22 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
                             print("Entry messaging is empty")
                     except KeyError:
                         print("No 'messaging' key for this entry.")
-                return Response({'success': True, 'message': "EVENT RECEIVED"}, 
-                        status=status.HTTP_200_OK)
-            return Response({'success': True}, status=status.HTTP_200_OK)
+
+                return Response("EVENT RECEIVED", status=status.HTTP_200_OK,
+                                content_type="text/html")
+            
+            return Response(None, status=status.HTTP_403_FORBIDDEN)
 
         elif request.method == 'GET':
             verify_token = "C75D9C4588648645EDBF24987D32713368806AB2"
             
             mode = request.query_params.get('hub.mode', None)
             token = request.query_params.get('hub.verify_token', None)
-            challenge = request.query_params.get('hub.challenge', 'success')
+            challenge = request.query_params.get('hub.challenge')
 
-            if mode and token:
-                if verify_token != token:
-                    return Response({'error': "Token does not match."},
-                                    status=status.HTTP_400_BAD_REQUEST)
-                if mode == 'subscribe':
-                    return Response({'challenge': challenge}, status.HTTP_200_OK)
+            if token and verify_token == token:
+                return Response(challenge, status=status.HTTP_200_OK, 
+                                content_type="text/html")
      
         return Response({
                     'error': "Access to this service not allowed."
