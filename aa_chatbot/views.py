@@ -52,7 +52,7 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
                             print("Entry messaging is empty")
                     except KeyError:
                         print("No 'messaging' key for this entry.")
-                return Response("EVENT RECEIVED", status=status.HTTP_200_OK
+                return Response("EVENT RECEIVED", status=status.HTTP_200_OK,
                             content_type="text/html")
             
             return Response(None, status=status.HTTP_403_FORBIDDEN)
