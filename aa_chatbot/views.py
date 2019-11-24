@@ -63,8 +63,7 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
                     except KeyError:
                         print("No 'messaging' key for this entry.")
 
-                return Response("EVENT RECEIVED", status=status.HTTP_200_OK,
-                                content_type="text/html")
+                return Response("EVENT RECEIVED", status=status.HTTP_200_OK)
             
             return Response(None, status=status.HTTP_403_FORBIDDEN)
 
@@ -76,8 +75,7 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
             challenge = request.query_params.get('hub.challenge')
 
             if token and verify_token == token:
-                return Response(challenge, status=status.HTTP_200_OK, 
-                                content_type="text/html")
+                return Response(challenge, status=status.HTTP_200_OK)
      
         return Response({
                     'error': "Access to this service not allowed."
