@@ -20,26 +20,16 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
         if request.method == 'POST':
             _data = request.data.copy()
             
-            if 'body' not in _data:
-                return Response({
-                    'error': "The 'body' parameter is required."
-                }, status=status.HTTP_400_BAD_REQUEST)
+            #if 'object' not in _data:
+            #    return Response({'error': "Key 'object' not found in body."},
+            #                status=status.HTTP_400_BAD_REQUEST)
+            obj = _data['object']
+            
+            #if 'entry' not in _data:
+            #    return Response({'error': "Key 'entry' not found in body."},
+            #                status=status.HTTP_400_BAD_REQUEST)
 
-            try:
-                # if body is not a dictionary, we load it with json
-                body = _data['body']
-            except Exception:
-                body = json.loads(_data['body'])
-            
-            if 'object' not in body:
-                return Response({'error': "Key 'object' not found in body."},
-                            status=status.HTTP_400_BAD_REQUEST)
-            obj = body['object']
-            
-            if 'entry' not in body:
-                return Response({'error': "Key 'entry' not found in body."},
-                            status=status.HTTP_400_BAD_REQUEST)
-            entries = body['entry']
+            entries = _data['entry']
             if not isinstance(entries, list):
                 return Response({'error': "Entries not an instance of list."},
                                 status=status.HTTP_400_BAD_REQUEST)
@@ -62,8 +52,8 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
                             print("Entry messaging is empty")
                     except KeyError:
                         print("No 'messaging' key for this entry.")
-
-                return Response("EVENT RECEIVED", status=status.HTTP_200_OK)
+                return Response("EVENT RECEIVED", status=status.HTTP_200_OK
+                            content_type="text/html")
             
             return Response(None, status=status.HTTP_403_FORBIDDEN)
 
@@ -75,9 +65,9 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
             challenge = request.query_params.get('hub.challenge')
 
             if token and verify_token == token:
-                return Response(challenge, status=status.HTTP_200_OK)
+                print("HEADERS", headers)
+                return Response(challenge, status=status.HTTP_200_OK,
+                            content_type="text/html")
      
-        return Response({
-                    'error': "Access to this service not allowed."
-                }, status=status.HTTP_403_FORBIDDEN)
+        return Response(None, status=status.HTTP_403_FORBIDDEN)
 
