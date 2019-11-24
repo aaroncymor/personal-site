@@ -2,6 +2,7 @@ import json
 import logging
 
 from django.shortcuts import render
+from django.http.response import HttpResponse
 
 from rest_framework import (viewsets, mixins, 
                             authentication, status)
@@ -52,8 +53,7 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
                             print("Entry messaging is empty")
                     except KeyError:
                         print("No 'messaging' key for this entry.")
-                return Response("EVENT RECEIVED", status=status.HTTP_200_OK,
-                            content_type="text/html")
+                return HttpResponse("EVENT RECEIVED")
             
             return Response(None, status=status.HTTP_403_FORBIDDEN)
 
@@ -65,8 +65,7 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
             challenge = request.query_params.get('hub.challenge')
 
             if token and verify_token == token:
-                return Response(challenge, status=status.HTTP_200_OK,
-                            content_type="text/html")
+                return HttpResponse(challenge)
      
         return Response(None, status=status.HTTP_403_FORBIDDEN)
 
