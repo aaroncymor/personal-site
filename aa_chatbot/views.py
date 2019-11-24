@@ -65,7 +65,6 @@ class FacebookChatbotViewSet(viewsets.ViewSet):
             challenge = request.query_params.get('hub.challenge')
 
             if token and verify_token == token:
-                print("HEADERS", headers)
                 return Response(challenge, status=status.HTTP_200_OK,
                             content_type="text/html")
      
