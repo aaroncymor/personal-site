@@ -32,6 +32,10 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'myportfolio/dashboard.html'
 
 
+class PrivacyPolicyView(generic.TemplateView):
+    template_name = 'myportfolio/privacypolicy.html'
+
+
 class LoginView(auth_views.LoginView):
     template_name = 'myportfolio/login.html'
 
