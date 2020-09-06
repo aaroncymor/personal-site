@@ -1,3 +1,4 @@
+import json
 from math import ceil
 
 from django.conf import settings
@@ -5,8 +6,11 @@ from django.views import generic
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models.query import QuerySet
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor, ReverseManyToOneDescriptor
+from django.utils.translation import gettext as _
 
 from bs4 import BeautifulSoup
+
+LOGGER_TYPES = ['info', 'debug', 'warning']
 
 API_CUSTOM_STATUS_CODES = {
     2000: 'List successfully retrieved.',
@@ -26,6 +30,17 @@ API_CUSTOM_STATUS_CODES = {
 
     9999: 'Unknown error occured. Please investigate.',
 }
+
+CHATBOT_CUSTOM_STATUS_CODES = {
+    2000: 'Message from user successfully received.',
+    2001: 'Token verification successful.',
+    2002: 'Page verification successful.',
+
+    4000: 'Message unsuccessful.',
+    4001: 'Token verification unsuccessful.',
+    4002: 'User is forbidden.'
+}
+
 
 # BeautifulSoup related utils
 def load_html_doc(html_doc):
@@ -303,3 +318,32 @@ class APITransactException(Exception):
         if 'message' in kwargs:
             self.message = kwargs.pop('message')
         super(APITransactException, self).__init__(*args, **kwargs)
+
+
+def log(view_name, action, data, 
+    status, status_code, logger_type,
+    success=False, message=''):
+
+    if not isinstance(view_name, str):
+        raise ValueError("View name should be string.")
+
+    if not isinstance(data, dict):
+        raise ValueError("Data should be dictionary type.")
+    
+    # TODO: determine all logger types   
+    if logger_type not in LOGGER_TYPES:
+        raise ValueError("logger_type not valid.")
+    
+    if logger_type == 'info':
+        return _("{0},{1},{2},{3},{4},{5}")\
+            .format(view_name, action, success, 
+                status, status_code, json.dumps(data))
+    elif logger_type == 'warning':
+        return _("WARNING: ")
+
+    # debug
+    return _("view_name: {0}, action: {1}, status: {2}, "
+            "status_code: {3} data: {4}, success: {5}"
+            "message: {6}")\
+            .format(view_name, action, status, status_code,
+                    data, success, message)

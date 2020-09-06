@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from blog.models import Category, Post, Tag, Decipher
-from projects.models import Project
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -101,15 +100,3 @@ class DecipherSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('_link', 'id', 'post', 'name', 
         'challenge', 'clue', 'code')
 
-
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-    short_description = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Project
-        fields = ('id', 'name', 'short_description', 'description', 'rank')
-    
-    def get_short_description(self, obj):
-        if not obj.description:
-            return None
-        return obj.short_description_for_list

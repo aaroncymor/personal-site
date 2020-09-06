@@ -528,3 +528,11 @@ def process_decipher_in_post(post, post_content):
             instance.delete()
 
     return soup.prettify(formatter="html5")
+
+
+def get_post_list(request):
+    return render(request, 'blog2/post_list.html', {})
+
+
+def get_post_detail(request):
+    return render(request, 'blog2/post_detail.html', {})

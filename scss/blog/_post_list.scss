@@ -1,0 +1,91 @@
+.posts {
+    &__item {
+        padding: 2.5rem;
+    }
+
+    &__title {
+        font-size: 2.7em;
+    }
+
+    &__short-content {
+        font-size: 1.3em;
+    }
+
+    &__read-more {
+        font-style: italic;
+        a {
+            text-decoration: none;
+            font-weight: 800;
+            color: $accentOne;
+        }
+    }
+
+    &__published {
+        p {
+            font-weight: 700;
+            font-size: 1.3em;
+            color: $accentTwo;
+        }   
+    }
+
+    &__tags ul {
+        display: inline-flex;
+        list-style-type: none;
+        gap: .6rem;
+    }
+
+    &__tags li {
+        font-family: 'BBT Martires';
+        background: $accentOne;
+        padding: 6px;
+        border-radius: 22px;
+        font-weight: 700;
+        color: $secondaryColor;
+    }
+
+    &__container {
+        display: block;
+        width: 80%;
+        margin: 0 auto;
+
+        h1 {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .posts__tags {
+            padding-bottom: 1.8rem;
+        }
+    }
+
+    &__more-blogs {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        flex-flow: row nowrap;
+    }
+
+    &__more-blogs ul {
+        display: inline-flex;
+        margin-left: 2rem;
+        list-style: '>>';
+        gap: 2rem;
+    }
+
+    &__more-blogs li a {
+        font-size: 1.1em;
+        font-weight: 700;
+        font-family: 'BBT Martires';
+        text-decoration: none;
+        color: $accentTwo;
+
+    }
+
+    &__content {
+        p {
+            font-size: 1.2em;
+            margin-bottom: 1.125rem;
+        }
+    }
+}

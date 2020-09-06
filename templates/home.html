@@ -134,45 +134,6 @@
         {% endif %}
         </div>
     </div>
-    <!--Projects-->
-    <div id="projects-container" class="row">
-        <h3 id="projects-h5">Projects</h3>
-        <div class="divider"></div>
-        <!--Feature Latest Three (3) Projects-->
-        <div id="">
-        {% if projects %}
-            {% for project in projects %}
-                <div class="row">
-                    <div class="col s12">
-                        <a class="modal-trigger" href="#modal-project-{{ forloop.counter }}">
-                            <div class="card medium">
-                                <div class="card-content">
-                                    <span class="card-title center-align">{{ project.name }}</span>
-                                    <div class="project-shortdesc">
-                                        <p>{{ project.short_description_for_home }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div id="modal-project-{{ forloop.counter }}" class="modal">
-                            <div class="modal-content">
-                                <p>{{ project.name }}</p>
-                                <p>{{ project.short_description_for_home }}</p>
-                                <div class="modal-footer">
-                                    Read full project <a href="{% url 'project-detail' project.id %}"> here</a> |
-                                    <a href="#!" class="modal-close">Close</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-            <div class="row"><a href="{% url 'project-list' %}?group_num=1">More projects here</a></div>
-        {% else %}
-            No projects at the moment
-        {% endif %}
-        </div>
-    </div>
 </div>
 {% endblock content %}
 

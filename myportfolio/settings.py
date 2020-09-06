@@ -11,8 +11,10 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import logging.config, logging
 
 import yaml
+
 from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -24,19 +26,24 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Config
 db_config = {}
-config_env = os.getenv('MYCONFIG')
+config_env = os.getenv('CONFIG')
 if config_env is not None:
     with open(config_env) as f:
         config_data = yaml.load(f)
+    # load config    
     app_conf = config_data['myportfolio']
+    myportfolioapi_conf = config_data['myportfolioapi']
+
     DJANGO_SECRET_KEY = app_conf['secret_key']
+    
+    # load loggers
+    logging.config.dictConfig(config_data['logging'])
+    MYPORTFOLIOAPI_LOGGER = logging.getLogger(myportfolioapi_conf['logger'])
 
-    #app_name
-    APP_NAME = app_conf['app_name']
-
+    # load database
     db_config = app_conf['db']
 else:
-    raise ImproperlyConfigured('MYCONFIG not set as an environment variable.')
+    raise ImproperlyConfigured('CONFIG not set as an environment variable.')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = DJANGO_SECRET_KEY
 
@@ -69,9 +76,7 @@ INSTALLED_APPS = [
 
     # internal
     'blog',
-    'projects',
     'core',
-    'aa_chatbot',
 ]
 
 MIDDLEWARE = [
@@ -199,3 +204,4 @@ TINYMCE_COMPRESSOR = True
 #GROUPBY_PAGINATION = 2 # Can also be defined by config
 
 CORS_ORIGIN_ALLOW_ALL = True
+

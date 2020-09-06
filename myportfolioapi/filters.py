@@ -8,8 +8,6 @@ from blog.models import (
     Decipher
 )
 
-from projects.models import Project
-
 class CharInFilter(filters.BaseInFilter, filters.CharFilter):
     pass
 
@@ -65,10 +63,3 @@ class DecipherFilter(FilterSet):
         model = Decipher
         fields = ['id', 'post_id', 'post_title', 'name', 'category_id', 'category_name']
 
-
-class ProjectFilter(FilterSet):
-    name = filters.CharFilter(field_name='name', lookup_expr='icontains')
-    
-    class Meta:
-        model = Project
-        fields = ['id' ,'name', 'rank']

@@ -5,7 +5,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 
 from blog.models import Post
-from projects.models import Project
 
 # Create your views here.
 
@@ -18,22 +17,14 @@ class HomeView(generic.TemplateView):
         # Queryset for blogs - latest two (2) posts
         posts = Post.published_objects.all().order_by('-timestamp')[:3]
 
-        # Queryset for projects - latest two (2) projects
-        projects = Project.objects.all().order_by('rank')[:3]
-
         # Assign to context
         context['posts'] = posts
-        context['projects'] = projects
 
         return self.render_to_response(context)
 
 
 class DashboardView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'myportfolio/dashboard.html'
-
-
-class PrivacyPolicyView(generic.TemplateView):
-    template_name = 'myportfolio/privacypolicy.html'
 
 
 class LoginView(auth_views.LoginView):

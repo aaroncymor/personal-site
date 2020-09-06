@@ -8,7 +8,9 @@ from .views import (
     delete_post,
     submit_post_search,
     get_random_tags,
-    get_deciphers_by_post
+    get_deciphers_by_post,
+    get_post_list,
+    get_post_detail,
 )
 
 urlpatterns = [
@@ -19,5 +21,8 @@ urlpatterns = [
     path('posts/<int:post_id>/deciphers/<int:decipher_id>/form', PostDecipherFormView.as_view(), name='post-decipher-form'),
     path('form', PostFormView.as_view(), name='post-form'),
     path('search', submit_post_search, name='post-search'),
-    path('random_tags', get_random_tags, name='post-random-tags' )
+    path('random_tags', get_random_tags, name='post-random-tags' ),
+
+    path('post-list', get_post_list, name='post-list-2' ),
+    path('post-detail', get_post_detail, name='post-detail-2'),
 ]

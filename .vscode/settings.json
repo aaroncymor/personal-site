@@ -1,0 +1,11 @@
+{
+    "python.pythonPath": "/home/rtidev/Projects/Others/myportfolio/venv/bin/python3.7",
+    "liveSassCompile.settings.formats": [
+        {
+            "format": "expanded",
+            "extensionName": ".css",
+            "savePath": "/static/css"
+        },
+    ],
+    
+}

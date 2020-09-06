@@ -7,3 +7,44 @@ myportfolio:
     pass: password
     host: localhost
     port: 5432
+
+myportfolioapi:
+  logger: MyPortfolioApiLogger
+
+logging:
+  version: 1 # required by dictConfig
+  formatters:
+    default:
+      format: "%(asctime)s\t%(levelname)s\t%(name)s\t%(message)s"
+  handlers:
+    console:
+      class: logging.StreamHandler
+      formatter: default
+      stream: ext://sys.stdout
+    datestamp_logfile:
+      level: INFO
+      class: core.logger.DateStampedHandler
+      filename_template: /home/rtidev/Projects/Others/logs/myportfolio/%Y%m/%Y%m%d.api
+    datestamp_chatbot_logfile:
+      level: INFO
+      class: core.logger.DateStampedHandler
+      filename_template: /home/rtidev/Projects/Others/logs/myportfolio/%Y%m/%Y%m%d.chatbot
+    debug_log:
+      level: DEBUG
+      class: logging.handlers.TimedRotatingFileHandler
+      formatter: default
+      filename: /home/rtidev/Projects/Others/logs/myportfolio/myportfolio.log
+      interval: 1
+      backupCount: 7
+      when: midnight
+  loggers:
+    myportfolioapi.views:
+      handlers: [console, debug_log]
+      level: DEBUG
+    MyPortfolioApiLogger:
+      handlers: [datestamp_logfile]
+      level: INFO
+      propagate: True
+
+
+  

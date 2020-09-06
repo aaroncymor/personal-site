@@ -1,4 +1,7 @@
+import logging
+
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -14,14 +17,11 @@ from blog.models import (
     Decipher
 )
 
-from projects.models import Project
-
 from .serializers import (
     UserSerializer,
     CategorySerializer,
     PostSerializer,
     TagSerializer,
-    ProjectSerializer,
     DecipherSerializer,
 )
 
@@ -30,12 +30,13 @@ from .filters import (
     PostFilter,
     TagFilter,
     DecipherFilter,
-    ProjectFilter,
 )
 
 from .pagination import CustomPagination
 from .mixins import CustomListModelMixin
 from .authentication import CsrfExemptSessionAuthentication
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -112,12 +113,3 @@ class DecipherViewSet(mixins.ListModelMixin,
         response.update({'hidden_text':instance.hidden_text})
         return Response(response, status=status.HTTP_200_OK, headers=headers)
 
-
-class ProjectViewSet(CustomListModelMixin, 
-                     mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
-    queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
-    filter_backends = (DjangoFilterBackend,)    
-    filter_class = ProjectFilter
-    pagination_class = CustomPagination

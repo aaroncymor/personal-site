@@ -1,0 +1,44 @@
+$primaryColor: #181810;
+$secondaryColor: #eeeeee;
+$accentOne: #062121;
+$accentTwo: #938952;
+
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap");
+
+@font-face {
+    font-family: 'BBT Martires';
+    font-weight: 300;
+    src: url("/static/fonts/BBTMartiresFree-Thin.otf");
+}
+
+@font-face {
+    font-family: 'BBT Martires';
+    font-weight: 400;
+    src: url("/static/fonts/BBTMartiresFree-Regular.otf");
+}
+
+@font-face {
+    font-family: 'BBT Martires';
+    font-weight: 800;
+    src: url("/static/fonts/BBTMartiresFree-ExtraBold.otf");
+}
+
+@font-face {
+    font-family: 'Bantayog';
+    font-weight: 400;
+    src: url("/static/fonts/Bantayog-Regular.otf");
+}
+
+@font-face {
+    font-family: 'Bantayog';
+    font-weight: 300;
+    src: url("/static/fonts/Bantayog-Light.otf");
+}
+
+@font-face {
+    font-family: 'Maragsa';
+    font-weight: 400;
+    src: url("/static/fonts/Maragsâ-Display.otf");
+}
+
+
