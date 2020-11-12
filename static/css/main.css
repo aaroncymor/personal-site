@@ -42,26 +42,34 @@
 
 .posts__title {
   font-size: 2.7em;
+  color: #E6E8E6;
+  text-align: center;
 }
 
 .posts__short-content {
+  padding-top: 1em;
   font-size: 1.3em;
 }
 
 .posts__read-more {
   font-style: italic;
+  font-weight: 700;
 }
 
 .posts__read-more a {
   text-decoration: none;
   font-weight: 800;
-  color: #062121;
+  color: #FDCA40;
+}
+
+.posts__published {
+  padding: 1em 0;
 }
 
 .posts__published p {
   font-weight: 700;
   font-size: 1.3em;
-  color: #938952;
+  color: #E6E8E6;
 }
 
 .posts__tags ul {
@@ -74,11 +82,11 @@
 
 .posts__tags li {
   font-family: 'BBT Martires';
-  background: #062121;
+  background: #E6E8E6;
   padding: 6px;
   border-radius: 22px;
   font-weight: 700;
-  color: #eeeeee;
+  color: #080708;
 }
 
 .posts__container {
@@ -89,7 +97,6 @@
 
 .posts__container h1 {
   padding: 1.5rem;
-  text-align: center;
 }
 
 .posts__container .posts__tags {
@@ -110,6 +117,10 @@
       flex-flow: row nowrap;
 }
 
+.posts__more-blogs p {
+  font-size: 1.2em;
+}
+
 .posts__more-blogs ul {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
@@ -120,16 +131,51 @@
 }
 
 .posts__more-blogs li a {
-  font-size: 1.1em;
+  font-size: 1.3em;
   font-weight: 700;
   font-family: 'BBT Martires';
   text-decoration: none;
-  color: #938952;
+  color: #FDCA40;
 }
 
 .posts__content p {
   font-size: 1.2em;
   margin-bottom: 1.125rem;
+}
+
+.posts__search {
+  width: 100%;
+}
+
+.posts__search form {
+  width: 60%;
+  margin: 2em auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.posts__search form input[type="text"] {
+  outline: 0;
+  border-width: 0 0 2px;
+  border-color: #E6E8E6;
+  background: #080708;
+}
+
+.posts__search form button {
+  margin-left: 10px;
+  padding: .3rem;
+  border: none;
+  width: 120px;
+  background: #FDCA40;
+  color: #080708;
+  font-family: 'Bantayog';
+  font-size: 1.2em;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
 *,
@@ -142,8 +188,8 @@
 }
 
 body {
-  background-color: #eeeeee;
-  color: #181810;
+  background-color: #080708;
+  color: #E6E8E6;
 }
 
 a {
@@ -192,7 +238,7 @@ a {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background: #062121;
+  background: #FDCA40;
 }
 
 .main-nav__list {
@@ -203,6 +249,6 @@ a {
 
 .main-nav__link {
   text-decoration: none;
-  color: #eeeeee;
+  color: #080708;
 }
 /*# sourceMappingURL=main.css.map */

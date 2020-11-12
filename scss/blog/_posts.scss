@@ -5,14 +5,19 @@
 
     &__title {
         font-size: 2.7em;
+        color: $primaryColor;
+        text-align: center;
     }
 
     &__short-content {
+        padding-top: 1em;
         font-size: 1.3em;
     }
 
     &__read-more {
         font-style: italic;
+        font-weight: 700;
+
         a {
             text-decoration: none;
             font-weight: 800;
@@ -21,10 +26,11 @@
     }
 
     &__published {
+        padding: 1em 0;
         p {
             font-weight: 700;
             font-size: 1.3em;
-            color: $accentTwo;
+            color: $primaryColor;
         }   
     }
 
@@ -36,7 +42,7 @@
 
     &__tags li {
         font-family: 'BBT Martires';
-        background: $accentOne;
+        background: $primaryColor;
         padding: 6px;
         border-radius: 22px;
         font-weight: 700;
@@ -50,7 +56,6 @@
 
         h1 {
             padding: 1.5rem;
-            text-align: center;
         }
 
         .posts__tags {
@@ -65,6 +70,10 @@
         flex-direction: row;
         flex-flow: row nowrap;
     }
+    
+    &__more-blogs p {
+        font-size: 1.2em;
+    }
 
     &__more-blogs ul {
         display: inline-flex;
@@ -74,11 +83,11 @@
     }
 
     &__more-blogs li a {
-        font-size: 1.1em;
+        font-size: 1.3em;
         font-weight: 700;
         font-family: 'BBT Martires';
         text-decoration: none;
-        color: $accentTwo;
+        color: $accentOne;
 
     }
 
@@ -86,6 +95,38 @@
         p {
             font-size: 1.2em;
             margin-bottom: 1.125rem;
+        }
+    }
+
+    &__search {
+        width: 100%;
+    }
+
+    &__search form {
+        width: 60%;
+        margin: 2em auto;
+        display: flex;
+        justify-content: center;
+
+        input[type="text"] {
+            outline: 0;
+            border-width: 0 0 2px;
+            border-color: $primaryColor;
+            background: $secondaryColor;
+        }
+
+        button {
+            margin-left: 10px;
+            padding: .3rem;
+            border: none;
+            // border-radius: 12px;
+            width: 120px;
+            background: $accentOne;
+            color: $secondaryColor;
+            font-family: 'Bantayog';
+            font-size: 1.2em;
+            text-transform: uppercase;
+            cursor: pointer;
         }
     }
 }
