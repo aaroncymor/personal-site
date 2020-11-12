@@ -1,10 +1,18 @@
 {% extends 'base2.html' %}
 
+{% block head_extension %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/js/autoComplete.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <section class="posts">
     <div class="posts__search">
         <form method="post" action="">
-            <input type="text" class="post-search" >
+            <input
+                id="post-search-autocomplete"
+                type="text"
+                class="post-search">
             <button>Search</button>
         </form>
     </div>
@@ -138,4 +146,49 @@
 {% endblock %}
 
 {% block javascript %}
+<script>
+    async function autoCompleteSearch(url='', data = {}) {
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+
+        return response.json();
+    }
+
+    new autoComplete({
+        data: {
+            src: async() => {
+                let source = await autoCompleteSearch('/api/v1/autocomplete',
+                { search: document.querySelector('#post-search-autocomplete').value })
+                .then(data => data);
+                
+                return ["test", "TesTer"];
+            },
+            cache: false
+        },
+        placeHolder: "Blog Posts...",
+        threshold: 3,
+        searchEngine: "strict",
+        resultsList: {
+            render: true,
+            container: source => {
+                source.setAttribute('id', 'post-search-list');
+            },
+            destination: document.querySelector('#post-search-autocomplete'),
+            position: 'afterend',
+            element: "ul"
+        },
+        highlight: true,
+        selector: '#post-search-autocomplete',
+        resultItem: {
+            content: (data, source) => {
+                source.innerHTML = data.match;
+            },
+            element: "li"
+        }
+    });
+</script>
 {% endblock %}

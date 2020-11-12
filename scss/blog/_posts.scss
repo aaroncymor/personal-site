@@ -1,6 +1,10 @@
 .posts {
     &__item {
-        padding: 2.5rem;
+        padding: 1.2em 0;
+    }
+
+    &__item:not(:last-child) {
+        border-bottom: 1px solid $accentOne;
     }
 
     &__title {
@@ -113,6 +117,8 @@
             border-width: 0 0 2px;
             border-color: $primaryColor;
             background: $secondaryColor;
+            color: $primaryColor;
+            font-family: 'Nunito', verdana;
         }
 
         button {

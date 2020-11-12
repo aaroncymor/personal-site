@@ -37,7 +37,11 @@
 }
 
 .posts__item {
-  padding: 2.5rem;
+  padding: 1.2em 0;
+}
+
+.posts__item:not(:last-child) {
+  border-bottom: 1px solid #FDCA40;
 }
 
 .posts__title {
@@ -163,6 +167,8 @@
   border-width: 0 0 2px;
   border-color: #E6E8E6;
   background: #080708;
+  color: #E6E8E6;
+  font-family: 'Nunito', verdana;
 }
 
 .posts__search form button {
