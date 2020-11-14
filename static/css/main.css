@@ -37,16 +37,16 @@
 }
 
 .posts__item {
-  padding: 1.2em 0;
+  padding: 1.2em 1.5em;
 }
 
 .posts__item:not(:last-child) {
-  border-bottom: 1px solid #FDCA40;
+  border-bottom: 1px solid #93deff;
 }
 
 .posts__title {
   font-size: 2.7em;
-  color: #E6E8E6;
+  color: #323643;
   text-align: center;
 }
 
@@ -63,7 +63,7 @@
 .posts__read-more a {
   text-decoration: none;
   font-weight: 800;
-  color: #FDCA40;
+  color: #93deff;
 }
 
 .posts__published {
@@ -73,7 +73,7 @@
 .posts__published p {
   font-weight: 700;
   font-size: 1.3em;
-  color: #E6E8E6;
+  color: #323643;
 }
 
 .posts__tags ul {
@@ -86,11 +86,11 @@
 
 .posts__tags li {
   font-family: 'BBT Martires';
-  background: #E6E8E6;
+  background: #323643;
   padding: 6px;
   border-radius: 22px;
   font-weight: 700;
-  color: #080708;
+  color: #f7f7f7;
 }
 
 .posts__container {
@@ -139,7 +139,7 @@
   font-weight: 700;
   font-family: 'BBT Martires';
   text-decoration: none;
-  color: #FDCA40;
+  color: #93deff;
 }
 
 .posts__content p {
@@ -165,10 +165,11 @@
 .posts__search form input[type="text"] {
   outline: 0;
   border-width: 0 0 2px;
-  border-color: #E6E8E6;
-  background: #080708;
-  color: #E6E8E6;
+  border-color: #323643;
+  background: #f7f7f7;
+  color: #323643;
   font-family: 'Nunito', verdana;
+  font-size: 1.4em;
 }
 
 .posts__search form button {
@@ -176,12 +177,43 @@
   padding: .3rem;
   border: none;
   width: 120px;
-  background: #FDCA40;
-  color: #080708;
+  background: #93deff;
+  color: #f7f7f7;
   font-family: 'Bantayog';
   font-size: 1.2em;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+.autocomplete-wrapper {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+}
+
+.autocomplete-wrapper .post-search-list {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 33px;
+  /* height of input text */
+}
+
+.autocomplete-wrapper .post-search-list .post-search-item {
+  font-family: Nunito;
+  font-size: 1.4em;
+  color: #323643;
+  cursor: pointer;
+}
+
+.post-search-item span {
+  color: #93deff;
 }
 
 *,
@@ -194,8 +226,8 @@
 }
 
 body {
-  background-color: #080708;
-  color: #E6E8E6;
+  background-color: #f7f7f7;
+  color: #323643;
 }
 
 a {
@@ -244,7 +276,7 @@ a {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background: #FDCA40;
+  background: #93deff;
 }
 
 .main-nav__list {
@@ -255,6 +287,6 @@ a {
 
 .main-nav__link {
   text-decoration: none;
-  color: #080708;
+  color: #f7f7f7;
 }
 /*# sourceMappingURL=main.css.map */

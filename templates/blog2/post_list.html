@@ -1,7 +1,6 @@
 {% extends 'base2.html' %}
 
 {% block head_extension %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/js/autoComplete.min.js"></script>
 {% endblock %}
 
@@ -9,10 +8,12 @@
 <section class="posts">
     <div class="posts__search">
         <form method="post" action="">
-            <input
-                id="post-search-autocomplete"
-                type="text"
-                class="post-search">
+            <div class="autocomplete-wrapper">
+                <input
+                    id="post-search-autocomplete"
+                    type="text"
+                    class="post-search">
+            </div>
             <button>Search</button>
         </form>
     </div>
@@ -147,6 +148,12 @@
 
 {% block javascript %}
 <script>
+    const postSearchInput = document.querySelector('#post-search-autocomplete');
+    // clear input text on refresh
+    window.onload = function(event) {
+        postSearchInput.value = "";
+    }
+
     async function autoCompleteSearch(url='', data = {}) {
         const response = await fetch(url, {
             method: 'POST',
@@ -175,19 +182,20 @@
         resultsList: {
             render: true,
             container: source => {
-                source.setAttribute('id', 'post-search-list');
+                source.setAttribute('class', 'post-search-list');
             },
             destination: document.querySelector('#post-search-autocomplete'),
             position: 'afterend',
-            element: "ul"
+            element: "div"
         },
         highlight: true,
         selector: '#post-search-autocomplete',
         resultItem: {
             content: (data, source) => {
+                source.setAttribute('class', 'post-search-item');
                 source.innerHTML = data.match;
             },
-            element: "li"
+            element: "div"
         }
     });
 </script>
