@@ -1,6 +1,6 @@
-myportfolio:
+personal_site:
   secret_key: (pfboe=(9khdb1#tas!u32q=7ecc%x4$2we%-_#fjot6=j#96#
-  app_name: myportfolio
+  app_name: personal_site
   db:
     database: myportfoliodb
     user: rtidev
@@ -8,8 +8,8 @@ myportfolio:
     host: localhost
     port: 5432
 
-myportfolioapi:
-  logger: MyPortfolioApiLogger
+personal_site_api:
+  logger: PersonalSiteApiLogger
 
 logging:
   version: 1 # required by dictConfig
@@ -24,24 +24,24 @@ logging:
     datestamp_logfile:
       level: INFO
       class: core.logger.DateStampedHandler
-      filename_template: /home/rtidev/Projects/Others/logs/myportfolio/%Y%m/%Y%m%d.api
+      filename_template: /home/rtidev/Projects/Others/logs/personal_site/%Y%m/%Y%m%d.api
     datestamp_chatbot_logfile:
       level: INFO
       class: core.logger.DateStampedHandler
-      filename_template: /home/rtidev/Projects/Others/logs/myportfolio/%Y%m/%Y%m%d.chatbot
+      filename_template: /home/rtidev/Projects/Others/logs/personal_site/%Y%m/%Y%m%d.chatbot
     debug_log:
       level: DEBUG
       class: logging.handlers.TimedRotatingFileHandler
       formatter: default
-      filename: /home/rtidev/Projects/Others/logs/myportfolio/myportfolio.log
+      filename: /home/rtidev/Projects/Others/logs/personal_site/personal_site.log
       interval: 1
       backupCount: 7
       when: midnight
   loggers:
-    myportfolioapi.views:
+    personal_site_api.views:
       handlers: [console, debug_log]
       level: DEBUG
-    MyPortfolioApiLogger:
+    PersonalSiteApiLogger:
       handlers: [datestamp_logfile]
       level: INFO
       propagate: True

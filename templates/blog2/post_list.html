@@ -21,11 +21,11 @@
         <article class="posts__item">
             <h2 class="posts__title bantayog-font">Title One</h2>
             <p class="posts__short-content nunito-font">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Maecenas quis odio non ipsum finibus ornare in vitae lectus. 
-                Pellentesque aliquam ipsum at augue convallis, at tincidunt 
-                purus tempor. Nulla rhoncus id sapien id aliquet. Nam nec posuere 
-                arcu. Nunc pharetra at risus sit amet accumsan. Vestibulum tempor 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas quis odio non ipsum finibus ornare in vitae lectus.
+                Pellentesque aliquam ipsum at augue convallis, at tincidunt
+                purus tempor. Nulla rhoncus id sapien id aliquet. Nam nec posuere
+                arcu. Nunc pharetra at risus sit amet accumsan. Vestibulum tempor
                 diam metus, ut rutrum ante rhoncus eget.
                 <span class="posts__read-more">
                     Read more <a href="#">here...</a>
@@ -46,11 +46,11 @@
         <article class="posts__item">
             <h2 class="posts__title bantayog-font">Title Two</h2>
             <p class="posts__short-content nunito-font">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Maecenas quis odio non ipsum finibus ornare in vitae lectus. 
-                Pellentesque aliquam ipsum at augue convallis, at tincidunt 
-                purus tempor. Nulla rhoncus id sapien id aliquet. Nam nec posuere 
-                arcu. Nunc pharetra at risus sit amet accumsan. Vestibulum tempor 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas quis odio non ipsum finibus ornare in vitae lectus.
+                Pellentesque aliquam ipsum at augue convallis, at tincidunt
+                purus tempor. Nulla rhoncus id sapien id aliquet. Nam nec posuere
+                arcu. Nunc pharetra at risus sit amet accumsan. Vestibulum tempor
                 diam metus, ut rutrum ante rhoncus eget.
                 <span class="posts__read-more">
                     Read more <a href="#">here...</a>
@@ -71,11 +71,11 @@
         <article class="posts__item">
             <h2 class="posts__title bantayog-font">Title Three</h2>
             <p class="posts__short-content nunito-font">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Maecenas quis odio non ipsum finibus ornare in vitae lectus. 
-                Pellentesque aliquam ipsum at augue convallis, at tincidunt 
-                purus tempor. Nulla rhoncus id sapien id aliquet. Nam nec posuere 
-                arcu. Nunc pharetra at risus sit amet accumsan. Vestibulum tempor 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas quis odio non ipsum finibus ornare in vitae lectus.
+                Pellentesque aliquam ipsum at augue convallis, at tincidunt
+                purus tempor. Nulla rhoncus id sapien id aliquet. Nam nec posuere
+                arcu. Nunc pharetra at risus sit amet accumsan. Vestibulum tempor
                 diam metus, ut rutrum ante rhoncus eget.
                 <span class="posts__read-more">
                     Read more <a href="#">here...</a>
@@ -96,11 +96,11 @@
         <article class="posts__item">
             <h2 class="posts__title bantayog-font">Title Four</h2>
             <p class="posts__short-content nunito-font">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Maecenas quis odio non ipsum finibus ornare in vitae lectus. 
-                Pellentesque aliquam ipsum at augue convallis, at tincidunt 
-                purus tempor. Nulla rhoncus id sapien id aliquet. Nam nec posuere 
-                arcu. Nunc pharetra at risus sit amet accumsan. Vestibulum tempor 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas quis odio non ipsum finibus ornare in vitae lectus.
+                Pellentesque aliquam ipsum at augue convallis, at tincidunt
+                purus tempor. Nulla rhoncus id sapien id aliquet. Nam nec posuere
+                arcu. Nunc pharetra at risus sit amet accumsan. Vestibulum tempor
                 diam metus, ut rutrum ante rhoncus eget.
                 <span class="posts__read-more">
                     Read more <a href="#">here...</a>
@@ -121,11 +121,11 @@
         <article class="posts__item">
             <h2 class="posts__title bantayog-font">Title Five</h2>
             <p class="posts__short-content nunito-font">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Maecenas quis odio non ipsum finibus ornare in vitae lectus. 
-                Pellentesque aliquam ipsum at augue convallis, at tincidunt 
-                purus tempor. Nulla rhoncus id sapien id aliquet. Nam nec posuere 
-                arcu. Nunc pharetra at risus sit amet accumsan. Vestibulum tempor 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Maecenas quis odio non ipsum finibus ornare in vitae lectus.
+                Pellentesque aliquam ipsum at augue convallis, at tincidunt
+                purus tempor. Nulla rhoncus id sapien id aliquet. Nam nec posuere
+                arcu. Nunc pharetra at risus sit amet accumsan. Vestibulum tempor
                 diam metus, ut rutrum ante rhoncus eget.
                 <span class="posts__read-more">
                     Read more <a href="#">here...</a>
@@ -149,10 +149,6 @@
 {% block javascript %}
 <script>
     const postSearchInput = document.querySelector('#post-search-autocomplete');
-    // clear input text on refresh
-    window.onload = function(event) {
-        postSearchInput.value = "";
-    }
 
     async function autoCompleteSearch(url='', data = {}) {
         const response = await fetch(url, {
@@ -165,20 +161,29 @@
         return response.json();
     }
 
+    // clear input text on refresh
+    window.onload = async () => {
+        postSearchInput.value = "";
+    }
+
     new autoComplete({
         data: {
-            src: async() => {
-                let source = await autoCompleteSearch('/api/v1/autocomplete',
-                { search: document.querySelector('#post-search-autocomplete').value })
-                .then(data => data);
-                
-                return ["test", "TesTer"];
+            src: async () => {
+                let postList = Array();
+                let searchData = (postSearchInput.value.length > 2) ? postSearchInput.value : '';
+                let postSearchResults = await autoCompleteSearch('/api/v1/autocomplete',
+                                        { search: searchData}).then(data => data);
+                return postSearchResults;
+                // postSearchResults.forEach(postSearchResult=>{
+                //     postList.push(`${postSearchResult.title} - ${postSearchResult.type}`);
+                // });
+                // return postList;
             },
             cache: false
         },
         placeHolder: "Blog Posts...",
-        threshold: 3,
-        searchEngine: "strict",
+        threshold: 2,
+        searchEngine: "loose",
         resultsList: {
             render: true,
             container: source => {
@@ -192,8 +197,10 @@
         selector: '#post-search-autocomplete',
         resultItem: {
             content: (data, source) => {
+                console.log(data);
+                // console.log(source);
                 source.setAttribute('class', 'post-search-item');
-                source.innerHTML = data.match;
+                // source.innerHTML = data.match;
             },
             element: "div"
         }

@@ -1,6 +1,6 @@
 import datetime
 
-from django.http import Http404, HttpResponseNotAllowed
+from django.http import Http404, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic, View
 from django.urls import reverse_lazy, reverse
@@ -11,7 +11,7 @@ from django.db import IntegrityError
 from .models import Post, Category, Tag, Decipher
 from .forms import PostForm, PostSearchForm, DecipherForm
 
-from myportfolioapi.filters import PostFilter
+from personal_site_api.filters import PostFilter
 from core.utils import (
     ModifiedSearchListView, load_html_doc,
     get_tags, assign_attr_to_tag,
@@ -19,7 +19,7 @@ from core.utils import (
     replace_element
 )
 
-#from myportfolio.core.views import ModifiedPaginateListView
+#from personal_site.core.views import ModifiedPaginateListView
 
 
 # Function based views here.

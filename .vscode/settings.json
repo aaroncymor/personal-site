@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/home/rtidev/Projects/Others/myportfolio/venv/bin/python3.7",
+    "python.pythonPath": "/home/rtidev/Projects/Others/personal_site/venv/bin/python3.7",
     "liveSassCompile.settings.formats": [
         {
             "format": "expanded",

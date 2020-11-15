@@ -3,12 +3,13 @@ from django.urls import re_path, include
 
 from rest_framework import routers
 
-from .views import (
+from personal_site_api.views import (
     UserViewSet,
     CategoryViewSet,
     PostViewSet,
     TagViewSet,
-    DecipherViewSet
+    DecipherViewSet,
+    autocomplete_search
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -21,4 +22,5 @@ router.register(r'deciphers', DecipherViewSet, base_name='decipher')
 app_name = 'api'
 urlpatterns = [
     re_path(r'^', include(router.urls), name='v1'),
+    re_path(r'autocomplete', autocomplete_search, name='autocomplete-search'),
 ]

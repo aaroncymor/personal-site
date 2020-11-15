@@ -170,6 +170,7 @@
   color: #323643;
   font-family: 'Nunito', verdana;
   font-size: 1.4em;
+  z-index: 0;
 }
 
 .posts__search form button {
@@ -199,10 +200,13 @@
 
 .autocomplete-wrapper .post-search-list {
   width: 100%;
-  height: 100%;
   position: absolute;
   top: 33px;
   /* height of input text */
+  background-color: #f7f7f7;
+  border-left: 1px solid #323643;
+  border-right: 1px solid #323643;
+  border-bottom: 1px solid #323643;
 }
 
 .autocomplete-wrapper .post-search-list .post-search-item {
@@ -210,6 +214,10 @@
   font-size: 1.4em;
   color: #323643;
   cursor: pointer;
+}
+
+.autocomplete-wrapper .post-search-list .post-search-item:not(:last-child) {
+  border-bottom: 1px solid #93deff;
 }
 
 .post-search-item span {
@@ -277,6 +285,7 @@ a {
       -ms-flex-align: center;
           align-items: center;
   background: #93deff;
+  z-index: 1;
 }
 
 .main-nav__list {

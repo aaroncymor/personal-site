@@ -100,3 +100,10 @@ class DecipherSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('_link', 'id', 'post', 'name', 
         'challenge', 'clue', 'code')
 
+
+# Autocomplete
+
+class PostSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('id', 'title', 'content')

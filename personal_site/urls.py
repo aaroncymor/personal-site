@@ -1,4 +1,4 @@
-"""myportfolio URL Configuration
+"""personal_site URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.0/topics/http/urls/
@@ -33,7 +33,7 @@ urlpatterns = [
     
     # core
     path('', include('core.urls')),
-    path('api/v1/', include('myportfolioapi.apiv1', namespace='api')),
+    path('api/v1/', include('personal_site_api.apiv1', namespace='api')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

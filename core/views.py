@@ -24,11 +24,11 @@ class HomeView(generic.TemplateView):
 
 
 class DashboardView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'myportfolio/dashboard.html'
+    template_name = 'personal_site/dashboard.html'
 
 
 class LoginView(auth_views.LoginView):
-    template_name = 'myportfolio/login.html'
+    template_name = 'personal_site/login.html'
 
     def post(self, request, *args, **kwargs):
         """

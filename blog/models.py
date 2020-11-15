@@ -21,7 +21,15 @@ class Category(PortfolioMixin):
     class Meta:
         db_table = 'category'
         verbose_name_plural = 'categories'
-    
+
+    @property
+    def autocomplete(self):
+        return {
+            'id': self.id,
+            'type': 'category',
+            'key': self.name
+        }
+
     def __str__(self):
         return self.name
 
@@ -132,6 +140,14 @@ class Post(PortfolioMixin):
         if self.published_date:
             return True
         return False
+    
+    @property
+    def autocomplete(self):
+        return {
+            'id': self.id,
+            'type': 'post',
+            'key': self.title
+        }
 
     def __str__(self):
         return self.title
@@ -148,6 +164,14 @@ class Tag(PortfolioMixin):
     @property
     def html_id(self):
         return self.tag.replace(" ", "-")
+    
+    @property
+    def autocomplete(self):
+        return {
+            'id': self.id,
+            'type': 'tag',
+            'key': self.tag
+        }
     
     def __str__(self):
         return self.tag

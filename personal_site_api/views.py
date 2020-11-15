@@ -5,8 +5,9 @@ from django.conf import settings
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import mixins, status, viewsets, serializers
-from rest_framework.decorators import action
+from rest_framework import mixins, status,viewsets, serializers
+from rest_framework.views import Response
+from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.authentication import BasicAuthentication
 
@@ -21,6 +22,7 @@ from .serializers import (
     UserSerializer,
     CategorySerializer,
     PostSerializer,
+    PostSearchSerializer,
     TagSerializer,
     DecipherSerializer,
 )
@@ -112,4 +114,37 @@ class DecipherViewSet(mixins.ListModelMixin,
         headers = {'content-type': 'application/json'}
         response.update({'hidden_text':instance.hidden_text})
         return Response(response, status=status.HTTP_200_OK, headers=headers)
+
+
+@api_view(['POST'])
+def autocomplete_search(request):
+    response = {}
+    search_results = []
+    headers = {'content-type': 'application/json'}
+    if request.method == 'POST':
+        if 'search' in request.data:
+            search = request.data['search']
+
+            print("SEARCH", search)
+
+            title_search = PostFilter({'title_icontains': search}, Post.objects.all()).qs.values('id', 'title')
+            category_search = PostFilter({'category_name': search}, Post.objects.all()).qs.values('id', 'title')
+            tag_search = PostFilter({'tag_iexact': search}, Post.objects.all()).qs.values('id', 'title')
+
+            for item in title_search:
+                item['type'] = 'post'
+                search_results.append(item)
+            
+            for item in category_search:
+                item['type'] = 'category'
+                search_results.append(item)
+
+            for item in tag_search:
+                item['type'] = 'tag'
+                search_results.append(item)
+
+        return Response(search_results, status=status.HTTP_200_OK, headers=headers)
+
+
+            
 

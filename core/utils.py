@@ -193,7 +193,7 @@ class ModifiedSearchListView(generic.ListView):
         return queryset
 
 
-## TODO: Reference myportfolio.core.utils.group_pagination
+## TODO: Reference personal_site.core.utils.group_pagination
 ## Check if we need to make partitions for pagination.
 
 def group_pagination(num_pages, group_num):
