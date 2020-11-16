@@ -125,22 +125,38 @@ def autocomplete_search(request):
         if 'search' in request.data:
             search = request.data['search']
 
-            print("SEARCH", search)
-
             title_search = PostFilter({'title_icontains': search}, Post.objects.all()).qs.values('id', 'title')
-            category_search = PostFilter({'category_name': search}, Post.objects.all()).qs.values('id', 'title')
+            category_search = PostFilter({'category_name': search}, Post.objects.all()).qs.values('id', 'title', 'category__name')
             tag_search = PostFilter({'tag_iexact': search}, Post.objects.all()).qs.values('id', 'title')
 
             for item in title_search:
+                # add new key value pair for search type
                 item['type'] = 'post'
                 search_results.append(item)
             
             for item in category_search:
+                # pop values from 'title' and 'category__name' keys
+                temp_title = item.pop('title')
+                category_name = item.pop('category__name')
+                
+                # update title
+                item['title'] = temp_title + ' ' + category_name
+
+                # add new key value pair for search type
                 item['type'] = 'category'
+
                 search_results.append(item)
 
             for item in tag_search:
+                # pop values from 'title'
+                temp_title = item.pop('title')
+
+                # update title. Assumes that search is tag
+                item['title'] = temp_title + ' ' + search
+
+                # add new key value pair for search type
                 item['type'] = 'tag'
+                                
                 search_results.append(item)
 
         return Response(search_results, status=status.HTTP_200_OK, headers=headers)

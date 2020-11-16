@@ -221,6 +221,7 @@
 .autocomplete-wrapper .post-search-list .post-search-item {
   font-family: Nunito;
   font-size: 1.4em;
+  font-weight: 700;
   color: #323643;
   cursor: pointer;
 }
@@ -229,8 +230,12 @@
   border-bottom: 1px solid #93deff;
 }
 
-.post-search-item span {
+.post-search-item span.autoComplete_highlighted {
   color: #93deff;
+}
+
+.post-search-item span.post-search-type {
+  font-style: italic;
 }
 
 *,

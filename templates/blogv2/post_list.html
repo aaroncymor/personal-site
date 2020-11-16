@@ -74,7 +74,7 @@
     }
 
     // clear input text on refresh
-    window.onload = async () => {
+    window.onload = () => {
         postSearchInput.value = "";
     }
 
@@ -86,19 +86,22 @@
                 
                 if (searchData.length > 2){
                     let postSearchResults = await autoCompleteSearch('/api/v1/autocomplete',
-                                        { search: searchData}).then(data => data);
-
+                                        { search: searchData }).then(data => data);
+                    console.log(JSON.stringify(postSearchResults));
                     postSearchResults.forEach(postSearchResult=>{
-                        postList.push(`${postSearchResult.title}-${postSearchResult.type}`);
+                        postList.push(
+                            `${postSearchResult.title}
+                            <span class="post-search-type" data-post-link="/blog/${postSearchResult.id}"> - ${postSearchResult.type}</span>`);
                     });               
                 }
+                console.log(postList)
                 return postList;
             },
             cache: false
         },
         placeHolder: "Blog Posts...",
         threshold: 2,
-        searchEngine: "loose",
+        searchEngine: "strict",
         resultsList: {
             render: true,
             container: source => {
@@ -112,14 +115,26 @@
         selector: '#post-search-autocomplete',
         resultItem: {
             content: (data, source) => {
-
-                //console.log(data);
-                let values = data.value.split(";");
-                console.log(source);
                 source.setAttribute('class', 'post-search-item');
                 source.innerHTML = data.match;
             },
             element: "div"
+        },
+        onSelection: feedback => {
+            let postSearchItem = feedback.event.target;
+            let elemTagName = postSearchItem.tagName;
+            let postSearchLink = '';
+            if (elemTagName == 'DIV') {
+                postSearchLink = postSearchItem.lastElementChild.getAttribute('data-post-link');
+            } else if (elemTagName == 'SPAN'){
+                if (postSearchItem.classList.contains("post-search-type")) {
+                    postSearchLink = postSearchItem.getAttribute('data-post-link');
+                } else {
+                    postSearchLink = postSearchItem.parentElement.lastElementChild.getAttribute('data-post-link');
+                }
+                
+            }
+            window.location.href = postSearchLink;
         }
     });
 </script>
