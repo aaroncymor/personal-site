@@ -139,7 +139,7 @@ def get_random_tags(request):
             break
 
     context['tags'] = tags
-    return render(request, 'blog/post_random_tags.html', context)
+    return render(request, 'blogv1/post_random_tags.html', context)
 
 def get_deciphers_by_post(request, pk):
     context = {}
@@ -172,7 +172,7 @@ class PostListView(ModifiedSearchListView):
     model = Post
     paginate_by = 10
     context_object_name = 'posts'
-    template_name = 'blog/post_list.html'
+    template_name = 'blogv2/post_list.html'
     filter_class = PostFilter
 
     def get_queryset(self):
@@ -239,7 +239,7 @@ class PostListView(ModifiedSearchListView):
 
 class PostDetailView(generic.DetailView):
     model = Post
-    template_name = 'blog/post_detail.html'
+    template_name = 'blogv2/post_detail.html'
 
     def get(self, request, *args, **kwargs):
 
@@ -259,7 +259,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
     login_url = '/login'
 
     form_class = PostForm
-    template_name = 'blog/post_form.html'
+    template_name = 'blogv2/post_form.html'
     success_url = '/blog/'
 
     def post(self, request, *args, **kwargs):
@@ -382,7 +382,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
 class PostDecipherFormView(LoginRequiredMixin, generic.FormView):
     
     form_class = DecipherForm
-    template_name = 'blog/post_decipher_form.html'
+    template_name = 'blogv1/post_decipher_form.html'
 
     def post(self, request, post_id, decipher_id, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -531,8 +531,8 @@ def process_decipher_in_post(post, post_content):
 
 
 def get_post_list(request):
-    return render(request, 'blog2/post_list.html', {})
+    return render(request, 'blogv2/post_list.html', {})
 
 
 def get_post_detail(request):
-    return render(request, 'blog2/post_detail.html', {})
+    return render(request, 'blogv2/post_detail.html', {})

@@ -25,7 +25,7 @@ class PostForm(forms.Form):
     title = forms.CharField(label="Title")
     content = forms.CharField(
             label="Content",
-            widget=TinyMCE(attrs={'cols': 80, 'rows': 30})
+            widget=TinyMCE()
         )
     publish = forms.BooleanField(required=False, label="Publish")
 

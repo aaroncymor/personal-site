@@ -187,8 +187,8 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 TINYMCE_DEFAULT_CONFIG = {
     'plugins': "code,image,table,spellchecker,paste,searchreplace",
     'theme': "advanced",
-    'clean_on_startup': True,
-    'custom_undo_redo_levels': 10,
+    'width': '100%',
+    'height': '350px', # fixed height
 }
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True

@@ -93,6 +93,15 @@
   color: #f7f7f7;
 }
 
+.posts__tags li a {
+  background: #f7f7f7;
+  margin-left: 10px;
+  text-decoration: none;
+  color: #323643;
+  border-radius: 50%;
+  padding: 2px 7px;
+}
+
 .posts__container {
   display: block;
   width: 80%;

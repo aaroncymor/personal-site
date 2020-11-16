@@ -1,0 +1,123 @@
+{% extends 'base2.html' %}
+
+{% load static %}
+
+{% block head_extension %}
+    {{ form.media }}
+{% endblock %}
+
+{% block content %}
+<section class="posts">
+    <div id="post-form" class="posts__form">
+        <form action="">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            {{ form.source.errors }}
+            {{ form.source }}
+
+            <!--Post Category field-->
+            <div class="posts__form-group">
+                {{ form.category_id.label_tag }}
+                {{ form.category_id.errors }}
+                {{ form.category_id }}
+            </div>
+            <!-- Post Title field -->
+            <div class="posts__form-group">
+                {{ form.title.label_tag }}
+                {{ form.title.errors }}
+                {{ form.title }}
+            </div>
+            <!-- Post Content field -->
+            <div class="posts__form-group">
+                {{ form.content.label_tag }}
+                {{ form.content.errors }}
+                {{ form.content }}
+            </div>
+            <!-- Post Tags field-->
+            <div class="posts__form-group">
+                <div class="posts__tags">
+                    <ul id="tag-list"></ul>
+                    <input id="tag-field" type="text">
+                </div>
+                <div id="tag-input-container"></div>
+            </div>
+            <input class="posts__form-submit" type="submit" value="Save">
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    let postForm = document.getElementById('post-form');
+    postForm.addEventListener('submit', e=>{
+        e.preventDefault();
+    })
+
+    /**
+    * reference: https://codepen.io/buglessir/pen/MWwOaKd
+    * chip tags
+    */
+
+    // tag list div child should only by ul, at index 0
+    let tagList = document.getElementById('tag-list');
+    let tagField = document.getElementById('tag-field');
+    let tagInputContainer = document.getElementById('tag-input-container');
+    
+    let tags = ['test1', 'test2'];
+    function renderTags() {
+        // refresh ul element innher html, make it blank or empty string
+        tagList.innerHTML = '';
+        
+        // refresh input hidden container for tags
+        tagInputContainer.innerHTML = '';
+
+        tags.map((tag, index) => {
+            // add a li under ul
+            tagList.innerHTML += `<li data-tag-index="${index}"><span>${tag}</span><a class="tag-close" href="#">x</a></li>`;
+            
+            // add input field name tags
+            tagInputContainer.innerHTML += `<input type="hidden" name="tags" value="${tag}">`;
+        });
+    }
+
+    function removeTag(index) {
+        tags = tags.filter(tag => tags.indexOf(tag) != index);
+        renderTags();
+    }
+
+    // event delegation for dynamically added elements
+    document.addEventListener('click', (e)=>{
+        if (e.target && e.target.classList.contains("tag-close")){
+            // get assigned value for data-tag-index property from li element
+            let tagIndex = e.target.parentElement.getAttribute('data-tag-index');
+            removeTag(tagIndex);
+        }
+    });
+
+    tagField.addEventListener('keypress', (e)=>{
+        if (e.key === 'Enter'){
+            let val = tagField.value;
+            console.log(`val: ${val}`);
+            if (val !== ''){
+                // check if duplicate or not
+                if (tags.indexOf(val) >= 0){
+                    // show error message of duplicate tag entry
+                    alert('Tag name is a duplicate');
+                } else {
+                    tags.push(val);
+                    renderTags();
+                    tagField.value = '';
+                    tagField.focus();
+                }
+            }
+        }
+    });
+
+    window.onload = () => {
+        renderTags();
+    }
+
+</script>
+{% endblock %}

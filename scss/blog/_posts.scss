@@ -54,6 +54,15 @@
         color: $secondaryColor;
     }
 
+    &__tags li a {
+        background: $secondaryColor;
+        margin-left: 10px;
+        text-decoration: none;
+        color: $primaryColor;
+        border-radius: 50%;
+        padding: 2px 7px;
+    }
+
     &__container {
         display: block;
         width: 80%;
@@ -137,6 +146,12 @@
             text-transform: uppercase;
             cursor: pointer;
         }
+    }
+
+    &__form {
+
+    }
+    &__form-group {
     }
 }
 
