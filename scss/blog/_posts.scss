@@ -147,6 +147,42 @@
             cursor: pointer;
         }
     }
+    
+    &__pagination {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 1em;
+    }
+
+    &__pagination-prev a,
+    &__pagination-next a{
+        text-decoration: none;
+        color: $primaryColor;
+        font-size: 1.4em;
+    }
+    
+    &__pagination ul {
+        display: inline-flex;
+        align-items: center;
+        gap: .5em;
+    }
+
+    &__pagination ul li {
+        list-style-type: none;
+        font-size: 2em;
+    }
+
+    &__pagination ul li a {
+        text-decoration: none;
+        color: $primaryColor;
+    }
+
+    &__pagination ul li a.active {
+	    padding: 5px;
+	    background-color: $accentOne;
+	    color: $primaryColor;
+    }
 
     &__form {
 

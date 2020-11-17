@@ -101,7 +101,7 @@ def submit_post_search(request):
         tags_autocomplete = Tag.objects.distinct().values_list('tag', flat=True)
         context['tags_autocomplete'] = convert_list_for_chipauto(tags_autocomplete)
 
-    return render(request, 'blog/post_list.html', context)
+    return render(request, 'blogv1/post_list.html', context)
 
 def delete_post(request, pk):
     if Post.objects.filter(pk=pk).exists():
@@ -170,7 +170,7 @@ def get_deciphers_by_post(request, pk):
 # Class based views here
 class PostListView(ModifiedSearchListView):
     model = Post
-    paginate_by = 10
+    paginate_by = 1
     context_object_name = 'posts'
     template_name = 'blogv2/post_list.html'
     filter_class = PostFilter
@@ -207,7 +207,7 @@ class PostListView(ModifiedSearchListView):
         return queryset
 
     def get(self, request, *args, **kwargs):
-
+        
         self.object_list = self.get_queryset()
         allow_empty = self.get_allow_empty()
         if not allow_empty:
@@ -229,10 +229,6 @@ class PostListView(ModifiedSearchListView):
 
         # add form here
         context['form'] = PostSearchForm
-
-        # add tags autocomplete here
-        tags_autocomplete = Tag.objects.distinct().values_list('tag', flat=True)
-        context['tags_autocomplete'] = convert_list_for_chipauto(tags_autocomplete)
 
         return self.render_to_response(context)
 
