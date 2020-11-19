@@ -195,6 +195,21 @@
   cursor: pointer;
 }
 
+.posts__random-tags {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.posts__random-tags p {
+  text-align: center;
+}
+
+.posts__random-tags p a {
+  font-weight: 700;
+  color: #323643;
+  text-decoration: underline;
+}
+
 .posts__pagination {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -283,6 +298,70 @@
 
 .post-search-item span.post-search-type {
   font-style: italic;
+}
+
+.tags {
+  min-height: 100vh;
+}
+
+.tags__container {
+  display: block;
+  margin: 0 auto;
+  width: 40%;
+  padding: 2em;
+  border-radius: 14px;
+  border: 1px solid #f7f7f7;
+  margin-top: 2em;
+}
+
+.tags__title {
+  text-align: center;
+  font-family: 'Nunito';
+  font-size: 2em;
+}
+
+.tags__list {
+  padding: 1em;
+  width: 100%;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  list-style-type: none;
+  color: #323643;
+  gap: .4em;
+}
+
+.tags__item {
+  background: #323643;
+  padding: 6px;
+  border-radius: 22px;
+}
+
+.tags__item a {
+  text-decoration: none;
+  font-family: 'BBT Martires';
+  color: #f7f7f7;
+  font-weight: 700;
+}
+
+.tags__results {
+  padding: 1.5em;
+}
+
+.tags__results:not(:last-child) {
+  border-bottom: 1px solid #93deff;
+}
+
+.tags__post-title {
+  font-size: 1.9em;
+  margin-bottom: .2em;
+}
+
+.tags__post-published {
+  font-weight: 700;
 }
 
 *,

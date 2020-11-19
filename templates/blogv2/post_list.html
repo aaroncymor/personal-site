@@ -18,7 +18,12 @@
         </form>
     </div>
     <div class="posts__random-tags">
-        <p>Try <a href="{% url 'post-random-tags' %}">random tag search</a></p>
+        <p class="nunito-font">Try 
+            <a class="bantayog-font" 
+               href="{% url 'post-random-tags' %}">
+                random tag search
+            </a>
+        </p>
     </div>
     <div class="posts__list">
         {% for post in posts %}

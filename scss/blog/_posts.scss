@@ -147,6 +147,21 @@
             cursor: pointer;
         }
     }
+
+    &__random-tags {
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    &__random-tags p {
+        text-align: center;
+    }
+
+    &__random-tags p a {
+        font-weight: 700;
+        color: $primaryColor;
+        text-decoration: underline;
+    }
     
     &__pagination {
         display: flex;
@@ -182,12 +197,6 @@
 	    padding: 5px;
 	    background-color: $accentOne;
 	    color: $primaryColor;
-    }
-
-    &__form {
-
-    }
-    &__form-group {
     }
 }
 
