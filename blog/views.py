@@ -139,7 +139,7 @@ def get_random_tags(request):
             break
 
     context['tags'] = tags
-    return render(request, 'blogv1/post_random_tags.html', context)
+    return render(request, 'blogv2/post_random_tags.html', context)
 
 def get_deciphers_by_post(request, pk):
     context = {}
@@ -170,7 +170,7 @@ def get_deciphers_by_post(request, pk):
 # Class based views here
 class PostListView(ModifiedSearchListView):
     model = Post
-    paginate_by = 1
+    paginate_by = 10
     context_object_name = 'posts'
     template_name = 'blogv2/post_list.html'
     filter_class = PostFilter
@@ -267,7 +267,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
             post_data = request.POST.dict()
             # tags from form
             tags = request.POST.getlist('tags')
-
+            
             try:
                 # TODO: Make DateFormat UTC
                 post_data['publish']
@@ -289,7 +289,6 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
                     post.content = processed_content
                     post.published_date = published_date
                     post.save()
-
                     # tags recorded in database
                     post_tags = post.tags.all().values_list('tag', flat=True)
                     
@@ -464,8 +463,7 @@ def convert_list_for_chipauto(item_list):
     return autocomplete
 
 def process_decipher_in_post(post, post_content):
-    ## TODO: Process decipher objects wherein, when deleted,
-    ## get id and use that to delete object by id.
+    # load html doc in to readable python objects 
     soup = load_html_doc(post_content)
 
     # will only process div element with class 'decipher'
@@ -480,6 +478,7 @@ def process_decipher_in_post(post, post_content):
             # To avoid IntegrityError (null value)
             if decipher.string:
                 try:
+                    # if key 'id' doesn't exist, maybe add to database
                     decipher_id = int(decipher['id'][11:])
 
                     instance = Decipher.objects.get(id=decipher_id)

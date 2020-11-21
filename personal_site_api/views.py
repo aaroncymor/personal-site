@@ -162,5 +162,31 @@ def autocomplete_search(request):
         return Response(search_results, status=status.HTTP_200_OK, headers=headers)
 
 
-            
+@api_view(['POST'])
+def get_tags_by_post(request):
+    response = {}
+    tag_list = []
+    
+    headers = {'Content-Type': 'application/json'}
+    if request.method == 'POST':
+        request_data_keys = request.data.keys()
 
+        if not 'post_id' in request_data_keys:
+            # throw error
+            pass
+        
+        post_id = request.data['post_id']
+        tag_list = Tag.objects.filter(post__id=post_id).values_list('tag', flat=True)
+            
+    return Response(tag_list, status=status.HTTP_200_OK, headers=headers)
+
+
+@api_view(['POST'])
+def handle_wysiwyg_image_upload(request):
+    headers = {'Content-Type': 'application/json'}
+    if request.method == 'POST':
+        request_data_keys = request.data.keys()
+
+    print("REQUEST FILES", request.FILES)
+
+    return Response({}, status=status.HTTP_200_OK, headers=headers)

@@ -7,9 +7,12 @@
 {% endblock %}
 
 {% block content %}
+
+{{ STATIC_URL }}
 <section class="posts">
-    <div id="post-form" class="posts__form">
-        <form action="">
+    <div class="posts__form-container">
+        <input type="hidden" id="post-id" value="{{ post_id }}">
+        <form id="post-form" class="posts__form" method="POST">
             {% csrf_token %}
             {{ form.non_field_errors }}
 
@@ -42,6 +45,11 @@
                 </div>
                 <div id="tag-input-container"></div>
             </div>
+            <div class="posts__form-group">
+                {{ form.publish.label_tag }}
+                {{ form.publish.errors }}
+                {{ form.publish }}
+            </div>
             <input class="posts__form-submit" type="submit" value="Save">
         </form>
     </div>
@@ -50,10 +58,42 @@
 
 {% block javascript %}
 <script>
-    let postForm = document.getElementById('post-form');
-    postForm.addEventListener('submit', e=>{
-        e.preventDefault();
-    })
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const postForm = document.querySelector('#post-form');
+    postForm.addEventListener('keypress', (e)=>{
+        /* reference: https://stackoverflow.com/a/587575 */
+        e = e || event;
+        var txtArea = /textarea/i.test((e.target || e.srcElement).tagName);
+        return txtArea || (e.keyCode || e.which || e.charCode || 0) !== 13;
+    });
+
+    let tags = [];
+    async function getTags(url='', data={}) {
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    }
+
+    window.onload = async () => {
+        const postIDInput = document.getElementById('post-id');
+        
+        if (postIDInput.value) {
+            tags = await getTags('/api/v1/post-tags', {
+                'post_id': postIDInput.value  
+            });
+            console.log(tags);
+        }
+ 
+        // render tag related HTML elements after update 
+        renderTags();
+    }
 
     /**
     * reference: https://codepen.io/buglessir/pen/MWwOaKd
@@ -65,7 +105,6 @@
     let tagField = document.getElementById('tag-field');
     let tagInputContainer = document.getElementById('tag-input-container');
     
-    let tags = ['test1', 'test2'];
     function renderTags() {
         // refresh ul element innher html, make it blank or empty string
         tagList.innerHTML = '';
@@ -110,14 +149,11 @@
                     renderTags();
                     tagField.value = '';
                     tagField.focus();
+                    e.preventDefault();
                 }
             }
         }
     });
-
-    window.onload = () => {
-        renderTags();
-    }
 
 </script>
 {% endblock %}

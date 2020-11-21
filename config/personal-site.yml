@@ -2,7 +2,7 @@ personal_site:
   secret_key: (pfboe=(9khdb1#tas!u32q=7ecc%x4$2we%-_#fjot6=j#96#
   app_name: personal_site
   db:
-    database: myportfoliodb
+    database: personalsite_db
     user: rtidev
     pass: password
     host: localhost
@@ -10,6 +10,8 @@ personal_site:
 
 personal_site_api:
   logger: PersonalSiteApiLogger
+  tinymce:
+    image_upload_endpoint: http://localhost:8000/api/v1/wysiwyg-image-upload
 
 logging:
   version: 1 # required by dictConfig

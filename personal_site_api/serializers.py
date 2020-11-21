@@ -39,7 +39,6 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     category = CategorySerializer()
     content = serializers.SerializerMethodField()
     short_content = serializers.SerializerMethodField()
-    angular_content = serializers.SerializerMethodField()
 
     # Create another serializer for Post that has different fields.
     class DecipherSimpleSerializer(serializers.ModelSerializer):
@@ -57,7 +56,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('_link', 'id', 'category', 'title', 'short_content', 'content', 'angular_content', 'deciphers', 'published_date', 'timestamp')
+        fields = ('_link', 'id', 'category', 'title', 'short_content', 'content', 'deciphers', 'published_date', 'timestamp')
 
     def get_content(self, obj):
         if not obj.content:
@@ -71,13 +70,6 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         
         return obj.short_content_for_list
     
-    def get_angular_content(self, obj):
-        if not obj.content:
-            return None
-        
-        return obj.angular_content
-        
-
 
 class TagSerializer(serializers.HyperlinkedModelSerializer):
     _link = serializers.HyperlinkedIdentityField(

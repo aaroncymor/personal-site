@@ -9,18 +9,22 @@ from personal_site_api.views import (
     PostViewSet,
     TagViewSet,
     DecipherViewSet,
-    autocomplete_search
+    autocomplete_search,
+    get_tags_by_post,
+    handle_wysiwyg_image_upload
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'users', UserViewSet, base_name='user')
-router.register(r'categories', CategoryViewSet, base_name='category')
-router.register(r'posts', PostViewSet, base_name='post')
-router.register(r'tags', TagViewSet, base_name='tag')
-router.register(r'deciphers', DecipherViewSet, base_name='decipher')
+router.register(r'users', UserViewSet)
+router.register(r'categories', CategoryViewSet)
+router.register(r'posts', PostViewSet)
+router.register(r'tags', TagViewSet)
+router.register(r'deciphers', DecipherViewSet)
 
 app_name = 'api'
 urlpatterns = [
     re_path(r'^', include(router.urls), name='v1'),
     re_path(r'autocomplete', autocomplete_search, name='autocomplete-search'),
+    re_path(r'post-tags', get_tags_by_post, name='tags-by-post'),
+    re_path(r'wysiwyg-image-upload', handle_wysiwyg_image_upload, name='wysiwyg-image-upload'),
 ]

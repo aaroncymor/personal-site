@@ -22,14 +22,6 @@ class Category(PortfolioMixin):
         db_table = 'category'
         verbose_name_plural = 'categories'
 
-    @property
-    def autocomplete(self):
-        return {
-            'id': self.id,
-            'type': 'category',
-            'key': self.name
-        }
-
     def __str__(self):
         return self.name
 
@@ -69,69 +61,87 @@ class Post(PortfolioMixin):
     @property
     def sanitized_content(self):
         soup = load_html_doc(self.content)
-        deciphers = soup.select('span.decipher')
-        for decipher in deciphers:
-            decipher_id = decipher.get('id', '')
-            decipher_classes = decipher.get('class', [])
+        
+        # get all span.decipher elements
+        # prepended with underscore as a marker that is is
+        # an HTML element, not from database 
+        _deciphers = soup.select('span.decipher')
+        for _decipher in _deciphers:
+            decipher_id = _decipher.get('id', '')
+            decipher_classes = _decipher.get('class', [])
 
-            # create anchor tag
-            anchor_tag = soup.new_tag('a')
             if decipher_id:
-                anchor_tag['id'] = decipher_id
-                anchor_tag['href'] = '#modal-' + decipher_id
-            anchor_tag['class'] = decipher_classes + ['tooltipped', 'modal-trigger']
-            anchor_tag['data-position'] = "top"
-            anchor_tag['data-tooltip'] = "Click me, and try to crack code to unlock secret message."
-            
-            # create icon tag lock_outline from materialize
-            close_lock_icon = soup.new_tag('i')
-            close_lock_icon['class'] = ["small", "material-icons",  decipher_id + "-lock"]
-            close_lock_icon.string = "lock_outline"
-            
-            # append icon tag to anchor tag
-            anchor_tag.append(close_lock_icon)
+                # get decipher from db
+                decipher = self.deciphers.get(name=decipher_id)
 
-            # create icon tag lock_open
-            open_lock_icon = soup.new_tag('i')
-            open_lock_icon['class'] = ["small", "material-icons",  decipher_id + "-lock"]
-            open_lock_icon['style'] = "display:none"
-            open_lock_icon['id'] = decipher_id + '-unlock'
-            open_lock_icon.string = "lock_open"
+                # create div element tag for tooltip
+                div_tooltip_container = soup.new_tag('div')
+                div_tooltip_container['id'] = decipher.name
+                div_tooltip_container['class'] = decipher_classes + ['tooltip-container']
 
-            decipher.insert_after(open_lock_icon)
-            decipher.replace_with(anchor_tag)
-        return soup.prettify(formatter="html5")
-    
-    @property
-    def angular_content(self):
-        soup = load_html_doc(self.content)
-        deciphers = soup.select('span.decipher')
+                # insert text
+                div_tooltip_container.string = "?"
+                
+                # create form
+                decipher_form = soup.new_tag('form');
+                decipher_form['class'] = ['notify-form']
 
-        for decipher in deciphers:
-            decipher_id = decipher.get('id', '')
-            decipher_classes = decipher.get('class', [])
+                # create div element tag for notify / pop up message
+                div_notify_container = soup.new_tag('div')
+                div_notify_container['class'] = ['notify-container']
 
-            # create anchor tag
-            anchor_tag = soup.new_tag('a')
-            if decipher_id:
-                #anchor_tag['href'] = '#' + decipher_id
-                anchor_tag['class'] = 'decipher-clickme'
-            
-            # create icon tag lock_outline from materialize
-            close_lock_icon = soup.new_tag('i')
-            close_lock_icon['class'] = ["small", "material-icons"]
-            close_lock_icon.string = "lock_outline"
-            
-            # append icon tag to anchor tag
-            anchor_tag.append(close_lock_icon)
+                # create div row for clue
+                decipher_form_row = soup.new_tag('div')
+                decipher_form_row['class'] = ['notify-form-row']
 
-            # create icon tag lock_open
-            open_lock_icon = soup.new_tag('i')
-            open_lock_icon['class'] = ["small", "material-icons"]
-            open_lock_icon.string = "lock_open"
+                decipher_clue = soup.new_tag('p')
+                decipher_clue_label = soup.new_tag('span')
+                decipher_clue_label.string = "clue:"
+                decipher_clue.append(decipher_clue_label)
+                decipher_clue.append(decipher.clue) 
 
-            decipher.insert_after(open_lock_icon)
-            decipher.replace_with(anchor_tag)
+                # append row clue to form
+                decipher_form_row.append(decipher_clue)
+                decipher_form.append(decipher_form_row)
+
+                if decipher.clue_photo:
+                    # create new row for clue_photo
+                    decipher_form_row = soup.new_tag('div')
+                    decipher_form_row['class'] = ['notify-form-row']
+                
+                    decipher_clue_photo = soup.new_tag('a')
+                    decipher_clue_photo['href'] = '#'
+                    decipher_clue_photo.string = "more clue"
+
+                    decipher_form_row.append(decipher_clue_photo)
+                    decipher_form.append(decipher_form_row)
+
+                decipher_form_row = soup.new_tag('div')
+                decipher_form_row['class'] = ['notify-form-row']
+                
+                decipher_code = soup.new_tag('input')
+                decipher_code['type'] = "text"
+                decipher_code['name'] = "code"
+
+                decipher_form_row.append(decipher_code)
+                decipher_form.append(decipher_form_row)
+
+                decipher_form_submit = soup.new_tag('button')
+                decipher_form_submit['type'] = "submit"
+                decipher_form_submit.string = "Enter"
+
+                # decipher_form.append(decipher_code_formgroup)
+                decipher_form.append(decipher_form_submit)
+
+                # append form.notify-form to div.notify-container
+                div_notify_container.append(decipher_form)
+
+                # append the div.notify-container to div.tooltip-container
+                div_tooltip_container.append(div_notify_container)
+
+                # change span.decipher with div.tooltip-container.decipher
+                _decipher.replace_with(div_tooltip_container)
+
         return soup.prettify(formatter="html5")
 
     @property
@@ -140,14 +150,6 @@ class Post(PortfolioMixin):
         if self.published_date:
             return True
         return False
-    
-    @property
-    def autocomplete(self):
-        return {
-            'id': self.id,
-            'type': 'post',
-            'key': self.title
-        }
 
     def __str__(self):
         return self.title
@@ -165,14 +167,6 @@ class Tag(PortfolioMixin):
     def html_id(self):
         return self.tag.replace(" ", "-")
     
-    @property
-    def autocomplete(self):
-        return {
-            'id': self.id,
-            'type': 'tag',
-            'key': self.tag
-        }
-    
     def __str__(self):
         return self.tag
 
@@ -181,6 +175,6 @@ class Decipher(PortfolioMixin):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='deciphers')
     hidden_text = models.CharField(max_length=255)
     name = models.CharField(max_length=100, null=True, default='')
-    challenge = tinymce_models.HTMLField()
+    clue_photo = models.ImageField(null=True)
     clue = models.TextField()
     code = models.CharField(max_length=20, null=True, blank=True, default='')

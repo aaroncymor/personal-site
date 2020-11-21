@@ -29,9 +29,43 @@
             </div>
             {% endif %}
         </div>
+
+        {% if deciphers %}
+            {% for decipher in deciphers %}
+            <div class="post__decipher modal">
+                <div class="card">
+                    <div class="card-header">
+
+                    </div>
+                    <div class="card-body">
+                        <form action="" class="post__decipher-form">
+                            <div class="form-group challenge"></div>
+                            <div class="form-group clue"></div>
+                            <div class="form-group">
+                                <label class="form-label" for=""></label>
+                                <input type="text" class="form-input">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="post__decipher-cancel"></a>
+                    </div>
+                </div>    
+            </div>
+            {% endfor %} 
+        {% endif %}
     {% endif %}
 </section>
 {% endblock %}
 
 {% block javascript %}
+<script>
+    const toolTipContainers = document.querySelectorAll('.decipher.tooltip-container');
+    toolTipContainers.forEach(toolTipContainer=>{
+        toolTipContainer.addEventListener('click', (e)=>{
+            console.log(e.target);
+            e.target.firstElementChild.classList.toggle("active");
+        });
+    });
+</script>
 {% endblock %}

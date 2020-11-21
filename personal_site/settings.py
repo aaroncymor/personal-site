@@ -39,6 +39,8 @@ if config_env is not None:
     # load loggers
     logging.config.dictConfig(config_data['logging'])
     PERSONAL_SITE_LOGGER = logging.getLogger(personal_site_conf['logger'])
+    
+    TINYMCE_IMAGE_UPLOAD_ENDPOINT = personal_site_conf['tinymce']['image_upload_endpoint']
 
     # load database
     db_config = app_conf['db']
@@ -183,25 +185,20 @@ STATICFILES_DIRS = [
 # Accounts Settings
 LOGIN_REDIRECT_URL = '/dashboard/'
 
+from django.conf.urls.static import static
+
+print("image upload url", TINYMCE_IMAGE_UPLOAD_ENDPOINT)
+
 # Tiny MCE Config
+TINYMCE_JS_URL = 'https://cdn.tiny.cloud/1/rxwpvkeq4u0blyzuyd562m5mthfs5fbwwn4kb2gypi4yak63/tinymce/5/tinymce.min.js'
 TINYMCE_DEFAULT_CONFIG = {
-    'plugins': "code,image,table,spellchecker,paste,searchreplace",
-    'theme': "advanced",
-    'width': '100%',
-    'height': '350px', # fixed height
+    'plugins': "print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons",
+    'toolbar': 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 10,
 }
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
-
-## TODO: Reference personal_site.core.utils.group_pagination
-## Check if we need to make partitions for pagination.
-
-# Grouping of pages. Basically how may page numbers you group by
-# Example below woulb mean group by 3, which will appear like this.
-# 1 2 3 >
-# < 4 5 6 >
-# < 7 8 9
-#GROUPBY_PAGINATION = 2 # Can also be defined by config
 
 CORS_ORIGIN_ALLOW_ALL = True
 

@@ -8,6 +8,7 @@
 <section class="posts">
     <div class="posts__search">
         <form method="post" action="">
+            {% csrf_token %}
             <div class="autocomplete-wrapper">
                 <input
                     id="post-search-autocomplete"
@@ -95,10 +96,15 @@
     const postSearchInput = document.querySelector('#post-search-autocomplete');
 
     async function autoCompleteSearch(url='', data = {}) {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken' : csrftoken,
+            },
             body: JSON.stringify(data)
         });
         return response.json();
