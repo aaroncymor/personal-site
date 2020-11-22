@@ -1,5 +1,23 @@
 {% extends 'base2.html' %}
 
 {% block head_extension %}{% endblock %}
-{% block content %}{% endblock %}
+{% block content %}
+    <section class="deciphers">
+        <div class="deciphers__list">
+            {% if deciphers %}
+                {% for decipher in deciphers %}
+                <div class="deciphers__item">
+                    <div class="decipher__post">{{ decipher.post.title }}</div>
+                    <div class="decipher__name">{{ decipher.name }}</div>
+                    {% if is_paginated %}
+                    <a href="{% url 'post-decipher-form' post.id decipher.id %}">Edit</a>
+                    {% else %}
+                    <a href="{% url 'post-decipher-form' post.id decipher.id %}">Edit</a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
 {% block javascript %}{% endblock %}

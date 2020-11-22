@@ -10,8 +10,6 @@ personal_site:
 
 personal_site_api:
   logger: PersonalSiteApiLogger
-  tinymce:
-    image_upload_endpoint: http://localhost:8000/api/v1/wysiwyg-image-upload
 
 logging:
   version: 1 # required by dictConfig

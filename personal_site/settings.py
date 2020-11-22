@@ -40,8 +40,6 @@ if config_env is not None:
     logging.config.dictConfig(config_data['logging'])
     PERSONAL_SITE_LOGGER = logging.getLogger(personal_site_conf['logger'])
     
-    TINYMCE_IMAGE_UPLOAD_ENDPOINT = personal_site_conf['tinymce']['image_upload_endpoint']
-
     # load database
     db_config = app_conf['db']
 else:
@@ -186,8 +184,6 @@ STATICFILES_DIRS = [
 LOGIN_REDIRECT_URL = '/dashboard/'
 
 from django.conf.urls.static import static
-
-print("image upload url", TINYMCE_IMAGE_UPLOAD_ENDPOINT)
 
 # Tiny MCE Config
 TINYMCE_JS_URL = 'https://cdn.tiny.cloud/1/rxwpvkeq4u0blyzuyd562m5mthfs5fbwwn4kb2gypi4yak63/tinymce/5/tinymce.min.js'

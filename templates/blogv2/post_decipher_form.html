@@ -1,5 +1,38 @@
 {% extends 'base2.html' %}
 
 {% block head_extension %}{% endblock %}
-{% block content %}{% endblock %}
+{% block content %}
+<section class="deciphers">
+    <div class="deciphers__form-container">
+        <form 
+            action=""
+            id="decipher-form"
+            class="deciphers__form"
+            method="POST">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+            {{ form.source.errors }}
+            {{ form.source }}
+
+             <div class="deciphers__form-group">
+                {{ form.clue.label_tag }}
+                {{ form.clue.errors }}
+                {{ form.clue }}
+            </div>
+             <div class="deciphers__form-group">
+                {{ form.clue_photo.label_tag }}
+                {{ form.clue_photo.errors }}
+                {{ form.clue_photo }}
+            </div>
+             <div class="deciphers__form-group">
+                {{ form.code.label_tag }}
+                {{ form.code.errors }}
+                {{ form.code }}
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
 {% block javascript %}{% endblock %}

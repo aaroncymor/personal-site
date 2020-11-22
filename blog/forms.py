@@ -61,14 +61,9 @@ class PostSearchForm(forms.Form):
 
 
 class DecipherForm(forms.Form):
-    challenge = forms.CharField(
-            required=False,
-            label="Challenge",
-            widget=TinyMCE(attrs={'cols': 80, 'rows': 30})
-        )
     clue = forms.CharField(
             required=False,
             label="Clue",
-            widget=forms.Textarea(attrs={'class': 'materialize-textarea'})
         )
+    clue_photo = forms.ImageField(required=False)
     code = forms.CharField(required=False, label="Code")

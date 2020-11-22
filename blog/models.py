@@ -176,5 +176,5 @@ class Decipher(PortfolioMixin):
     hidden_text = models.CharField(max_length=255)
     name = models.CharField(max_length=100, null=True, default='')
     clue_photo = models.ImageField(null=True)
-    clue = models.TextField()
+    clue = models.CharField(max_length=50)
     code = models.CharField(max_length=20, null=True, blank=True, default='')

@@ -164,7 +164,7 @@ def get_deciphers_by_post(request, pk):
         if 'prev_page_session' in request.GET.keys():
             context['prev_page_session'] = request.GET['prev_page_session']
 
-    return render(request, 'blog/post_decipher_list.html', context)
+    return render(request, 'blogv2/post_decipher_list.html', context)
 
 
 # Class based views here
@@ -377,7 +377,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
 class PostDecipherFormView(LoginRequiredMixin, generic.FormView):
     
     form_class = DecipherForm
-    template_name = 'blogv1/post_decipher_form.html'
+    template_name = 'blogv2/post_decipher_form.html'
 
     def post(self, request, post_id, decipher_id, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -386,13 +386,13 @@ class PostDecipherFormView(LoginRequiredMixin, generic.FormView):
             raise Http404
         data = request.POST.copy()
 
-        challenge = data.get('challenge', None)
         clue = data.get('clue', None)
+        clue_photo = data.get('clue_photo', None)
         code = data.get('code', None)
 
-        decipher.challenge = challenge
-        decipher.code = code
         decipher.clue = clue
+        decipher.clue_photo = clue_photo
+        decipher.code = code
         decipher.save()
 
         return redirect(reverse('post-decipher-form', kwargs={'post_id': post_id, 'decipher_id': decipher_id}))
@@ -404,8 +404,8 @@ class PostDecipherFormView(LoginRequiredMixin, generic.FormView):
             raise Http404
 
         form = self.form_class({
-            'challenge': decipher.challenge,
             'clue': decipher.clue,
+            'clue_photo': decipher.clue_photo,
             'code': decipher.code
         })
 
