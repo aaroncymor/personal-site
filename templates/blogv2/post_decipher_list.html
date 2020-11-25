@@ -18,6 +18,32 @@
                 {% endfor %}
             {% endif %}
         </div>
+
+        {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+            <div class="previous">
+                <a href="{% url 'post-decipher-list' post.id %}?page={{ page_obj.previous_page_number }}"><i class="fas fa-chevron-left"></i></a>
+            </div>
+            {% endif %}
+
+            <ul class="bantayog-font">
+                {% for i in paginator.page_range %}
+                    {% if page_obj.number == i %}
+                    <li><a href="#" class="active">{{ i }}</a></li>
+                    {% else %}
+                    <li><a href="{% url 'post-decipher-list' post.id %}?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+            {% if page_obj.has_next %}
+            <div class="next">
+                <a href="{% url 'post-decipher-list' post.id %}?page={{ page_obj.next_page_number }}"><i class="fas fa-chevron-right"></i></a>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
     </section>
 {% endblock %}
 {% block javascript %}{% endblock %}

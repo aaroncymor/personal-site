@@ -151,14 +151,14 @@ def get_deciphers_by_post(request, pk):
         decipher_qs = post.deciphers.all()
         paginator, page, queryset, is_paginated = paginate_queryset(request=request,
                                                                     queryset=decipher_qs,
-                                                                    page_size=10)
+                                                                    page_size=1)
         context.update({
                 'post': post,
                 'paginator': paginator,
                 'page_obj': page,
                 'is_paginated': is_paginated,
                 'object_list': decipher_qs,
-                'deciphers': decipher_qs
+                'deciphers': queryset
             })
 
         if 'prev_page_session' in request.GET.keys():

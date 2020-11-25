@@ -79,12 +79,9 @@ class Post(PortfolioMixin):
                 div_tooltip_container['id'] = decipher.name
                 div_tooltip_container['class'] = decipher_classes + ['tooltip-container']
 
-                # insert text
-                div_tooltip_container.string = "?"
-                
                 # create form
                 decipher_form = soup.new_tag('form');
-                decipher_form['class'] = ['notify-form']
+                decipher_form['class'] = ['notify-form', 'decipher-form']
 
                 # create div element tag for notify / pop up message
                 div_notify_container = soup.new_tag('div')
@@ -130,8 +127,8 @@ class Post(PortfolioMixin):
                 decipher_form_submit['type'] = "submit"
                 decipher_form_submit.string = "Enter"
 
-                # decipher_form.append(decipher_code_formgroup)
-                decipher_form.append(decipher_form_submit)
+                # input[type="text"] and button on same row
+                decipher_form_row.append(decipher_form_submit)
 
                 # append form.notify-form to div.notify-container
                 div_notify_container.append(decipher_form)
@@ -175,6 +172,6 @@ class Decipher(PortfolioMixin):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='deciphers')
     hidden_text = models.CharField(max_length=255)
     name = models.CharField(max_length=100, null=True, default='')
-    clue_photo = models.ImageField(null=True)
+    clue_photo = models.ImageField(upload_to='images/', null=True)
     clue = models.CharField(max_length=50)
     code = models.CharField(max_length=20, null=True, blank=True, default='')

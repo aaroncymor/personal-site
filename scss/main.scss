@@ -1,8 +1,7 @@
 @import 'config';
 @import 'header';
 @import 'blog/posts';
-@import 'blog/decipher_list';
-@import 'blog/decipher_form';
+@import 'blog/deciphers';
 @import 'blog/random_tags';
 
 *,
@@ -68,4 +67,40 @@ a {
         text-decoration: none;
         color: $secondaryColor;
     }
+}
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1em;
+}
+
+.pagination .previous a,
+.pagination .next a{
+    text-decoration: none;
+    color: $primaryColor;
+    font-size: 1.4em;
+}
+
+.pagination ul {
+    display: inline-flex;
+    align-items: center;
+    gap: .5em;
+}
+
+.pagination ul li {
+    list-style-type: none;
+    font-size: 2em;
+}
+
+.pagination ul li a {
+    text-decoration: none;
+    color: $primaryColor;
+}
+
+.pagination ul li a.active {
+    padding: 5px;
+    background-color: $accentOne;
+    color: $primaryColor;
 }

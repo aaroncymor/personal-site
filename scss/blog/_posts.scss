@@ -168,42 +168,6 @@
         color: $primaryColor;
         text-decoration: underline;
     }
-    
-    &__pagination {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        gap: 1em;
-    }
-
-    &__pagination-prev a,
-    &__pagination-next a{
-        text-decoration: none;
-        color: $primaryColor;
-        font-size: 1.4em;
-    }
-    
-    &__pagination ul {
-        display: inline-flex;
-        align-items: center;
-        gap: .5em;
-    }
-
-    &__pagination ul li {
-        list-style-type: none;
-        font-size: 2em;
-    }
-
-    &__pagination ul li a {
-        text-decoration: none;
-        color: $primaryColor;
-    }
-
-    &__pagination ul li a.active {
-	    padding: 5px;
-	    background-color: $accentOne;
-	    color: $primaryColor;
-    }
 
     /**
      * Post Form Styles
@@ -214,6 +178,20 @@
 
     &__form-group {
         margin-top: 1em;
+    }
+
+    &__author-menu {
+        margin-top: 1em;
+    }
+
+    &__author-menu a {
+        text-decoration: none;
+        color: $primaryColor;
+        font-family: 'Bantayog';
+    }
+
+    &__author-menu a:hover {
+        text-decoration: underline;
     }
 }
 
@@ -262,7 +240,7 @@
 	display: inline-block;
 	position: relative;
 	z-index: 2;
-	background: blue;
+	background: #93deff;;
 	color: white;
 	width: 18px;
 	height: 18px;
@@ -270,6 +248,21 @@
 	vertical-align: center;
 	cursor: pointer;
 	border-radius: 50%;
+}
+
+.decipher.tooltip-container::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 600;
+    font-size: .75em;
+    position: absolute;
+    top: 2px;
+    left: 6.7px;
+    content: "\f12a";
+}
+
+.decipher.tooltip-container.active::before {
+    left: 5px;
+    content: "\f00d";
 }
 
 .notify-container {
@@ -287,14 +280,34 @@
     transition: transform .5s cubic-bezier(0.860, 0.000, 0.070, 1.000);
 }
 
-.notify-container.active {
+.notify-container.show {
+    cursor: default;
     transform: scale(1)
 }
 
 .notify-form {
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+}
+
+.notify-form .notify-form-row p {
+    color: $primaryColor;
+}
+
+.notify-form .notify-form-row input[type="text"] {
+    border: none;
+    border-bottom: 1px solid $primaryColor;
+    max-width: 170px;
+}
+
+.notify-form button {
+    border: none;
+    border-radius: 5px;
+    padding: 3px;
+    color: $secondaryColor;
+    font-family: 'Nunito';
+    background-color: $accentOne;
 }
 
 .notify-form-group {
