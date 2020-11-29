@@ -76,7 +76,7 @@ class Post(PortfolioMixin):
 
                 # create div element tag for tooltip
                 div_tooltip_container = soup.new_tag('div')
-                div_tooltip_container['id'] = decipher.name
+                # div_tooltip_container['id'] = decipher.name
                 div_tooltip_container['class'] = decipher_classes + ['tooltip-container']
 
                 # create form
@@ -107,7 +107,8 @@ class Post(PortfolioMixin):
                     decipher_form_row['class'] = ['notify-form-row']
                 
                     decipher_clue_photo = soup.new_tag('a')
-                    decipher_clue_photo['data-cluephoto-url'] = decipher.clue_photo_url
+                    decipher_clue_photo['class'] = 'clue-popup'
+                    decipher_clue_photo['data-target'] = '#' + decipher.name
                     decipher_clue_photo['href'] = '#'
                     decipher_clue_photo.string = "more clue"
 

@@ -45,16 +45,20 @@
         </div>
         {% if deciphers %}
             {% for decipher in deciphers %}
-            <div class="post__decipher modal">
+            <!-- Modal -->
+            <div id="{{ decipher.name }}" class="posts__decipher modal">
+                <!-- Card-->
                 <div class="card">
-                    <div class="card-header">
-
-                    </div>
+                    <!-- Card Header-->
+                    <div class="card-header">Clues</div>
+                    <!-- Card Body -->
                     <div class="card-body">
-                        <img src="{{ decipher.clue_photo_url }}"
+                        <p>{{ decipher.clue }}</p>
+                        <img src="{{ decipher.clue_photo_url }}">
                     </div>
+                    <!-- Card Footer -->
                     <div class="card-footer">
-                        <a href="#" class="post__decipher-cancel"></a>
+                        <a href="#" class="post__decipher-close">Close</a>
                     </div>
                 </div>    
             </div>
@@ -74,6 +78,19 @@
                 toolTipContainer.classList.toggle("active");
                 e.target.firstElementChild.classList.toggle("show");
             }
+        });
+    });
+
+    const decipherCluePopups = document.querySelectorAll('.clue-popup');
+    decipherCluePopups.forEach(decipherCluePopup => {
+        decipherCluePopup.addEventListener('click', (e)=>{
+            const targetModal = e.target.getAttribute('data-target');
+            // alert(targetModal);
+
+            // show modal
+            document.body.style.overflow = "hidden";
+            document.querySelector('html').style.overflow = "hidden";
+            document.querySelector(targetModal).style.display = "block";
         });
     });
 

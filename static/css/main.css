@@ -599,4 +599,36 @@ a {
   background-color: #93deff;
   color: #323643;
 }
+
+/**
+ * Custom Modal 
+ *
+ */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal .card {
+  position: relative;
+  padding: 20px;
+  background-color: #f7f7f7;
+  margin: 55% auto;
+  min-height: 400px;
+  width: 90%;
+  border-radius: 14px;
+  border: 1px solid #888;
+}
+
+.card-body img {
+  height: 100%;
+  width: 100%;
+}
 /*# sourceMappingURL=main.css.map */
