@@ -65,5 +65,6 @@ class DecipherForm(forms.Form):
             required=False,
             label="Clue",
         )
-    clue_photo = forms.ImageField(required=False)
+    clue_photo = forms.CharField(widget=forms.HiddenInput(), required=False)
+    clue_photo_name = forms.CharField(widget=forms.HiddenInput(), required=False)
     code = forms.CharField(required=False, label="Code")

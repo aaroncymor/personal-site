@@ -101,12 +101,13 @@ class Post(PortfolioMixin):
                 decipher_form_row.append(decipher_clue)
                 decipher_form.append(decipher_form_row)
 
-                if decipher.clue_photo:
+                if decipher.clue_photo_url:
                     # create new row for clue_photo
                     decipher_form_row = soup.new_tag('div')
                     decipher_form_row['class'] = ['notify-form-row']
                 
                     decipher_clue_photo = soup.new_tag('a')
+                    decipher_clue_photo['data-cluephoto-url'] = decipher.clue_photo_url
                     decipher_clue_photo['href'] = '#'
                     decipher_clue_photo.string = "more clue"
 
@@ -172,6 +173,8 @@ class Decipher(PortfolioMixin):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='deciphers')
     hidden_text = models.CharField(max_length=255)
     name = models.CharField(max_length=100, null=True, default='')
-    clue_photo = models.ImageField(upload_to='images/', null=True)
+    clue_photo_filename = models.CharField(max_length=255, null=True, default='')
+    clue_photo_fullpath = models.CharField(max_length=255, null=True, default='')
+    clue_photo_url = models.CharField(max_length=255, null=True, default='')
     clue = models.CharField(max_length=50)
     code = models.CharField(max_length=20, null=True, blank=True, default='')

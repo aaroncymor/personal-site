@@ -384,16 +384,45 @@ class PostDecipherFormView(LoginRequiredMixin, generic.FormView):
         decipher = Decipher.objects.get(id=decipher_id, post__id=post_id)
         if not decipher:
             raise Http404
-        data = request.POST.copy()
 
-        clue = data.get('clue', None)
-        clue_photo = data.get('clue_photo', None)
-        code = data.get('code', None)
+        if form.is_valid():
+            data = request.POST.copy()
 
-        decipher.clue = clue
-        decipher.clue_photo = clue_photo
-        decipher.code = code
-        decipher.save()
+            clue = data.get('clue', None)
+            code = data.get('code', None)
+            clue_photo_base64 = data.get('clue_photo', None)
+            clue_photo_name = data.get('clue_photo_name', None)
+
+            import base64
+            import os
+            from django.conf import settings
+
+            # if clues does not exists in media directory, create one
+            clues_media_dir = "{}/{}".format(settings.MEDIA_ROOT, 'clues')
+            if not os.path.isdir(clues_media_dir):
+                os.mkdir(clues_media_dir)
+
+            _, imgstring = clue_photo_base64.split(",")
+            imgfilename = "{}.jpg".format(clue_photo_name) if not clue_photo_name.endswith(".jpg") else clue_photo_name
+            imgdata = base64.b64decode(imgstring)
+            # e.g., /home/user/../personal-site/media/clues/filename.jpg
+            img_fullpath = "{}/{}".format(clues_media_dir, imgfilename)
+            # e.g., /media/clues/filename.jpg
+            img_url = "{}clues/{}".format(settings.MEDIA_URL, imgfilename)
+
+            # check if file exists already, then delete
+            if os.path.isfile(img_fullpath):
+                os.remove(img_fullpath)
+
+            with open(img_fullpath, "wb") as imagefile:
+                imagefile.write(imgdata)
+
+            decipher.clue = clue
+            decipher.clue_photo_filename = imgfilename
+            decipher.clue_photo_fullpath = img_fullpath
+            decipher.clue_photo_url = img_url
+            decipher.code = code
+            decipher.save()
 
         return redirect(reverse('post-decipher-form', kwargs={'post_id': post_id, 'decipher_id': decipher_id}))
 
@@ -405,7 +434,7 @@ class PostDecipherFormView(LoginRequiredMixin, generic.FormView):
 
         form = self.form_class({
             'clue': decipher.clue,
-            'clue_photo': decipher.clue_photo,
+            'clue_photo_name': decipher.clue_photo_filename,
             'code': decipher.code
         })
 
