@@ -3,16 +3,32 @@
 {% block head_extension %}{% endblock %}
 {% block content %}
     <section class="deciphers">
+        <div class="posts__manage">
+            {% if prev_page_session %}
+                <a href="{% url 'post-list' %}?page{{ prev_page_session }}">Back</a>
+            {% else %}
+                <a href="{% url 'post-list' %}">Back</a>
+            {% endif %}
+        </div>
+        <h1 class="deciphers__post-title">{{ post.title }}</h1>
         <div class="deciphers__list">
             {% if deciphers %}
                 {% for decipher in deciphers %}
                 <div class="deciphers__item">
-                    <div class="decipher__post">{{ decipher.post.title }}</div>
-                    <div class="decipher__name">{{ decipher.name }}</div>
+                    <p class="deciphers__name">{{ decipher.name }}</p>
+
                     {% if is_paginated %}
-                    <a href="{% url 'post-decipher-form' post.id decipher.id %}">Edit</a>
+                        {% if request.session.authorized and prev_page_session %}
+                        <a href="{% url 'post-decipher-form' post.id decipher.id %}?prev_page_session={{ prev_page_session }}&prev_decipher_page_session={{ page_obj.number }}">Edit</a>
+                        {% elif request.session.authorized and not prev_page_session %}
+                        <a href="{% url 'post-decipher-form' post.id decipher.id %}?prev_decipher_page_session={{ page_obj.number }}">Edit</a>
+                        {% endif %}
                     {% else %}
-                    <a href="{% url 'post-decipher-form' post.id decipher.id %}">Edit</a>
+                        {% if request.session.authorized and prev_page_session %}
+                        <a href="{% url 'post-decipher-form' post.id decipher.id %}?prev_page_session={{ prev_page_session }}">Edit</a>
+                        {% elif request.session.authorized and not prev_page_session %}
+                        <a href="{% url 'post-decipher-form' post.id decipher.id %}">Edit</a>
+                        {% endif %}
                     {% endif %}
                 </div>
                 {% endfor %}

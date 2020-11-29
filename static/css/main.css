@@ -400,6 +400,20 @@
   width: 70%;
 }
 
+.deciphers__post-title {
+  margin-top: 2em;
+  text-align: center;
+  font-family: 'Bantayog';
+}
+
+.deciphers__item {
+  padding: 1.2em 1.5em;
+}
+
+.deciphers__name {
+  font-size: 1.6em;
+}
+
 .tags {
   min-height: 100vh;
 }
