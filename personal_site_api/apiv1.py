@@ -11,7 +11,6 @@ from personal_site_api.views import (
     DecipherViewSet,
     autocomplete_search,
     get_tags_by_post,
-    handle_wysiwyg_image_upload
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -26,5 +25,4 @@ urlpatterns = [
     re_path(r'^', include(router.urls), name='v1'),
     re_path(r'autocomplete', autocomplete_search, name='autocomplete-search'),
     re_path(r'post-tags', get_tags_by_post, name='tags-by-post'),
-    re_path(r'wysiwyg-image-upload', handle_wysiwyg_image_upload, name='wysiwyg-image-upload'),
 ]

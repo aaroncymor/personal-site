@@ -99,12 +99,13 @@ class DecipherViewSet(mixins.ListModelMixin,
         https://www.cnblogs.com/AmilyWilly/p/6438448.html
         https://github.com/encode/django-rest-framework/blob/master/rest_framework/authentication.py
         """
-
         response = {}
-        if 'code' not in request.POST:
+        request_data = request.data
+        
+        if 'code' not in request_data.keys():
             response['error'] = 'The code is required.'
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        code = request.POST['code']
+        code = request_data['code']
         instance = self.get_object()
         
         if instance.code:
@@ -180,13 +181,3 @@ def get_tags_by_post(request):
             
     return Response(tag_list, status=status.HTTP_200_OK, headers=headers)
 
-
-@api_view(['POST'])
-def handle_wysiwyg_image_upload(request):
-    headers = {'Content-Type': 'application/json'}
-    if request.method == 'POST':
-        request_data_keys = request.data.keys()
-
-    print("REQUEST FILES", request.FILES)
-
-    return Response({}, status=status.HTTP_200_OK, headers=headers)

@@ -43,26 +43,32 @@
             </div>
             {% endif %}
         </div>
+
         {% if deciphers %}
             {% for decipher in deciphers %}
-            <!-- Modal -->
-            <div id="{{ decipher.name }}" class="posts__decipher modal">
-                <!-- Card-->
+            <div id="{{ decipher.name }}" class="posts__deciphers modal">
                 <div class="card">
-                    <!-- Card Header-->
-                    <div class="card-header">Clues</div>
-                    <!-- Card Body -->
+                    <div class="card-header"></div>
                     <div class="card-body">
-                        <p>{{ decipher.clue }}</p>
-                        <img src="{{ decipher.clue_photo_url }}">
+                        <form class="decipher-form"
+                            action=""
+                            data-checkcode-url="{% url 'api:decipher-check-code' decipher.id %}">
+                            <div class="decipher-form-row">
+                                {{ decipher.clue }}
+                            </div>
+                            <div class="decipher-form-row">
+                                <img src="{{ decipher.clue_photo_url }}" alt="">
+                            </div>
+                            <div class="decipher-form-row">
+                                <input type="text" name="code">
+                                <button type="submit">Enter</button>
+                            </div>
+                        </form>
                     </div>
-                    <!-- Card Footer -->
-                    <div class="card-footer">
-                        <a href="#" class="post__decipher-close">Close</a>
-                    </div>
-                </div>    
+                    <div class="card-footer"></div>
+                </div>
             </div>
-            {% endfor %} 
+            {% endfor %}
         {% endif %}
     {% endif %}
 </section>
@@ -70,35 +76,55 @@
 
 {% block javascript %}
 <script>
+    let matchMedia = window.matchMedia("(max-width: 768px)");
+
     const toolTipContainers = document.querySelectorAll('.decipher.tooltip-container');
     toolTipContainers.forEach(toolTipContainer=>{
         toolTipContainer.addEventListener('click', (e)=>{
-            console.log(e.target);
-            if (e.target.classList.contains("tooltip-container")){
-                toolTipContainer.classList.toggle("active");
-                e.target.firstElementChild.classList.toggle("show");
-            }
+            // if media screen is equal or lower than 768px, use modal form
+            // else use tooltip form
+            if (matchMedia.matches) {
+                const targetModalID = toolTipContainer.getAttribute('data-target');
+                document.body.style.overflow = "hidden";
+                document.querySelector('html').style.overflow = "hidden";
+                
+                // get hidden modal using target modal ID and show
+                const modalTarget = document.querySelector(targetModalID);
+                modalTarget.style.display = "block";
+            } else {
+                if (e.target.classList.contains("tooltip-container")){
+                    toolTipContainer.classList.toggle("active");
+                    e.target.firstElementChild.classList.toggle("show");
+                }
+            } 
         });
     });
 
-    const decipherCluePopups = document.querySelectorAll('.clue-popup');
-    decipherCluePopups.forEach(decipherCluePopup => {
-        decipherCluePopup.addEventListener('click', (e)=>{
-            const targetModal = e.target.getAttribute('data-target');
-            // alert(targetModal);
-
-            // show modal
-            document.body.style.overflow = "hidden";
-            document.querySelector('html').style.overflow = "hidden";
-            document.querySelector(targetModal).style.display = "block";
+    async function checkCode(url='', data={}) {
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            'headers': {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
-    });
+        return response.json();
+    }
 
     const decipherForms = document.querySelectorAll('.decipher-form');
     decipherForms.forEach(decipherForm=>{
-        decipherForm.addEventListener('submit', (e)=>{
+        const checkCodeEndpoint = decipherForm.getAttribute('data-checkcode-url');
+        decipherForm.addEventListener('submit', async (e)=>{
             e.preventDefault();
-            alert("yeaboy")
+            // console.log(e.target);
+            // form.notify-form > .notify-form-row:last-child input
+            const codeInput = decipherForm.lastElementChild.firstElementChild;
+            let checkCodeResult = await checkCode(checkCodeEndpoint, {'code': codeInput.value});
+            console.log(JSON.stringify(checkCodeResult));
+            if (checkCodeResult.hasOwnProperty('hidden_text')) {
+                alert(checkCodeResult['hidden_text'])
+            }
         });
     });
 </script>

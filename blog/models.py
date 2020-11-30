@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 
 from tinymce import models as tinymce_models
 
@@ -78,11 +79,13 @@ class Post(PortfolioMixin):
                 div_tooltip_container = soup.new_tag('div')
                 # div_tooltip_container['id'] = decipher.name
                 div_tooltip_container['class'] = decipher_classes + ['tooltip-container']
+                div_tooltip_container['data-target'] = '#' + decipher.name
 
                 # create form
-                decipher_form = soup.new_tag('form');
+                decipher_form = soup.new_tag('form')
                 decipher_form['class'] = ['notify-form', 'decipher-form']
-
+                decipher_form['data-checkcode-url'] = reverse('api:decipher-check-code', args=[str(decipher.id)])
+                
                 # create div element tag for notify / pop up message
                 div_notify_container = soup.new_tag('div')
                 div_notify_container['class'] = ['notify-container']
@@ -106,13 +109,14 @@ class Post(PortfolioMixin):
                     decipher_form_row = soup.new_tag('div')
                     decipher_form_row['class'] = ['notify-form-row']
                 
-                    decipher_clue_photo = soup.new_tag('a')
-                    decipher_clue_photo['class'] = 'clue-popup'
-                    decipher_clue_photo['data-target'] = '#' + decipher.name
-                    decipher_clue_photo['href'] = '#'
-                    decipher_clue_photo.string = "more clue"
-
+                    # create img element tag
+                    decipher_clue_photo = soup.new_tag('img')
+                    decipher_clue_photo['class'] = ['decipher-clue-photo']
+                    decipher_clue_photo['src'] = decipher.clue_photo_url
+                    
+                    # append to new div form row
                     decipher_form_row.append(decipher_clue_photo)
+                    # append div form row to form
                     decipher_form.append(decipher_form_row)
 
                 decipher_form_row = soup.new_tag('div')
@@ -141,6 +145,7 @@ class Post(PortfolioMixin):
                 # change span.decipher with div.tooltip-container.decipher
                 _decipher.replace_with(div_tooltip_container)
 
+        print("SOUPPPP",soup)
         return soup.prettify(formatter="html5")
 
     @property

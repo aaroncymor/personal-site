@@ -40,4 +40,30 @@ $accentOne: #93deff;
     src: url("/static/fonts/Maragsâ-Display.otf");
 }
 
+@mixin media-xs {
+    // Medium devices (landscape tablets, 768px and up)
+    @media only screen and (max-width: 600px) {
+        @content;
+    }
+}
 
+@mixin media-md {
+    // Medium devices (landscape tablets, 768px and up)
+    @media only screen and (min-width: 768px) {
+        @content;
+    }
+}
+
+@mixin media-lg {
+    // Large devices (laptops/desktops, 1024px and up)
+    @media only screen and (min-width: 1024px) {
+        @content;
+    }
+}
+
+@mixin media-xl {
+    // Extra large devices (large laptops and desktops, 1600px and up)
+    @media only screen and (min-width: 1600px) {
+        @content;
+    }
+}

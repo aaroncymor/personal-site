@@ -114,7 +114,7 @@
 .posts__container {
   display: block;
   width: 80%;
-  margin: 0 auto;
+  margin: 5em auto;
 }
 
 .posts__container h1 {
@@ -233,15 +233,28 @@
 
 .posts__author-menu {
   margin-top: 1em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .posts__author-menu a {
   text-decoration: none;
   color: #323643;
   font-family: 'Bantayog';
+  text-decoration: underline;
+  margin-left: 5px;
 }
 
 .posts__author-menu a:hover {
+  color: #93deff;
   text-decoration: underline;
 }
 
@@ -319,6 +332,11 @@
 .decipher.tooltip-container.active::before {
   left: 5px;
   content: "\f00d";
+}
+
+.decipher-clue-photo {
+  max-height: 150px;
+  width: 100%;
 }
 
 .notify-container {

@@ -68,7 +68,7 @@
     &__container {
         display: block;
         width: 80%;
-        margin: 0 auto;
+        margin: 5em auto;
 
         h1 {
             padding: 1.5rem;
@@ -182,15 +182,21 @@
 
     &__author-menu {
         margin-top: 1em;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
     }
 
     &__author-menu a {
         text-decoration: none;
         color: $primaryColor;
         font-family: 'Bantayog';
+        text-decoration: underline;
+        margin-left: 5px;
     }
 
     &__author-menu a:hover {
+        color: $accentOne;
         text-decoration: underline;
     }
 }
@@ -263,6 +269,11 @@
 .decipher.tooltip-container.active::before {
     left: 5px;
     content: "\f00d";
+}
+
+.decipher-clue-photo {
+    max-height: 150px;
+    width: 100%;
 }
 
 .notify-container {
