@@ -164,6 +164,8 @@ def get_deciphers_by_post(request, pk):
         if 'prev_page_session' in request.GET.keys():
             context['prev_page_session'] = request.GET['prev_page_session']
 
+        context['post_list'] = 0 if 'post_list' not in request.GET.keys() else request.GET['post_list']
+
     return render(request, 'blogv2/post_decipher_list.html', context)
 
 
@@ -248,6 +250,9 @@ class PostDetailView(generic.DetailView):
         if 'prev_page_session' in request.GET.keys():
             context['prev_page_session'] = request.GET['prev_page_session']
 
+        # assign value to post_list which will be passed to template
+        context['post_list'] = 0 if 'post_list' not in request.GET.keys() else request.GET['post_list']
+
         return self.render_to_response(context)
 
 
@@ -325,11 +330,13 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
                         post_tags.append(Tag(post=post, tag=tag))
 
                 Tag.objects.bulk_create(post_tags)
-            
+        
         redirect_url = "{0}?id={1}".format(reverse('post-form'), post.id)
         if 'prev_page_session' in request_get_keys:
             redirect_url += '&prev_page_session=' + request.GET['prev_page_session']
 
+        if 'post_list' in request_get_keys:
+            redirect_url += '&post_list=' + request.GET['post_list']
 
         return redirect(redirect_url)
 
@@ -365,6 +372,9 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
         
         if 'prev_page_session' in request_get_keys:
             context['prev_page_session'] = request.GET['prev_page_session']
+
+        # assign value to post_list which will be passed to template
+        context['post_list'] = 0 if 'post_list' not in request_get_keys else request.GET['post_list']
 
         context['form'] = form
         context['tag_objects'] = tag_objects

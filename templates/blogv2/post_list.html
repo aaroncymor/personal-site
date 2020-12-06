@@ -63,13 +63,13 @@
             {% if request.session.authorized %}
             <div class="posts__author-menu">
                 {% if is_paginated %}
-                <a href="{% url 'post-detail' post.id %}?prev_page_session={{ page_obj.number }}">View</a>
-                <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ page_obj.number }}">Edit</a>
-                <a href="{% url 'post-decipher-list' post.id %}?prev_page_session={{ page_obj.number }}">Deciphers</a>
+                <a href="{% url 'post-detail' post.id %}?prev_page_session={{ page_obj.number }}&post_list=1">View</a>
+                <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ page_obj.number }}&post_list=1">Edit</a>
+                <a href="{% url 'post-decipher-list' post.id %}?prev_page_session={{ page_obj.number }}&post_list=1">Deciphers</a>
                 {% else %}
-                <a href="{% url 'post-detail' post.id %}">View</a>
-                <a href="{% url 'post-form' %}?id={{ post.id }}">Edit</a>
-                <a href="{% url 'post-decipher-list' post.id %}">Deciphers</a>
+                <a href="{% url 'post-detail' post.id %}?post_list=1">View</a>
+                <a href="{% url 'post-form' %}?id={{ post.id }}&post_list=1">Edit</a>
+                <a href="{% url 'post-decipher-list' post.id %}?post_list=1">Deciphers</a>
                 {% endif %}
                 <a href="{% url 'post-delete' post.id %}">Remove</a>
             </div>

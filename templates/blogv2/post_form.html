@@ -7,9 +7,14 @@
 {% endblock %}
 
 {% block content %}
-
-{{ STATIC_URL }}
 <section class="posts">
+    <div class="posts__manage">
+        {% if post_list == '1' %}
+        <a href="{% url 'post-list' %}">Back</a>
+        {% else %}
+        <a href="{% url 'post-detail' post_id %}">Back</a>
+        {% endif %}
+    </div>
     <div class="posts__form-container">
         <input type="hidden" id="post-id" value="{{ post_id }}">
         <form id="post-form" class="posts__form" method="POST">
@@ -154,6 +159,5 @@
             }
         }
     });
-
 </script>
 {% endblock %}

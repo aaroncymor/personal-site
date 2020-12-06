@@ -258,6 +258,17 @@
   text-decoration: underline;
 }
 
+.posts__manage {
+  padding: 1em;
+}
+
+.posts__manage a {
+  font-family: 'Bantayog', sans-serif;
+  text-decoration: underline;
+  color: #323643;
+  font-weight: 700;
+}
+
 .autocomplete-wrapper {
   width: 100%;
   display: -webkit-box;
@@ -273,7 +284,7 @@
 .autocomplete-wrapper .post-search-list {
   width: 100%;
   position: absolute;
-  top: 33px;
+  top: 33.6px;
   /* height of input text */
   background-color: #f7f7f7;
   border-left: 1px solid #323643;
@@ -416,6 +427,18 @@
 
 .notify-form-group input {
   width: 70%;
+}
+
+.modal .card-body form {
+  position: relative;
+}
+
+.modal .card-body form .fa-times {
+  position: absolute;
+  top: -17px;
+  right: -15px;
+  font-size: 1.5em;
+  cursor: pointer;
 }
 
 .deciphers__post-title {
