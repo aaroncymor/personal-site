@@ -3,6 +3,21 @@
 {% block head_extension %}{% endblock %}
 {% block content %}
 <section class="deciphers">
+    <div class="deciphers__manage">
+    {% if prev_page_session %}
+        {% if prev_decipher_page_session %}
+        <a href="{% url 'post-decipher-list' decipher.post.id %}?page={{ prev_decipher_page_session }}&prev_page_session={{ prev_page_session }}&post_list={{ post_list }}">Back</a>
+        {% else %}
+        <a href="{% url 'post-decipher-list' decipher.post.id %}?prev_page_session={{ prev_page_session }}&post_list={{ post_list }}">Back</a>
+        {% endif %}
+    {% else %}
+        {% if prev_decipher_page_session %}
+        <a href="{% url 'post-decipher-list' decipher.post.id %}?page={{ prev_decipher_page_session }}&post_list={{ post_list }}">Back</a>
+        {% else %}
+        <a href="{% url 'post-decipher-list' decipher.post.id %}?post_list={{ post_list }}">Back</a>           
+        {% endif %}
+    {% endif %}
+    </div>
     <div class="deciphers__form-container">
         <form
             action=""

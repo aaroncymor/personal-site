@@ -42,7 +42,7 @@
      */
 }
 
-.posts__item {
+.posts__item, .posts__add-post {
   padding: 1.2em 1.5em;
 }
 
@@ -245,7 +245,8 @@
           justify-content: center;
 }
 
-.posts__author-menu a {
+.posts__author-menu a,
+.posts__add-post a {
   text-decoration: none;
   color: #323643;
   font-family: 'Bantayog';
@@ -253,7 +254,8 @@
   margin-left: 5px;
 }
 
-.posts__author-menu a:hover {
+.posts__author-menu a:hover,
+.posts__add-post a:hover {
   color: #93deff;
   text-decoration: underline;
 }

@@ -1,6 +1,7 @@
 .posts {
 
-    &__item {
+    &__item,
+    &__add-post {
         padding: 1.2em 1.5em;
     }
 
@@ -187,7 +188,8 @@
         justify-content: center;
     }
 
-    &__author-menu a {
+    &__author-menu a,
+    &__add-post a {
         text-decoration: none;
         color: $primaryColor;
         font-family: 'Bantayog';
@@ -195,7 +197,8 @@
         margin-left: 5px;
     }
 
-    &__author-menu a:hover {
+    &__author-menu a:hover,
+    &__add-post a:hover {
         color: $accentOne;
         text-decoration: underline;
     }

@@ -7,13 +7,27 @@
 {% endblock %}
 
 {% block content %}
+
 <section class="posts">
     <div class="posts__manage">
-        {% if post_list == '1' %}
-        <a href="{% url 'post-list' %}">Back</a>
+    {% if request.session.authorized %}
+        {% if prev_page_session and post_list == '1' %}
+        <a href="{% url 'post-list' %}?page={{ prev_page_session }}">Back</a>
+        {% elif prev_page_session and post_list == '0' %}
+        <a href="{% url 'post-detail' post_id %}?prev_page_session={{ prev_page_session }}">Back</a>
         {% else %}
-        <a href="{% url 'post-detail' post_id %}">Back</a>
+        <a href="{% url 'post-list' %}">Back</a>
         {% endif %}
+
+        <!-- Dont show if add new post page, else if edit show -->
+        {% if post_id %}
+        <a href="{% url 'post-decipher-list' post_id %}?prev_page_session={{ prev_page_session }}">Deciphers</a>
+        {% endif %}
+   {% else %}
+    <a href="{% url 'post-list' %}">Back</a>
+    <a href="{% url 'post-detail' post_id %}">Back</a>
+    <a href="{% url 'post-decipher-list' post_id %}">Deciphers</a>
+    {% endif %}
     </div>
     <div class="posts__form-container">
         <input type="hidden" id="post-id" value="{{ post_id }}">

@@ -164,7 +164,7 @@ def get_deciphers_by_post(request, pk):
         if 'prev_page_session' in request.GET.keys():
             context['prev_page_session'] = request.GET['prev_page_session']
 
-        context['post_list'] = 0 if 'post_list' not in request.GET.keys() else request.GET['post_list']
+        context['post_list'] = request.GET.get('post_list', 0)
 
     return render(request, 'blogv2/post_decipher_list.html', context)
 
@@ -172,7 +172,7 @@ def get_deciphers_by_post(request, pk):
 # Class based views here
 class PostListView(ModifiedSearchListView):
     model = Post
-    paginate_by = 10
+    paginate_by = 1
     context_object_name = 'posts'
     template_name = 'blogv2/post_list.html'
     filter_class = PostFilter
@@ -251,7 +251,7 @@ class PostDetailView(generic.DetailView):
             context['prev_page_session'] = request.GET['prev_page_session']
 
         # assign value to post_list which will be passed to template
-        context['post_list'] = 0 if 'post_list' not in request.GET.keys() else request.GET['post_list']
+        context['post_list'] = request.GET.get('post_list', 0)
 
         return self.render_to_response(context)
 
@@ -334,9 +334,9 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
         redirect_url = "{0}?id={1}".format(reverse('post-form'), post.id)
         if 'prev_page_session' in request_get_keys:
             redirect_url += '&prev_page_session=' + request.GET['prev_page_session']
+        
+        redirect_url += '&post_list=' + str(request.GET.get('post_list', 0))
 
-        if 'post_list' in request_get_keys:
-            redirect_url += '&post_list=' + request.GET['post_list']
 
         return redirect(redirect_url)
 
@@ -374,7 +374,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
             context['prev_page_session'] = request.GET['prev_page_session']
 
         # assign value to post_list which will be passed to template
-        context['post_list'] = 0 if 'post_list' not in request_get_keys else request.GET['post_list']
+        context['post_list'] = request.GET.get('post_list', 0)
 
         context['form'] = form
         context['tag_objects'] = tag_objects
@@ -450,9 +450,16 @@ class PostDecipherFormView(LoginRequiredMixin, generic.FormView):
 
         context = {'form': form}
 
+        context['decipher'] = decipher
+
+        # post list page session
         if 'prev_page_session' in request.GET.keys():
             context['prev_page_session'] = request.GET['prev_page_session']
-
+        
+        # decipher page session
+        if 'prev_decipher_page_session' in request.GET.keys():
+            context['prev_decipher_page_session'] = request.GET['prev_decipher_page_session']
+        context['post_list'] = request.GET.get('post_list', 0)
         return self.render_to_response(context)
 
 
