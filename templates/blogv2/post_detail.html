@@ -2,32 +2,39 @@
 
 {% block content %}
 <section class="posts">
+    {% if more_blogs %}
     <div class="posts__more-blogs">
         <p class="nunito-font">More Blogs</p>
         <ul>
-            <li><a href="#">Title Two</a></li>
-            <li><a href="#">Title Three</a></li>
-            <li><a href="#">Title Four</a></li>
+            {% for more_blog in more_blogs %}
+                {% if prev_page_session %}
+                <li><a href="{% url 'post-detail' more_blog.post__id %}?prev_page_session={{ prev_page_session }}">{{ more_blog.post__title }}</a></li>
+                {% else %}
+                <li><a href="{% url 'post-detail' more_blog.post__id %}>{{ more_blog.post__title }}</a></li>
+                {% endif %}
+            {% endfor %}
         </ul>
     </div>
+    {% endif %}
     {% if post %}
-        <!-- Post manage -->
-        <div class="posts__manage">
-        {% if prev_page_session %}
-            <a href="{% url 'post-list' %}?page={{ prev_page_session }}">Back</a>
-            {% if request.session.authorized %}
-            <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ prev_page_session }}&post_list=0">Edit</a>
-            <a href="{% url 'post-decipher-list' post.id %}?prev_page_session={{ prev_page_session }}&post_list=0">Deciphers</a>
-            {% endif %}
-        {% else %}
-            <a href="{% url 'post-list' %}">Back</a>
-            {% if request.session.authorized %}
-            <a href="{% url 'post-form' %}?id={{ post.id }}&post_list=0">Edit</a>
-            <a href="{% url 'post-decipher-list' post.id %}?post_list=0">Deciphers</a>
-            {% endif %}
-        {% endif %}        
-        </div>
-        <div class="posts__container">
+       <div class="posts__container">
+            <!-- Post manage -->
+            <div class="posts__manage">
+            {% if prev_page_session %}
+                <a href="{% url 'post-list' %}?page={{ prev_page_session }}">Back</a>
+                {% if request.session.authorized %}
+                <a href="{% url 'post-form' %}?id={{ post.id }}&prev_page_session={{ prev_page_session }}&post_list=0">Edit</a>
+                <a href="{% url 'post-decipher-list' post.id %}?prev_page_session={{ prev_page_session }}&post_list=0">Deciphers</a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'post-list' %}">Back</a>
+                {% if request.session.authorized %}
+                <a href="{% url 'post-form' %}?id={{ post.id }}&post_list=0">Edit</a>
+                <a href="{% url 'post-decipher-list' post.id %}?post_list=0">Deciphers</a>
+                {% endif %}
+            {% endif %}        
+            </div>
+
             <h1 class="posts__title bantayog-font">{{ post.title }}</h1>
             <div class="posts__published">
                 <p>Published: {{ post.published_date | date:"M d, Y h:i a" }}</p>
@@ -88,14 +95,15 @@
     };
 
     let isMobileBrowser = mobileCheck();
-    let matchMedia = window.matchMedia("(max-width: 768px)");
+    let matchMediaTablet = window.matchMedia("(max-width: 768px)");
+    let matchMediaPhone = window.matchMedia("(max-width: 600px)");
 
     const toolTipContainers = document.querySelectorAll('.decipher.tooltip-container');
     toolTipContainers.forEach(toolTipContainer=>{
         toolTipContainer.addEventListener('click', (e)=>{
             // if media screen is equal or lower than 768px, use modal form
             // else use tooltip form
-            if (matchMedia.matches && isMobileBrowser) {
+            if ((matchMediaTablet.matches && isMobileBrowser) || matchMediaPhone.matches) {
                 const targetModalID = toolTipContainer.getAttribute('data-target');
                 document.body.style.overflow = "hidden";
                 document.querySelector('html').style.overflow = "hidden";
@@ -136,7 +144,15 @@
             let checkCodeResult = await checkCode(checkCodeEndpoint, {'code': codeInput.value});
             console.log(JSON.stringify(checkCodeResult));
             if (checkCodeResult.hasOwnProperty('hidden_text')) {
-                alert(checkCodeResult['hidden_text'])
+                //alert(checkCodeResult['hidden_text']);
+                //console.log(e.target);
+                let revealParagraph = document.createElement('p');
+                revealParagraph.style.color = "black";
+                revealParagraph.innerHTML = checkCodeResult['hidden_text'];
+                e.target.parentElement.appendChild(revealParagraph);
+
+                // hide form
+                e.target.style.display = "none";
             }
         });
     });
@@ -144,13 +160,11 @@
     const decipherFormClose = document.querySelectorAll('.decipher-form-close');
     decipherFormClose.forEach(formClose=> {
         formClose.addEventListener('click', (e)=>{
-            if (matchMedia.matches && isMobileBrowser) {
-                document.body.style.overflow = "auto";
-                document.querySelector('html').style.overflow = "hidden";
+            document.body.style.overflow = "auto";
+            document.querySelector('html').style.overflow = "hidden";
 
-                const modal = e.target.closest('.modal');
-                modal.style.display = "none";
-            }
+            const modal = e.target.closest('.modal');
+            modal.style.display = "none";
         });
     });
 </script>

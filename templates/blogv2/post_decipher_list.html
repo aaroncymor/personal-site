@@ -38,9 +38,9 @@
                     {% else %}
                         {% if request.session.authorized and prev_page_session %}
                             {% if post_list %}
-                            <a href="{% url 'post-decipher-form' post.id decipher.id %}?prev_decipher_page_session={{ page_obj.number }}&post_list={{ post_list }}">Edit</a>
+                            <a href="{% url 'post-decipher-form' post.id decipher.id %}?prev_decipher_page_session={{ page_obj.number }}&prev_page_session={{ prev_page_session }}&post_list={{ post_list }}">Edit</a>
                             {% else %}
-                            <a href="{% url 'post-decipher-form' post.id decipher.id %}?prev_decipher_page_session={{ page_obj.number }">Edit</a>
+                            <a href="{% url 'post-decipher-form' post.id decipher.id %}?prev_decipher_page_session={{ page_obj.number }}&prev_page_session={{ prev_page_session }}">Edit</a>
                             {% endif %}
                         {% elif request.session.authorized and not prev_page_session %}
                             {% if post_list %}

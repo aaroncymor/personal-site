@@ -160,6 +160,11 @@
   color: #93deff;
 }
 
+.posts__more-blogs li a:hover {
+  color: #323643;
+  text-decoration: underline;
+}
+
 .posts__content p {
   font-size: 1.2em;
   margin-bottom: 1.125rem;
@@ -249,7 +254,7 @@
 .posts__add-post a {
   text-decoration: none;
   color: #323643;
-  font-family: 'Bantayog';
+  font-family: 'Bantayog', sans-serif;
   text-decoration: underline;
   margin-left: 5px;
 }
@@ -260,15 +265,16 @@
   text-decoration: underline;
 }
 
-.posts__manage {
-  padding: 1em;
-}
-
 .posts__manage a {
   font-family: 'Bantayog', sans-serif;
   text-decoration: underline;
   color: #323643;
   font-weight: 700;
+  font-size: 1.15em;
+}
+
+.posts__manage a:hover {
+  color: #93deff;
 }
 
 .autocomplete-wrapper {
@@ -400,6 +406,10 @@
   max-width: 170px;
 }
 
+.notify-form .notify-form-row button {
+  cursor: pointer;
+}
+
 .notify-form button {
   border: none;
   border-radius: 5px;
@@ -407,28 +417,6 @@
   color: #f7f7f7;
   font-family: 'Nunito';
   background-color: #93deff;
-}
-
-.notify-form-group {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: end;
-  width: 80%;
-}
-
-.notify-form-group label {
-  color: #323643;
-}
-
-.notify-form-group input {
-  width: 70%;
 }
 
 .modal .card-body form {

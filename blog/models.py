@@ -145,7 +145,7 @@ class Post(PortfolioMixin):
                 # change span.decipher with div.tooltip-container.decipher
                 _decipher.replace_with(div_tooltip_container)
 
-        print("SOUPPPP",soup)
+        #print("SOUPPPP",soup)
         return soup.prettify(formatter="html5")
 
     @property
