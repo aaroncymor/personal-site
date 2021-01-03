@@ -77,7 +77,7 @@ class Post(PortfolioMixin):
 
                 # create div element tag for tooltip
                 div_tooltip_container = soup.new_tag('div')
-                # div_tooltip_container['id'] = decipher.name
+                div_tooltip_container['id'] = "tooltip-" + decipher.name
                 div_tooltip_container['class'] = decipher_classes + ['tooltip-container']
                 div_tooltip_container['data-target'] = '#' + decipher.name
 
@@ -89,6 +89,12 @@ class Post(PortfolioMixin):
                 # create div element tag for notify / pop up message
                 div_notify_container = soup.new_tag('div')
                 div_notify_container['class'] = ['notify-container']
+
+                # create icon element for notify close
+                close_notify_container = soup.new_tag('i')
+                close_notify_container['class'] = ['fas', 'fa-times', 'decipher-close']
+
+                div_notify_container.append(close_notify_container)
 
                 # create div row for clue
                 decipher_form_row = soup.new_tag('div')

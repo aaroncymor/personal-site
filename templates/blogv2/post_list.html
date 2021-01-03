@@ -20,10 +20,17 @@
     </div>
     <div class="posts__random-tags">
         <p class="nunito-font">Try 
+            {% if is_paginated %}
+            <a class="bantayog-font" 
+               href="{% url 'post-random-tags' %}?prev_page_session={{ page_obj.number }}&post_list=1">
+                random tag search
+            </a>
+            {% else %}
             <a class="bantayog-font" 
                href="{% url 'post-random-tags' %}">
                 random tag search
             </a>
+            {% endif %}
         </p>
     </div>
     <div class="posts__add-post">

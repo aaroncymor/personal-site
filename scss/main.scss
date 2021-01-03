@@ -86,12 +86,16 @@ a {
 .pagination ul {
     display: inline-flex;
     align-items: center;
-    gap: .5em;
 }
 
 .pagination ul li {
     list-style-type: none;
     font-size: 2em;
+}
+
+.pagination ul li:not(:last-child),
+.pagination .pagination-prev {
+    margin-right: .5em;
 }
 
 .pagination ul li a {
@@ -103,6 +107,17 @@ a {
     padding: 5px;
     background-color: $accentOne;
     color: $primaryColor;
+}
+
+.pagination .pagination-next {
+    margin-left: .5em;
+}
+
+.pagination .pagination-prev a,
+.pagination .pagination-next a {
+    text-decoration: none;
+    color: $primaryColor;
+    font-size: 2em;
 }
 
 /**

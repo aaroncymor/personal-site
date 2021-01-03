@@ -11,6 +11,20 @@
         margin-top: 2em;
     }
 
+    &__manage {
+        padding: 1.2em 1.5em;
+    }
+
+    &__manage a {
+        text-decoration: underline;
+        font-family: 'Bantayog', sans-serif;
+        color: $primaryColor;
+    }
+
+    &__manage a:hover {
+        color: $accentOne;
+    }
+
     &__title {
         text-align: center;
         font-family: 'Nunito';
@@ -24,13 +38,13 @@
         justify-content: center;
         list-style-type: none;
         color: $primaryColor;
-        gap: .4em;
     }
 
     &__item {
         background: $primaryColor;
         padding: 6px;
         border-radius: 22px;
+        margin-right: .6em;
     }
 
     &__item a {
@@ -41,7 +55,7 @@
     }
 
     &__results {
-        padding: 1.5em;
+        padding: 1.2em 1.5em;
     }
 
     &__results:not(:last-child) {

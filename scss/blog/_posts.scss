@@ -45,7 +45,6 @@
         display: inline-flex;
         flex-wrap: wrap;
         list-style-type: none;
-        gap: .6rem;
     }
 
     &__tags li {
@@ -55,6 +54,7 @@
         border-radius: 22px;
         font-weight: 700;
         color: $secondaryColor;
+        margin-right: .6em;
     }
 
     &__tags li a {
@@ -96,7 +96,10 @@
         display: inline-flex;
         margin-left: 2rem;
         list-style: '>>';
-        gap: 2rem;
+    }
+
+    &__more-blogs ul li {
+        margin-right: 2em;
     }
 
     &__more-blogs li a {
@@ -315,6 +318,15 @@
     transform: scale(1)
 }
 
+.notify-container .decipher-close {
+    font-size: 1.5em;
+    color: $primaryColor;
+    cursor: pointer;
+    position: absolute;
+    right: 4px;
+    top: 0;
+}
+
 .notify-form {
     width: 100%;
     display: flex;
@@ -344,14 +356,46 @@
     background-color: $accentOne;
 }
 
-.modal .card-body form {
+.modal .card {
     position: relative;
 }
 
-.modal .card-body form .fa-times {
+.modal .decipher-close {
     position: absolute;
-    top: -17px;
-    right: -15px;
+    top: 4px;
+    right: 6px;
     font-size: 1.5em;
+    cursor: pointer;
+}
+
+
+/**
+ * Decipher form
+ */
+
+
+.decipher-form-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: .5em;
+}
+
+.decipher-form-row.code input[type="text"] {
+    border: none;
+    border-bottom: 1px solid $primaryColor;
+    background-color: $secondaryColor;
+    flex-basis: 70%;
+    margin-right: .5em;
+}
+
+.decipher-form-row.code button[type="submit"] {
+    flex-basis: 30%;
+    border: none;
+    border-radius: 5px;
+    padding: 3px;
+    color: $secondaryColor;
+    font-family: 'Nunito', sans-serif;
+    background-color: $accentOne;
     cursor: pointer;
 }

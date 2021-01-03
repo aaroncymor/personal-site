@@ -139,6 +139,12 @@ def get_random_tags(request):
             break
 
     context['tags'] = tags
+
+    if 'prev_page_session' in request.GET.keys():
+        context['prev_page_session'] = request.GET['prev_page_session']
+
+    context['post_list'] = request.GET.get('post_list', '0')
+
     return render(request, 'blogv2/post_random_tags.html', context)
 
 def get_deciphers_by_post(request, pk):

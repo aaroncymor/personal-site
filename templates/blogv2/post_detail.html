@@ -57,14 +57,14 @@
             {% for decipher in deciphers %}
             <div id="{{ decipher.name }}" class="posts__deciphers modal">
                 <div class="card">
+                    <i class="fas fa-times decipher-close"></i>
                     <div class="card-header"></div>
                     <div class="card-body">
                         <form class="decipher-form"
                             action=""
                             data-checkcode-url="{% url 'api:decipher-check-code' decipher.id %}">
-                            <i class="fas fa-times decipher-form-close"></i>
                             <div class="decipher-form-row">
-                                {{ decipher.clue }}
+                                <p class="clue"><span>clue:</span>{{ decipher.clue }}</p>
                             </div>
                             <div class="decipher-form-row">
                                 <img src="{{ decipher.clue_photo_url }}" alt="">
@@ -86,7 +86,6 @@
 
 {% block javascript %}
 <script>
-
     // https://stackoverflow.com/a/11381730 check if mobile browser or not
     window.mobileCheck = function() {
         let check = false;
@@ -142,30 +141,103 @@
             // form.notify-form > .notify-form-row:last-child input
             const codeInput = decipherForm.lastElementChild.firstElementChild;
             let checkCodeResult = await checkCode(checkCodeEndpoint, {'code': codeInput.value});
-            console.log(JSON.stringify(checkCodeResult));
+            //console.log(JSON.stringify(checkCodeResult));
             if (checkCodeResult.hasOwnProperty('hidden_text')) {
                 //alert(checkCodeResult['hidden_text']);
                 //console.log(e.target);
                 let revealParagraph = document.createElement('p');
-                revealParagraph.style.color = "black";
+                revealParagraph.style.color = "#323643";
                 revealParagraph.innerHTML = checkCodeResult['hidden_text'];
-                e.target.parentElement.appendChild(revealParagraph);
+
+                let modal = e.target.closest('.modal');
+                let notifyContainer = e.target.closest('.notify-container');
+                notifyContainer.appendChild(revealParagraph);
+                // notifyContainer.innerHTML = `
+                //     <i class="fas fa-times decipher-close"></i>
+                //     <p style="color: #323643;">${checkCodeResult['hidden_text']}</p>
+                // `;
+
+                if (modal == null) {
+                    let revealParagraph = document.createElement('p');
+                    revealParagraph.style.color = "#323643";
+                    revealParagraph.innerHTML = checkCodeResult['hidden_text'];
+
+                    // notify container
+                    let tooltipContainer = notifyContainer.parentElement;
+                    let decipherModalID = tooltipContainer.getAttribute('data-target');
+
+                    const decipherModal = document.querySelector(decipherModalID);
+                    //console.log(decipherModal);
+                    
+                    let decipherModalCardBody = decipherModal.querySelector('.card .card-body');
+                    decipherModalCardBody.appendChild(revealParagraph);
+
+                    let decipherForm = decipherModal.querySelector('.card .card-body .decipher-form');
+                    //console.log(decipherForm);
+
+                    decipherForm.style.display = "none";
+                    
+                } else if (notifyContainer == null) {
+                    // modal
+                    
+                }
 
                 // hide form
-                e.target.style.display = "none";
+                //e.target.style.display = "none";
             }
         });
     });
 
-    const decipherFormClose = document.querySelectorAll('.decipher-form-close');
+    const decipherFormClose = document.querySelectorAll('.decipher-close');
     decipherFormClose.forEach(formClose=> {
         formClose.addEventListener('click', (e)=>{
-            document.body.style.overflow = "auto";
-            document.querySelector('html').style.overflow = "hidden";
+            if ((matchMediaTablet.matches && isMobileBrowser) || matchMediaPhone.matches) {
+                document.body.style.overflow = "auto";
+                document.querySelector('html').style.overflow = "auto";
 
-            const modal = e.target.closest('.modal');
-            modal.style.display = "none";
+                const modal = e.target.closest('.modal');
+                modal.style.display = "none";
+            } else {
+                //console.log(e.target);
+                // tooltip container toggle active class
+                const tooltipContainer = e.target.closest('.tooltip-container');
+                tooltipContainer.classList.toggle("active");
+                
+                // notify container toggle show class
+                e.target.parentElement.classList.toggle("show");
+            }
         });
+    });
+
+    window.addEventListener('resize', (e) => {
+        //console.log(`HEIGHT: ${window.innerHeight}`);
+        //console.log(`WIDTH: ${window.innerWidth}`);
+        if ((matchMediaTablet.matches && isMobileBrowser) || matchMediaPhone.matches) {
+
+            let notifyContainers = document.querySelectorAll('.notify-container');
+            notifyContainers.forEach(notifyContainer => {
+                // remove active and show classes from notify and tooltip containers
+                if (notifyContainer.classList.contains("show")) {
+                    let tooltipContainer = notifyContainer.closest('.tooltip-container');
+                    if (tooltipContainer.classList.contains("active")) {
+                        tooltipContainer.classList.remove("active");
+                    }
+                    notifyContainer.classList.remove("show");
+                }
+            });
+
+        } else {
+            let decipherModals = document.querySelectorAll('.posts__deciphers.modal');
+            decipherModals.forEach(decipherModal => {
+                let decipherModalDisplay = decipherModal.style.display;
+                if (decipherModalDisplay == "block") {
+                    document.body.style.overflow = "auto";
+                    document.querySelector('html').style.overflow = "auto";
+                    decipherModal.style.display = "none";                    
+                }
+                
+            });
+        }
     });
 </script>
 {% endblock %}
