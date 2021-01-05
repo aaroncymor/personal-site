@@ -139,29 +139,40 @@
             e.preventDefault();
             // console.log(e.target);
             // form.notify-form > .notify-form-row:last-child input
+
+            function createRevealParagraph(hiddenText, color="#323643") {
+                let revealParagraph = document.createElement('p');
+                revealParagraph.style.color = color;
+                revealParagraph.innerHTML = hiddenText;
+                return revealParagraph;
+            }
+
             const codeInput = decipherForm.lastElementChild.firstElementChild;
             let checkCodeResult = await checkCode(checkCodeEndpoint, {'code': codeInput.value});
             //console.log(JSON.stringify(checkCodeResult));
             if (checkCodeResult.hasOwnProperty('hidden_text')) {
                 //alert(checkCodeResult['hidden_text']);
                 //console.log(e.target);
-                let revealParagraph = document.createElement('p');
-                revealParagraph.style.color = "#323643";
-                revealParagraph.innerHTML = checkCodeResult['hidden_text'];
+                
+                // cant reuse variable in this case, need to recreate new element and insert to
+                // target element
+                let revealParagraph = createRevealParagraph(checkCodeResult['hidden_text']);
 
                 let modal = e.target.closest('.modal');
                 let notifyContainer = e.target.closest('.notify-container');
-                notifyContainer.appendChild(revealParagraph);
-                // notifyContainer.innerHTML = `
-                //     <i class="fas fa-times decipher-close"></i>
-                //     <p style="color: #323643;">${checkCodeResult['hidden_text']}</p>
-                // `;
 
-                if (modal == null) {
-                    let revealParagraph = document.createElement('p');
-                    revealParagraph.style.color = "#323643";
-                    revealParagraph.innerHTML = checkCodeResult['hidden_text'];
+                if (modal == null && notifyContainer != null) {
 
+                    // append reveal paragraph
+                    notifyContainer.appendChild(revealParagraph);
+
+                    // hide the form under ntotify container
+                    let notifyForm = notifyContainer.querySelector('.decipher-form');
+                    notifyForm.style.display = "none";
+
+                    // genrate new reveal paragraph for modal form
+                    revealParagraph = createRevealParagraph(checkCodeResult['hidden_text']);
+                    
                     // notify container
                     let tooltipContainer = notifyContainer.parentElement;
                     let decipherModalID = tooltipContainer.getAttribute('data-target');
@@ -177,13 +188,26 @@
 
                     decipherForm.style.display = "none";
                     
-                } else if (notifyContainer == null) {
+                } else if (modal != null && notifyContainer == null) {
                     // modal
-                    
-                }
 
-                // hide form
-                //e.target.style.display = "none";
+                    let modalCardBody = modal.querySelector('.card .card-body');
+                    modalCardBody.appendChild(revealParagraph);
+
+                    let decipherForm = modal.querySelector('.card .card-body .decipher-form');
+                    decipherForm.style.display = "none";
+
+
+                    let modalID = modal.getAttribute('id');
+                    let tooltipContainer = document.getElementById(`tooltip-${modalID}`);
+
+                    let notifyContainer = tooltipContainer.firstElementChild;
+                    revealParagraph = createRevealParagraph(checkCodeResult['hidden_text']);
+                    notifyContainer.appendChild(revealParagraph);                    
+
+                    let notifyForm = notifyContainer.querySelector('.notify-form');
+                    notifyForm.style.display = "none";
+                }
             }
         });
     });
