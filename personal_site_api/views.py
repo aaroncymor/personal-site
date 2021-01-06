@@ -2,6 +2,7 @@ import logging
 
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.urls import reverse
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -133,8 +134,10 @@ def autocomplete_search(request):
             for item in title_search:
                 # add new key value pair for search type
                 item['type'] = 'post'
+                item['link'] = reverse('post-detail', kwargs={'pk': item['id']})
                 search_results.append(item)
             
+
             for item in category_search:
                 # pop values from 'title' and 'category__name' keys
                 temp_title = item.pop('title')
@@ -145,6 +148,7 @@ def autocomplete_search(request):
 
                 # add new key value pair for search type
                 item['type'] = 'category'
+                item['link'] = reverse('post-detail', kwargs={'pk': item['id']})
 
                 search_results.append(item)
 
@@ -157,6 +161,8 @@ def autocomplete_search(request):
 
                 # add new key value pair for search type
                 item['type'] = 'tag'
+
+                item['link'] = reverse('post-detail', kwargs={'pk': item['id']})
                                 
                 search_results.append(item)
 
