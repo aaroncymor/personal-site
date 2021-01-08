@@ -260,6 +260,15 @@
     font-style: italic;
 }
 
+.post-search-item:hover {
+    background: $accentOne;
+    opacity: .87;
+} 
+
+.post-search-item:hover .autoComplete_highlighted {
+    color: $secondaryColor;
+}
+
 /**
  * Tooltip with Form
  *

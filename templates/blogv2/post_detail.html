@@ -10,7 +10,7 @@
                 {% if prev_page_session %}
                 <li><a href="{% url 'post-detail' more_blog.post__id %}?prev_page_session={{ prev_page_session }}">{{ more_blog.post__title }}</a></li>
                 {% else %}
-                <li><a href="{% url 'post-detail' more_blog.post__id %}>{{ more_blog.post__title }}</a></li>
+                <li><a href="{% url 'post-detail' more_blog.post__id %}">{{ more_blog.post__title }}</a></li>
                 {% endif %}
             {% endfor %}
         </ul>
