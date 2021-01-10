@@ -1,5 +1,6 @@
 @import 'config';
 @import 'header';
+@import 'responsive';
 @import 'blog/posts';
 @import 'blog/deciphers';
 @import 'blog/random_tags';
@@ -56,6 +57,7 @@ a {
     align-items: center;
     background: $accentOne;
     z-index: 1;
+    transition: all 550ms;
 
     &__list {
         list-style-type: none;
@@ -67,6 +69,33 @@ a {
         text-decoration: none;
         color: $secondaryColor;
     }
+
+    &__link:hover {
+        text-decoration: underline;
+        color: $primaryColor;
+    }
+}
+
+.burger-menu {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.burger-menu i {
+    font-size: 1.5em;
+}
+
+.close-menu {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    cursor: pointer;
+}
+
+.close-menu i {
+    font-size: 1.5em;
 }
 
 .pagination {

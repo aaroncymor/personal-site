@@ -15,11 +15,11 @@
 <body>
     <header>
         <div class="burger-menu">
-            
+           <i class="fas fa-bars"></i> 
         </div>
         <nav class="main-nav">
             <div class="close-menu">
-
+                <i class="fas fa-times"></i>
             </div>
             <ul class="main-nav__list">
                 <li class="main-nav__item">
@@ -36,6 +36,7 @@
     </header>
     <main>{% block content %}{% endblock %}</main>
     <footer></footer>
+    <script src="{% static 'js/script.js' %}"></script>
     {% block javascript %}{% endblock %}
 </body>
 </html>

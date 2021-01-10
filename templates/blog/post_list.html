@@ -1,7 +1,9 @@
 {% extends 'base2.html' %}
 
+{% load static %}
+
 {% block head_extension %}
-    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/js/autoComplete.min.js"></script>
+    <script src="{% static 'js/autoComplete.min.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -127,6 +129,7 @@
 
 {% block javascript %}
 <script>
+    console.log("HIIIII THISSSSS LONG MESSAGEEEEEE");
     const postSearchInput = document.querySelector('#post-search-autocomplete');
 
     async function autoCompleteSearch(url='', data = {}) {
@@ -152,6 +155,7 @@
     new autoComplete({
         data: {
             src: async () => {
+                console.log("HAHAHHAA");
                 let postList = Array();
                 let searchData = (postSearchInput.value.length > 2) ? postSearchInput.value : '';
                 

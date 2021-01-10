@@ -19,90 +19,8 @@ from core.utils import (
     replace_element
 )
 
-#from personal_site.core.views import ModifiedPaginateListView
-
 
 # Function based views here.
-def submit_post_search(request):
-    """Assumes paginated already, hence we use paginate queryset function.
-    
-    Arguments:
-        request {[type]} -- [description]
-    
-    Returns:
-        [type] -- [description]
-    """
-    context = {'form': PostSearchForm()}
-    paginated, page, post_qs, is_paginated = None, None, None, False
-    if request.method == "POST":
-        session_keys = request.session.keys()
-
-        # For each new post request or click of search form,
-        # remove session with name (reference: ModifiedListView)
-        # filter_class.base_filter + filter_field_suffix
-        if 'category_search' in session_keys:
-            del request.session['category_search']
-        
-        if 'title_search' in session_keys:
-            del request.session['title_search']
-        
-        if 'tags_search' in session_keys:
-            del request.session['tags_search']
-
-        search_filter = {}
-        form = PostSearchForm(request.POST)
-        category, title, tags = None, None, None
-        if form.is_valid():
-            post_data = request.POST.dict()
-
-            category = post_data.get('category', None)
-            title = post_data.get('title', None)
-
-            if 'tags' in request.POST.keys():
-                tags = ','.join(request.POST.getlist('tags'))
-        
-            if not category and not title and not tags:
-                return redirect(reverse('post-list'))
-
-        # add sessions for filter fields to cache paginated queryset
-        # session name must be in filter_class.base_filter with the item
-        # by filter_field_suffix (See ModifiedListView in utils). In this
-        # case, it is base_filter + '_search'
-        if category:
-            search_filter['category_name'] = category
-            request.session['category_name_search'] = category
-        
-        if title:
-            search_filter['title'] = title
-            request.session['title_search'] = title
-
-        if tags:
-            search_filter['tags'] = tags
-            request.session['tags_search'] = tags
-        if isinstance(request.user, AnonymousUser):
-            queryset = Post.published_objects.all()
-        else:
-            queryset = Post.objects.all()
-
-        post_qs = PostFilter(search_filter, 
-                             queryset=queryset).qs
-
-        # TODO: page_size should come from config or settings, not fix size of 10
-        paginator, page, queryset, is_paginated = paginate_queryset(request=request,
-                                                                    queryset=post_qs,
-                                                                    page_size=10)
-        context['paginator'] = paginator
-        context['page_obj'] = page
-        context['is_paginated'] = is_paginated
-        context['object_list'] = post_qs
-        context['posts'] = post_qs
-
-        # tags auto complete
-        tags_autocomplete = Tag.objects.distinct().values_list('tag', flat=True)
-        context['tags_autocomplete'] = convert_list_for_chipauto(tags_autocomplete)
-
-    return render(request, 'blogv1/post_list.html', context)
-
 def delete_post(request, pk):
     if Post.objects.filter(pk=pk).exists():
         post = Post.objects.get(pk=pk)
@@ -145,7 +63,7 @@ def get_random_tags(request):
 
     context['post_list'] = request.GET.get('post_list', '0')
 
-    return render(request, 'blogv2/post_random_tags.html', context)
+    return render(request, 'blog/post_random_tags.html', context)
 
 def get_deciphers_by_post(request, pk):
     context = {}
@@ -157,7 +75,7 @@ def get_deciphers_by_post(request, pk):
         decipher_qs = post.deciphers.all()
         paginator, page, queryset, is_paginated = paginate_queryset(request=request,
                                                                     queryset=decipher_qs,
-                                                                    page_size=1)
+                                                                    page_size=10)
         context.update({
                 'post': post,
                 'paginator': paginator,
@@ -172,15 +90,15 @@ def get_deciphers_by_post(request, pk):
 
         context['post_list'] = request.GET.get('post_list', '0')
 
-    return render(request, 'blogv2/post_decipher_list.html', context)
+    return render(request, 'blog/post_decipher_list.html', context)
 
 
 # Class based views here
 class PostListView(ModifiedSearchListView):
     model = Post
-    paginate_by = 1
+    paginate_by = 10
     context_object_name = 'posts'
-    template_name = 'blogv2/post_list.html'
+    template_name = 'blog/post_list.html'
     filter_class = PostFilter
 
     def get_queryset(self):
@@ -243,7 +161,7 @@ class PostListView(ModifiedSearchListView):
 
 class PostDetailView(generic.DetailView):
     model = Post
-    template_name = 'blogv2/post_detail.html'
+    template_name = 'blog/post_detail.html'
 
     def get(self, request, *args, **kwargs):
 
@@ -275,7 +193,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
     login_url = '/login'
 
     form_class = PostForm
-    template_name = 'blogv2/post_form.html'
+    template_name = 'blog/post_form.html'
     success_url = '/blog/'
 
     def post(self, request, *args, **kwargs):
@@ -402,7 +320,7 @@ class PostFormView(LoginRequiredMixin, generic.FormView):
 class PostDecipherFormView(LoginRequiredMixin, generic.FormView):
     
     form_class = DecipherForm
-    template_name = 'blogv2/post_decipher_form.html'
+    template_name = 'blog/post_decipher_form.html'
 
     def post(self, request, post_id, decipher_id, *args, **kwargs):
         form = self.form_class(request.POST)
