@@ -1,0 +1,64 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-filescalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Aaron Cymor</title>
+    <!--Font awesome CDN-->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="{% static 'css/portfolio.css' %}">
+    {%block head_extension %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="burger-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="social-icons">
+                <a target="_blank" href="https://www.linkedin.com/in/aaron-cymor-neme%C3%B1o-4b353922/">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a target="_blank" href="https://github.com/aaroncymor">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <nav class="nav">
+                <div class="close-menu">
+                    <i class="fas fa-times"></i>
+                </div>
+                <ul class="menu-nav">
+                    <li class="menu-nav__item">
+                        <a href="#profile" class="menu-nav__link active">About</a>
+                    </li>
+                    <li class="menu-nav__item">
+                        <a href="#skills" class="menu-nav__link">Skills</a>
+                    </li>
+                    <li class="menu-nav__item">
+                        <a href="#experience" class="menu-nav__link">Experiences</a>
+                    </li>
+                    <li class="menu-nav__item">
+                        <a href="#projects" class="menu-nav__link">Projects</a>
+                    </li>
+                    <li class="menu-nav__item">
+                        <a href="{% url 'post-list' %}" class="menu-nav__link">Blog</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+    {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">
+        <p>&copy; Aaron Cymor 2020</p>
+    </footer>
+    <script src="https://kit.fontawesome.com/6d2ea823d0.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="{% static 'js/portfolio.js' %}"></script>
+</body>
+</html>

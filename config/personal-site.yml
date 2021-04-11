@@ -1,15 +1,12 @@
 personal_site:
   secret_key: (pfboe=(9khdb1#tas!u32q=7ecc%x4$2we%-_#fjot6=j#96#
   app_name: personal_site
-  db:
-    database: personalsite_db
-    user: rtidev
-    pass: password
-    host: localhost
-    port: 5432
-
-personal_site_api:
-  logger: PersonalSiteApiLogger
+#  db:
+#    database: personalsite_db
+#    user: aaroncymor
+#    pass: aaroncymor
+#    host: localhost
+#    port: 5432
 
 logging:
   version: 1 # required by dictConfig
@@ -21,14 +18,10 @@ logging:
       class: logging.StreamHandler
       formatter: default
       stream: ext://sys.stdout
-    datestamp_logfile:
-      level: INFO
-      class: core.logger.DateStampedHandler
-      filename_template: /home/rtidev/Projects/Others/logs/personal_site/%Y%m/%Y%m%d.api
-    datestamp_chatbot_logfile:
-      level: INFO
-      class: core.logger.DateStampedHandler
-      filename_template: /home/rtidev/Projects/Others/logs/personal_site/%Y%m/%Y%m%d.chatbot
+#    datestamp_logfile:
+#      level: INFO
+#      class: core.logger.DateStampedHandler
+#      filename_template: /home/rtidev/Projects/Others/logs/personal_site/%Y%m/%Y%m%d.api
     debug_log:
       level: DEBUG
       class: logging.handlers.TimedRotatingFileHandler
@@ -41,10 +34,10 @@ logging:
     personal_site_api.views:
       handlers: [console, debug_log]
       level: DEBUG
-    PersonalSiteApiLogger:
-      handlers: [datestamp_logfile]
-      level: INFO
-      propagate: True
+#    PersonalSiteApiLogger:
+#      handlers: [datestamp_logfile]
+#      level: INFO
+#      propagate: True
 
 
   

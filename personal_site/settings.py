@@ -32,16 +32,16 @@ if config_env is not None:
         config_data = yaml.load(f)
     # load config    
     app_conf = config_data['personal_site']
-    personal_site_conf = config_data['personal_site_api']
+#    personal_site_conf = config_data['personal_site_api']
 
     DJANGO_SECRET_KEY = app_conf['secret_key']
     
     # load loggers
-    logging.config.dictConfig(config_data['logging'])
-    PERSONAL_SITE_LOGGER = logging.getLogger(personal_site_conf['logger'])
+#    logging.config.dictConfig(config_data['logging'])
+#    PERSONAL_SITE_LOGGER = logging.getLogger(personal_site_conf['logger'])
     
     # load database
-    db_config = app_conf['db']
+    #db_config = app_conf['db']
 else:
     raise ImproperlyConfigured('CONFIG not set as an environment variable.')
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -116,23 +116,30 @@ WSGI_APPLICATION = 'personal_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {}
-try:
-    if db_config:
-        DATABASES['default'] = {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': db_config['database'],
-            'USER': db_config['user'],
-            'PORT': db_config['port'],
-            'PASSWORD': db_config['pass'],
-            'HOST': db_config['host']
-        }
-except Exception:
-    DATABASES['default'] = {
+#DATABASES = {}
+#try:
+#    if db_config:
+#        DATABASES['default'] = {
+#            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#            'NAME': db_config['database'],
+#            'USER': db_config['user'],
+#            'PORT': db_config['port'],
+#            'PASSWORD': db_config['pass'],
+#            'HOST': db_config['host']
+#        }
+#except Exception:
+#    DATABASES['default'] = {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+
+DATABASES = {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-    
+}
+
 
 
 # Password validation

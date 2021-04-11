@@ -1,7 +1,7 @@
 from itertools import chain
 
 from django import forms
-from django.db.utils import ProgrammingError
+from django.db.utils import ProgrammingError, OperationalError
 
 from tinymce.widgets import TinyMCE
 
@@ -11,7 +11,7 @@ def generate_category_choices(category_fields):
     try:
         choices = list(chain([('', 'None')], 
                 Category.objects.all().values_list(*category_fields)))
-    except ProgrammingError:
+    except OperationalError:
         choices = (('', 'None'))
 
     return choices
