@@ -7,6 +7,8 @@ window.onbeforeunload = function () {
     window.scrollTo(0, 0);
 }
 
+const inviteToBlogModal = document.getElementById('invite-to-blog');
+
 /**
  * Loader Animation
  */
@@ -14,7 +16,19 @@ setTimeout(()=>{
     document.body.style.overflow = "auto";
     const loaderSection = document.querySelector('.loader');
     loaderSection.style.display = "none";
+    
+    inviteToBlogModal.style.display = "block";
+
 }, 5000);
+
+/**
+ * Modal invite to Blog
+ */
+const inviteToBlogModalClose = inviteToBlogModal.querySelector('.close');
+inviteToBlogModalClose.addEventListener('click', (e)=> {
+    console.log(e.target);
+    inviteToBlogModal.style.display = "none";
+});
 
 /**
  * Menu Section Animation
