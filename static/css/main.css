@@ -46,6 +46,7 @@
     width: 100% !important;
     background-color: #f7f7f7 !important;
     margin-top: .5em !important;
+    padding: 0 1.5em;
   }
   .main-nav__list {
     width: 100%;
@@ -56,10 +57,11 @@
     -webkit-box-direction: normal;
         -ms-flex-direction: row;
             flex-direction: row;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: start;
     font-size: 2.5em !important;
+    text-align: left;
   }
   .main-nav__item {
     margin-right: .5em;
@@ -691,6 +693,7 @@ a {
   list-style-type: none;
   font-family: 'Maragsa';
   font-size: 3.8em;
+  text-align: center;
 }
 
 .main-nav__link {

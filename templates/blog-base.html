@@ -23,15 +23,21 @@
             </div>
             <ul class="main-nav__list">
                 <li class="main-nav__item">
+                    <a href="{% url 'home' %}" class="main-nav__link">&#60;&#60; Go back to my portfolio</a>
+                </li>
+            </ul>
+            <!--
+            <ul class="main-nav__list">
+                <li class="main-nav__item">
                     <a href="#home" class="main-nav__link">Home</a>
                 </li>
                 <li class="main-nav__item">
                     <a href="#blog" class="main-nav__link">Blog</a>
-                </li>
+                </li> 
                 <li class="main-nav__item">
-                    <a href="#portfolio" class="main-nav__link">Portfolio</a>
+                    <a href="#portfolio" class="main-nav__link">Go back to my portfolio</a>
                 </li>
-            </ul>
+            </ul>-->
         </nav>
     </header>
     <main>{% block content %}{% endblock %}</main>

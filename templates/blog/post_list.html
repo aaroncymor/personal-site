@@ -8,6 +8,7 @@
 
 {% block content %}
 <section class="posts">
+    {% if request.session.authorized %}
     <div class="posts__search">
         <form method="post" action="">
             {% csrf_token %}
@@ -36,10 +37,9 @@
         </p>
     </div>
     <div class="posts__add-post">
-        {% if request.session.authorized %}
         <a href="{% url 'post-form' %}">Add New Post</a>
-        {% endif %}
     </div>
+    {% endif %}
     <div class="posts__list">
         {% for post in posts %}
         <article class="posts__item">
