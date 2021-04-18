@@ -41,7 +41,7 @@ if config_env is not None:
 #    PERSONAL_SITE_LOGGER = logging.getLogger(personal_site_conf['logger'])
     
     # load database
-    #db_config = app_conf['db']
+    db_config = app_conf['db']
 else:
     raise ImproperlyConfigured('CONFIG not set as an environment variable.')
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -50,7 +50,7 @@ SECRET_KEY = DJANGO_SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'aaroncymor.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'www.aacymor.com']
 
 
 # Application definition
@@ -116,29 +116,23 @@ WSGI_APPLICATION = 'personal_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-#DATABASES = {}
-#try:
-#    if db_config:
-#        DATABASES['default'] = {
-#            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#            'NAME': db_config['database'],
-#            'USER': db_config['user'],
-#            'PORT': db_config['port'],
-#            'PASSWORD': db_config['pass'],
-#            'HOST': db_config['host']
-#        }
-#except Exception:
-#    DATABASES['default'] = {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    'default' = {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': db_config['database'],
+        'USER': db_config['user'],
+        'PORT': db_config['port'],
+        'PASSWORD': db_config['pass'],
+        'HOST': db_config['host']
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 
 
@@ -176,12 +170,12 @@ USE_TZ = True
 
 # Media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') # '/www/media/'
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') # '/www/media/' '/var/www/www.aacymor.com/media'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static'); #'/www/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static'); #'/www/static/' '/var/www/www.aacymor.com/static'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")

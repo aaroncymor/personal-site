@@ -11,7 +11,7 @@ def generate_category_choices(category_fields):
     try:
         choices = list(chain([('', 'None')], 
                 Category.objects.all().values_list(*category_fields)))
-    except OperationalError:
+    except (OperationalError, ProgrammingError):
         choices = (('', 'None'))
 
     return choices
